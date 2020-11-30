@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<!--<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"-->
+<!--            fx:controller="pl.edu.agh.diskstalker.controller.DiskStalkerController">-->
+
+<!--</BorderPane>-->
+<!--fx:controller="pl.edu.agh.diskstalker.controller.DiskStalkerController"-->
+<AnchorPane maxHeight="600.0" maxWidth="900.0" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            >
+    <children>
+
+        <ProgressBar layoutX="425.0" layoutY="20.0" prefHeight="20.0" prefWidth="350.0" progress="0.3" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="15.0">
+            <padding>
+                <Insets left="5.0" right="5.0" />
+            </padding></ProgressBar>
+        <HBox layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="350" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
+            </padding>
+            <children>
+                <ListView fx:id="folderListView" prefHeight="10" prefWidth="350.0" />
+            </children>
+        </HBox>
+        <HBox layoutX="350.0" layoutY="71.0" prefHeight="400.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="50.0">
+            <padding>
+                <Insets bottom="10.0" left="5.0" right="5.0" />
+            </padding>
+            <children>
+                <TreeView fx:id="folderTreeView" prefHeight="458.0" prefWidth="350.0" />
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>
