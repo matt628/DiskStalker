@@ -1,6 +1,9 @@
 # Ignore .idea folder
 .idea
 
+# Ignore *.db files
+*.db
+
 # Created by https://www.gitignore.io/api/java,gradle
 
 ### Java ###
