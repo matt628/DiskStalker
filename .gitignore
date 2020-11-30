@@ -1,3 +1,6 @@
+# Ignore .idea folder
+.idea
+
 # Created by https://www.gitignore.io/api/java,gradle
 
 ### Java ###
