@@ -9,6 +9,9 @@ import pl.edu.agh.diskstalker.executor.QueryExecutor;
 import pl.edu.agh.diskstalker.model.Item;
 
 import java.sql.SQLException;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {
 
@@ -30,6 +33,25 @@ public class DatabaseTest {
     @Test
     public void createItemTest() {
         // When
-//        var item1 = Item.create()
+        var item1 = Item.create("folder1", "/home/temp", null, "234");
+        var item2 = Item.create("file1", "/home/temp/folder1", "jpg", "42");
+        var redundantItem = Item.create("folder1", "/home/temp", null, "234");
+
+        // Then
+        checkItem(item1);
+        checkItem(item2);
+
+        assertNotEquals(item1.get().getId(), item2.get().getId());
+        assertFalse(redundantItem.isPresent());
+    }
+
+    private void checkItem(final Optional<Item> item) {
+        assertTrue(item.isPresent());
+        item.ifPresent(i -> {
+            assertTrue(i.getId() > 0);
+            assertNotNull(i.getName());
+            assertNotNull(i.getPath());
+            assertNotNull(i.getSize());
+        });
     }
 }
