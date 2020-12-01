@@ -1,18 +1,31 @@
 package pl.edu.agh.diskstalker.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DiskStalkerController {
+public class MainViewController {
     private Stage primaryStage;
-    public DiskStalkerController(){}
 
-    public DiskStalkerController(Stage primaryStage) {
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private ListView folderListView;
+
+    public MainViewController(){}
+
+    public MainViewController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
     public void initRootLayout() {
@@ -21,7 +34,7 @@ public class DiskStalkerController {
 
             // load layout from FXML file
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(DiskStalkerController.class.getResource("/MainPane.fxml"));
+            loader.setLocation(MainViewController.class.getResource("/MainPane.fxml"));
             HBox rootLayout = loader.load();
             //            BorderPane rootLayout = loader.load();
 
@@ -42,8 +55,23 @@ public class DiskStalkerController {
 
     }
 
+
+
     @FXML
     private void initialize() {
+        //MOCK DATA
+        List<String> rootFolders = new ArrayList<String>();
+        rootFolders.add("myFirstPath");
+        for(String folder : rootFolders) {
+            folderListView.getItems().add(folder);
+        }
+
+    }
+
+    @FXML
+    private void handleAddAction(ActionEvent event) {
+        // FOLDER CHOOSER
+        DirectoryChooser directoryChooser = new DirectoryChooser();
 
     }
 

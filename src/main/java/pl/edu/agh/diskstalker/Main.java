@@ -2,27 +2,27 @@ package pl.edu.agh.diskstalker;
 
 // import from our code
 import pl.edu.agh.diskstalker.connection.ConnectionProvider;
+import pl.edu.agh.diskstalker.controller.MainViewController;
 import pl.edu.agh.diskstalker.executor.QueryExecutor;
-import pl.edu.agh.diskstalker.controller.DiskStalkerController;
 
 import java.sql.SQLException;
 
 // javaFX imports
 import javafx.application.Application;
 import javafx.stage.Stage;
-import pl.edu.agh.diskstalker.presenter.PopUpNotification;
+import pl.edu.agh.diskstalker.view.PopUpNotification;
 
 public class Main extends Application {
 
     private Stage primaryStage;
-    private DiskStalkerController diskStalkerController;
+    private MainViewController mainViewController;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
 
-        this.diskStalkerController = new DiskStalkerController(primaryStage);
-        this.diskStalkerController.initRootLayout();
+        this.mainViewController = new MainViewController(primaryStage);
+        this.mainViewController.initRootLayout();
 
 
 
