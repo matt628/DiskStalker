@@ -20,12 +20,11 @@ public class QueryExecutor {
         try {
             LOGGER.info("Creating table Items");
             create("CREATE TABLE IF NOT EXISTS Items (" +
-                    "ItemID INT NOT NULL AUTOINCREMENT," +
+                    "ItemID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Name VARCHAR(100) NOT NULL," +
                     "Path VARCHAR(200) NOT NULL," +
                     "Type VARCHAR(20)," +
-                    "Size VARCHAR(20)," +
-                    "PRIMARY KEY (ItemID)" +
+                    "Size VARCHAR(20)" +
                     ");");
         } catch (SQLException e) {
             LOGGER.info("Error during create tables: " + e.getMessage());
