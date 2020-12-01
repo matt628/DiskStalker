@@ -10,6 +10,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,8 @@ public class MainViewController {
     private void handleAddAction(ActionEvent event) {
         // FOLDER CHOOSER
         DirectoryChooser directoryChooser = new DirectoryChooser();
-
+        File selectedDirectory = directoryChooser.showDialog(primaryStage);
+        folderListView.getItems().add(selectedDirectory.getAbsolutePath());
     }
 
 
