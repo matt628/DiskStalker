@@ -20,7 +20,8 @@ public class QueryExecutor {
         try {
             LOGGER.info("Creating table Items");
             create("CREATE TABLE IF NOT EXISTS Items (" +
-                    "ItemID INT NOT NULL," +
+                    "ItemID INT NOT NULL AUTOINCREMENT," +
+                    "Name VARCHAR(100) NOT NULL," +
                     "Path VARCHAR(200) NOT NULL," +
                     "Type VARCHAR(20)," +
                     "Size VARCHAR(20)," +
