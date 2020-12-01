@@ -1,16 +1,15 @@
 package pl.edu.agh.diskstalker;
 
 // import from our code
-import pl.edu.agh.diskstalker.connection.ConnectionProvider;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.controller.MainViewController;
-import pl.edu.agh.diskstalker.executor.QueryExecutor;
+import pl.edu.agh.diskstalker.view.PopUpNotification;
 
 import java.sql.SQLException;
 
 // javaFX imports
-import javafx.application.Application;
-import javafx.stage.Stage;
-import pl.edu.agh.diskstalker.view.PopUpNotification;
 
 public class Main extends Application {
 
@@ -38,9 +37,6 @@ public class Main extends Application {
     public static void main(String[] args) throws SQLException {
         runNotification();
         launch();
-        QueryExecutor.create("INSERT INTO Items (ItemID, Path, Type, Size) VALUES (1, '/home', 'root', '4233')");
-
-        ConnectionProvider.close();
     }
 
     public static void runNotification(){ //this method is only a placeholder for code to use later
