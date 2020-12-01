@@ -13,20 +13,22 @@ public class Item {
 
     private final int id;
 
+    private final String name;
+
     private final String path;
 
     private final String type;
 
     private final String size;
 
-    private final Integer parentId;
+    private Integer parentId;
 
-    public Item(int id, String path, String type, String size, Integer parentId) {
+    public Item(int id, String name, String path, String type, String size) {
         this.id = id;
+        this.name = name;
         this.path = path;
         this.type = type;
         this.size = size;
-        this.parentId = parentId;
     }
 
     public static Optional<Item> create(final String path, final String type, final String size, final Item parent) {
@@ -59,13 +61,13 @@ public class Item {
         Object[] args = { value };
         try {
             ResultSet rs = QueryExecutor.read(sql, args);
-            return Optional.of(new Item(
-                    rs.getInt(Columns.ID),
-                    rs.getString(Columns.PATH),
-                    rs.getString(Columns.TYPE),
-                    rs.getString(Columns.SIZE),
-                    rs.getInt(Columns.PARENT))
-            );
+//            return Optional.of(new Item(
+//                    rs.getInt(Columns.ID),
+//                    rs.getString(Columns.PATH),
+//                    rs.getString(Columns.TYPE),
+//                    rs.getString(Columns.SIZE)
+////                    rs.getInt(Columns.PARENT))
+//            );
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -74,6 +76,10 @@ public class Item {
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getPath() {
@@ -96,6 +102,8 @@ public class Item {
 
         public static final String ID = "ItemID";
 
+        public static final String NAME = "Name";
+
         public static final String PATH = "Path";
 
         public static final String TYPE = "Type";
@@ -103,6 +111,8 @@ public class Item {
         public static final String SIZE = "Size";
 
         public static final String PARENT = "ParentID";
+
+        public static final String ROOT = "RootID";
     }
 
     @Override
@@ -111,14 +121,15 @@ public class Item {
         if (!(o instanceof Item)) return false;
         Item item = (Item) o;
         return id == item.id &&
+                name.equals(item.name) &&
                 path.equals(item.path) &&
                 Objects.equals(type, item.type) &&
-                Objects.equals(size, item.size) &&
-                parentId == item.parentId;
+                size.equals(item.size) &&
+                Objects.equals(parentId, item.parentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, path, type, size, parentId);
+        return Objects.hash(id, name, path, type, size, parentId);
     }
 }
