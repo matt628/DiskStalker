@@ -21,8 +21,6 @@ public class Item {
 
     private final String size;
 
-    private Integer parentId;
-
     public Item(int id, String name, String path, String type, String size) {
         this.id = id;
         this.name = name;
@@ -31,19 +29,17 @@ public class Item {
         this.size = size;
     }
 
-    public static Optional<Item> create(final String path, final String type, final String size, final Item parent) {
-//        String sql = "INSERT INTO " + TABLE_NAME + " ("
-//                + Columns.PATH + ", " + Columns.TYPE + ", " + Columns.SIZE + ", " + Columns.PARENT +
-//                ") VALUES (?, ?, ?)";
+    public static Optional<Item> create(final String name, final String path, final String type, final String size) {
+        String sql = "INSERT INTO " + TABLE_NAME + " ("
+                + Columns.NAME + ", " + Columns.PATH + ", " + Columns.TYPE + ", " + Columns.SIZE +
+                ") VALUES (?, ?, ?, ?)";
 
-        String sql = "INSERT INTO Items (Path, Type, Size) VALUES (?, ?, ?);";
-
-        Integer parentId = null;
-        if (parent != null) parentId = parent.getId();
-
-        Object[] args = { path, type, size };
+        Object[] args = { name, path, type, size };
 
         try {
+            if (findByNameAndPath(name, path).isPresent())
+                return Optional.empty();
+
             int id = QueryExecutor.createAndObtainId(sql, args);
             return Item.findById(id);
         } catch (SQLException e) {
@@ -54,20 +50,27 @@ public class Item {
 
     public static Optional<Item> findById(final int id) {
         String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + Columns.ID + " = (?)";
-        return find(id, sql);
+        Object[] value = { id };
+        return find(value, sql);
     }
 
-    public static Optional<Item> find(Object value, String sql) {
-        Object[] args = { value };
+    public static Optional<Item> findByNameAndPath(final String name, final String path) {
+        String sql = "SELECT * FROM " + TABLE_NAME +
+                " WHERE " + Columns.NAME + " = (?) AND " + Columns.PATH + " = (?)";
+        Object[] value = { name, path };
+        return find(value, sql);
+    }
+
+    public static Optional<Item> find(Object[] args, String sql) {
         try {
             ResultSet rs = QueryExecutor.read(sql, args);
-//            return Optional.of(new Item(
-//                    rs.getInt(Columns.ID),
-//                    rs.getString(Columns.PATH),
-//                    rs.getString(Columns.TYPE),
-//                    rs.getString(Columns.SIZE)
-////                    rs.getInt(Columns.PARENT))
-//            );
+            return Optional.of(new Item(
+                    rs.getInt(Columns.ID),
+                    rs.getString(Columns.NAME),
+                    rs.getString(Columns.PATH),
+                    rs.getString(Columns.TYPE),
+                    rs.getString(Columns.SIZE)
+            ));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,10 +97,6 @@ public class Item {
         return size;
     }
 
-    public int getParentId() {
-        return parentId;
-    }
-
     public static class Columns {
 
         public static final String ID = "ItemID";
@@ -109,8 +108,6 @@ public class Item {
         public static final String TYPE = "Type";
 
         public static final String SIZE = "Size";
-
-        public static final String PARENT = "ParentID";
 
         public static final String ROOT = "RootID";
     }
@@ -124,12 +121,11 @@ public class Item {
                 name.equals(item.name) &&
                 path.equals(item.path) &&
                 Objects.equals(type, item.type) &&
-                size.equals(item.size) &&
-                Objects.equals(parentId, item.parentId);
+                size.equals(item.size);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, path, type, size, parentId);
+        return Objects.hash(id, name, path, type, size);
     }
 }
