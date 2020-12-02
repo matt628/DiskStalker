@@ -2,9 +2,11 @@ package pl.edu.agh.diskstalker.presenter;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import pl.edu.agh.diskstalker.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TreeBuilder {
     public TreeBuilder() {
@@ -33,12 +35,7 @@ public class TreeBuilder {
     }
 
     List<String> getChildren(String path){
-        /* TODO implement getChildren - maybe its good idea to add a getChildren in Item.
-            then we need to create an interface Item for Root and Item class with method getChildren
-         */
-        var children = new ArrayList<String>();
-        return children;
-
+        return Item.getChildren(path).stream().map(Item::getPathname).collect(Collectors.toList());
     }
 
 
