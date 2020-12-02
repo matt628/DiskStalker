@@ -19,7 +19,6 @@ public class QueryExecutor {
     static {
         try {
             LOGGER.info("Creating table Items");
-
             create("CREATE TABLE IF NOT EXISTS Items (" +
                     "ItemID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Name VARCHAR(100) NOT NULL," +
@@ -30,6 +29,7 @@ public class QueryExecutor {
                     "FOREIGN KEY (RootID) REFERENCES Roots (RootID)" +
                     ");");
 
+            LOGGER.info("Creating table Roots");
             create("CREATE TABLE IF NOT EXISTS Roots (" +
                     "RootID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Name VARCHAR(100) NOT NULL," +
