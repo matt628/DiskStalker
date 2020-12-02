@@ -19,12 +19,23 @@ public class QueryExecutor {
     static {
         try {
             LOGGER.info("Creating table Items");
+
             create("CREATE TABLE IF NOT EXISTS Items (" +
                     "ItemID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Name VARCHAR(100) NOT NULL," +
                     "Path VARCHAR(200) NOT NULL," +
                     "Type VARCHAR(20)," +
-                    "Size VARCHAR(20)" +
+                    "Size VARCHAR(20) NOT NULL," +
+                    "RootID INTEGER NOT NULL," +
+                    "FOREIGN KEY (RootID) REFERENCES Roots (RootID)" +
+                    ");");
+
+            create("CREATE TABLE IF NOT EXISTS Roots (" +
+                    "RootID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "Name VARCHAR(100) NOT NULL," +
+                    "Path VARCHAR(100) NOT NULL," +
+                    "Size VARCHAR(20) NOT NULL," +
+                    "MaxSize VARCHAR(20)" +
                     ");");
         } catch (SQLException e) {
             LOGGER.info("Error during create tables: " + e.getMessage());
