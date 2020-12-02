@@ -37,7 +37,7 @@ public class Item {
         Object[] args = { name, path, type, size };
 
         try {
-            if (findByNameAndPath(name, path).isPresent())
+            if (findByLocation(name, path).isPresent())
                 return Optional.empty();
 
             int id = QueryExecutor.createAndObtainId(sql, args);
@@ -54,7 +54,7 @@ public class Item {
         return find(value, sql);
     }
 
-    public static Optional<Item> findByNameAndPath(final String name, final String path) {
+    public static Optional<Item> findByLocation(final String name, final String path) {
         String sql = "SELECT * FROM " + TABLE_NAME +
                 " WHERE " + Columns.NAME + " = (?) AND " + Columns.PATH + " = (?)";
         Object[] value = { name, path };
