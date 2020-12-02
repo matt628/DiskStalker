@@ -1,12 +1,14 @@
 package pl.edu.agh.diskstalker.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
@@ -102,6 +104,20 @@ public class MainViewController {
             folderListView.getItems().add(folder);
         }
 
+        // handle double click on ListView item
+        folderListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    //Use ListView's getSelected Item
+                    var currentItemSelected = folderListView.getSelectionModel()
+                            .getSelectedItem();
+                    //use this to do whatever you want to. Open Link etc.
+                    showRootConfigurationDialog();
+                }
+            }
+        });
+
     }
 
     @FXML
@@ -114,10 +130,11 @@ public class MainViewController {
 
     @FXML
     private boolean showRootConfigurationDialog() {
+        System.out.println("SUPER");
         try {
             //loading Pane
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainViewController.class.getResource("/MainPane.fxml"));
+            loader.setLocation(MainViewController.class.getResource("/FolderDetails.fxml"));
             BorderPane page = loader.load();
 
             //creating dialog scene
@@ -134,7 +151,7 @@ public class MainViewController {
             dialogStage.showAndWait();
             return folderDetailsControler.isApproved();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

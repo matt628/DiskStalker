@@ -33,4 +33,9 @@ public class FolderDetailsControler {
         dialogStage.close();
     }
 
+    @FXML
+    private void handleCancelAction(ActionEvent event) {
+        // TODO: implement
+        dialogStage.close();
+    }
 }
