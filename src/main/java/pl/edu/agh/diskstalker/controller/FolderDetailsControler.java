@@ -38,4 +38,19 @@ public class FolderDetailsControler {
         // TODO: implement
         dialogStage.close();
     }
+
+    @FXML
+    private void  handleRootUnsubscribeAction(ActionEvent event) {
+        return;
+    }
+
+    @FXML
+    private void  handleFolderDeleteAction(ActionEvent event) {
+        return;
+    }
+
+    @FXML
+    private void  handleFolderContentDeleteAction(ActionEvent event) {
+        return;
+    }
 }

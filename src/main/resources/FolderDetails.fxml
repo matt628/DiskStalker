@@ -87,6 +87,25 @@
                     <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin></Button>
+                <Button mnemonicParsing="false" onAction="#handleRootUnsubscribeAction"
+                        wrapText="true" prefWidth="120.0"
+                        text="Usuń z obserwowanych">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </HBox.margin></Button>
+                <Button mnemonicParsing="false" onAction="#handleFolderDeleteAction"
+                        wrapText="true" prefWidth="120.0"
+                        text="Usuń Folder UWAGA DZIALA!!">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </HBox.margin></Button>
+                <Button mnemonicParsing="false" onAction="#handleFolderContentDeleteAction"
+                        wrapText="true" prefWidth="120.0"
+                        text="Usuń zawartość folderu DZIALA!">
+                <HBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </HBox.margin></Button>
+
             </children>
             <BorderPane.margin>
                 <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />

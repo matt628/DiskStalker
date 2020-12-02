@@ -130,7 +130,6 @@ public class MainViewController {
 
     @FXML
     private boolean showRootConfigurationDialog() {
-        System.out.println("SUPER");
         try {
             //loading Pane
             FXMLLoader loader = new FXMLLoader();
