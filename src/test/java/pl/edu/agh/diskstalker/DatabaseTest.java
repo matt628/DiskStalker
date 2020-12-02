@@ -1,9 +1,6 @@
 package pl.edu.agh.diskstalker;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import pl.edu.agh.diskstalker.connection.ConnectionProvider;
 import pl.edu.agh.diskstalker.executor.QueryExecutor;
 import pl.edu.agh.diskstalker.model.Item;
@@ -43,6 +40,34 @@ public class DatabaseTest {
 
         assertNotEquals(item1.get().getId(), item2.get().getId());
         assertFalse(redundantItem.isPresent());
+    }
+
+    @Test
+    public void findItemTest() {
+        // When
+        var item = Item.create("floder1", "/home/temp", null, "234");
+        var foundItemById = Item.findById(item.get().getId());
+        var nonExistingItem = Item.findById(Integer.MAX_VALUE);
+
+        // Then
+        checkItem(foundItemById);
+
+        Assertions.assertEquals(item.get(), foundItemById.get());
+        Assertions.assertFalse(nonExistingItem.isPresent());
+    }
+
+    @Test
+    public void findItemLocationTest() {
+        // When
+        var item = Item.create("floder1", "/home/temp", null, "234");
+        var foundItemById = Item.findByLocation(item.get().getName(), item.get().getPath());
+        var nonExistingItem = Item.findByLocation(null, null);
+
+        // Then
+        checkItem(foundItemById);
+
+        Assertions.assertEquals(item.get(), foundItemById.get());
+        Assertions.assertFalse(nonExistingItem.isPresent());
     }
 
     private void checkItem(final Optional<Item> item) {
