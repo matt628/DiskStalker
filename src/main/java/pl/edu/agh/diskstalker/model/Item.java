@@ -4,10 +4,10 @@ import pl.edu.agh.diskstalker.executor.QueryExecutor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Item {
 
@@ -45,9 +45,9 @@ public class Item {
                 return Optional.empty();
 
             int id = QueryExecutor.createAndObtainId(sql, args);
-            Optional<Item> item = Item.findById(id);
-            item.get().root.addChild(item.get());
-            return item;
+            Optional<Item> itemOptional = Item.findById(id);
+            itemOptional.ifPresent(item -> item.getRoot().addChild(item));
+            return itemOptional;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,14 +67,6 @@ public class Item {
         return find(value, sql);
     }
 
-    public static Optional<Item> findByPath( final String path) {
-        String sql = "SELECT * FROM " + TABLE_NAME +
-                " WHERE " + Columns.PATH + " = (?)";
-        Object[] value = { path };
-        return find(value, sql);
-    }
-
-
     public static Optional<Item> find(Object[] args, String sql) {
         try {
             ResultSet rs = QueryExecutor.read(sql, args);
@@ -84,7 +76,7 @@ public class Item {
                     rs.getString(Columns.PATH),
                     rs.getString(Columns.TYPE),
                     rs.getString(Columns.SIZE),
-                    Root.findById(rs.getInt(Columns.ROOT)).get()
+                    Root.findById(rs.getInt(Columns.ROOT)).orElseThrow(SQLException::new)
             ));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,37 +84,26 @@ public class Item {
         return Optional.empty();
     }
 
-    public static List<Item> getChildren(String path) {
-        List<Item> rootChildren = Item.findByPath(path).get().root.getChildren();
-        List<Item> resultList = new ArrayList<Item>();
-        for(Item i : rootChildren){
-            if(i.isChild(path)){
-                resultList.add(i);
-            }
-        }
-        return resultList;
+    // TODO Make this code look better by extracting some code to methods
+    public static List<Item> getChildren(String pathname) {
+        String path = getPathFromPathname(pathname);
+        String name = getNameFromPathname(pathname);
+        return Item.findByLocation(name, path)
+                .map(value -> value.getRoot().getChildren().stream().filter(i -> i.isChild(pathname)).collect(Collectors.toList()))
+                .orElseGet(() -> Root.findByLocation(name, path).map(Root::getChildren).orElse(null));
     }
 
-    public int countSlashes(String someString){
-        char someChar = '\\';
-        int count = 0;
-
-        for (int i = 0; i < someString.length(); i++) {
-            if (someString.charAt(i) == someChar) {
-                count++;
-            }
-        }
-        return count;
+    private static String getNameFromPathname(String pathname) {
+        return pathname.substring(pathname.lastIndexOf('/'), pathname.lastIndexOf('.') - 1);
     }
 
-    public boolean isChild(String path1){
-        if(path.contains(path1)) {
-            return countSlashes(path) == countSlashes(path1) + 1;
-        }
-        else return false;
+    private static String getPathFromPathname(String pathname) {
+        return pathname.substring(0, pathname.lastIndexOf('/'));
     }
 
-
+    private boolean isChild(String pathname) {
+            return path.equals(pathname);
+    }
 
     public int getId() {
         return id;
@@ -146,6 +127,10 @@ public class Item {
 
     public Root getRoot() {
         return root;
+    }
+
+    public String getPathname() {
+        return path + '/' + name;
     }
 
     public static class Columns {

@@ -32,18 +32,18 @@ public class Root {
         this.maxSize = maxSize;
     }
 
-    public static Optional<Item> create(final String name, final String path, final String size, final String maxSize) {
+    public static Optional<Root> create(final String name, final String path, final String size, final String maxSize) {
         String sql = "INSERT INTO " + TABLE_NAME + " (" + Columns.NAME + ", " + Columns.PATH + ", " +
                  Columns.SIZE + ", " + Columns.MAX_SIZE + ") VALUES (?, ?, ?, ?)";
 
-        Object[] args = {name, path, size, maxSize};
+        Object[] args = { name, path, size, maxSize };
 
         try {
             if (findByLocation(name, path).isPresent())
                 return Optional.empty();
 
             int id = QueryExecutor.createAndObtainId(sql, args);
-            return Item.findById(id);
+            return Root.findByLocation(name, path);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,15 +51,15 @@ public class Root {
     }
 
     public static Optional<Root> findById(final int id) {
-        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + Item.Columns.ID + " = (?)";
-        Object[] value = {id};
+        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + Columns.ID + " = (?)";
+        Object[] value = { id };
         return find(value, sql);
     }
 
     public static Optional<Root> findByLocation(final String name, final String path) {
         String sql = "SELECT * FROM " + TABLE_NAME +
-                " WHERE " + Item.Columns.NAME + " = (?) AND " + Item.Columns.PATH + " = (?)";
-        Object[] value = {name, path};
+                " WHERE " + Columns.NAME + " = (?) AND " + Columns.PATH + " = (?)";
+        Object[] value = { name, path };
         return find(value, sql);
     }
 
@@ -83,10 +83,6 @@ public class Root {
         rootChildren.add(item);
     }
 
-    public List<Item> getChildren(){
-        return rootChildren;
-    }
-
     public int getId() {
         return id;
     }
@@ -107,9 +103,17 @@ public class Root {
         return maxSize;
     }
 
+    public List<Item> getChildren(){
+        return rootChildren;
+    }
+
+    public String getPathname() {
+        return path + '/' + name;
+    }
+
     public static class Columns {
 
-        public static final String ID = "ItemID";
+        public static final String ID = "RootID";
 
         public static final String NAME = "Name";
 
