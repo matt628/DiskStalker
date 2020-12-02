@@ -4,6 +4,8 @@ import pl.edu.agh.diskstalker.executor.QueryExecutor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -21,27 +23,31 @@ public class Item {
 
     private final String size;
 
-    public Item(int id, String name, String path, String type, String size) {
+    private final Root root;
+
+    public Item(int id, String name, String path, String type, String size, Root root) {
         this.id = id;
         this.name = name;
         this.path = path;
         this.type = type;
         this.size = size;
+        this.root = root;
     }
 
-    public static Optional<Item> create(final String name, final String path, final String type, final String size) {
-        String sql = "INSERT INTO " + TABLE_NAME + " ("
-                + Columns.NAME + ", " + Columns.PATH + ", " + Columns.TYPE + ", " + Columns.SIZE +
-                ") VALUES (?, ?, ?, ?)";
+    public static Optional<Item> create(final String name, final String path, final String type, final String size, final Root root) {
+        String sql = "INSERT INTO " + TABLE_NAME + " (" + Columns.NAME + ", " + Columns.PATH + ", " +
+                Columns.TYPE + ", " + Columns.SIZE + ", " + Columns.ROOT + ") VALUES (?, ?, ?, ?, ?)";
 
-        Object[] args = { name, path, type, size };
+        Object[] args = { name, path, type, size, root.getId() };
 
         try {
             if (findByLocation(name, path).isPresent())
                 return Optional.empty();
 
             int id = QueryExecutor.createAndObtainId(sql, args);
-            return Item.findById(id);
+            Optional<Item> item = Item.findById(id);
+            item.get().root.addChild(item.get());
+            return item;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,6 +67,14 @@ public class Item {
         return find(value, sql);
     }
 
+    public static Optional<Item> findByPath( final String path) {
+        String sql = "SELECT * FROM " + TABLE_NAME +
+                " WHERE " + Columns.PATH + " = (?)";
+        Object[] value = { path };
+        return find(value, sql);
+    }
+
+
     public static Optional<Item> find(Object[] args, String sql) {
         try {
             ResultSet rs = QueryExecutor.read(sql, args);
@@ -69,13 +83,46 @@ public class Item {
                     rs.getString(Columns.NAME),
                     rs.getString(Columns.PATH),
                     rs.getString(Columns.TYPE),
-                    rs.getString(Columns.SIZE)
+                    rs.getString(Columns.SIZE),
+                    Root.findById(rs.getInt(Columns.ROOT)).get()
             ));
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return Optional.empty();
     }
+
+    public static List<Item> getChildren(String path) {
+        List<Item> rootChildren = Item.findByPath(path).get().root.getChildren();
+        List<Item> resultList = new ArrayList<Item>();
+        for(Item i : rootChildren){
+            if(i.isChild(path)){
+                resultList.add(i);
+            }
+        }
+        return resultList;
+    }
+
+    public int countSlashes(String someString){
+        char someChar = '\\';
+        int count = 0;
+
+        for (int i = 0; i < someString.length(); i++) {
+            if (someString.charAt(i) == someChar) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean isChild(String path1){
+        if(path.contains(path1)) {
+            return countSlashes(path) == countSlashes(path1) + 1;
+        }
+        else return false;
+    }
+
+
 
     public int getId() {
         return id;
@@ -95,6 +142,10 @@ public class Item {
 
     public String getSize() {
         return size;
+    }
+
+    public Root getRoot() {
+        return root;
     }
 
     public static class Columns {

@@ -24,8 +24,8 @@ public class TreeBuilder {
     }
 
     void buildChildrenTree(TreeItem<String> parent){
-        List<String> childs = getChildren(parent.getValue());
-        for(var child : childs){
+        List<String> children = getChildren(parent.getValue());
+        for(var child : children){
             TreeItem<String> childItem = new TreeItem<>(child);
             buildChildrenTree(childItem);
             childItem.getChildren().add(childItem);
@@ -36,8 +36,8 @@ public class TreeBuilder {
         /* TODO implement getChildren - maybe its good idea to add a getChildren in Item.
             then we need to create an interface Item for Root and Item class with method getChildren
          */
-        var childs = new ArrayList<String>();
-        return childs;
+        var children = new ArrayList<String>();
+        return children;
 
     }
 
