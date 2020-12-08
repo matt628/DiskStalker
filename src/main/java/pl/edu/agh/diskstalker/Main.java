@@ -5,6 +5,7 @@ package pl.edu.agh.diskstalker;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.controller.MainViewController;
+import pl.edu.agh.diskstalker.presenter.DeleteHandler;
 import pl.edu.agh.diskstalker.view.PopUpNotification;
 
 import java.sql.SQLException;

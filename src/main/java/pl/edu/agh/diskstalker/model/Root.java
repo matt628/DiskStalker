@@ -63,6 +63,13 @@ public class Root {
         return find(value, sql);
     }
 
+//    TODO implement method find all
+//    public static Optional<Root> findAll(){
+//
+//    }
+
+    //
+
     public static Optional<Root> find(Object[] args, String sql) {
         try {
             ResultSet rs = QueryExecutor.read(sql, args);
@@ -135,6 +142,8 @@ public class Root {
                 size.equals(root.size) &&
                 maxSize.equals(root.maxSize);
     }
+
+
 
     @Override
     public int hashCode() {

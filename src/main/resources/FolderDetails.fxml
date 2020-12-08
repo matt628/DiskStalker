@@ -32,47 +32,26 @@
                 <RowConstraints minHeight="10.0" />
             </rowConstraints>
             <children>
-                <Label text="Date">
+                <Label text="Maksymalny Rozmiar">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Label>
-                <Label text="Payee" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label text="Category" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label text="Inflow" GridPane.rowIndex="3">
-                    <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <TextField fx:id="dateTextField" GridPane.columnIndex="1">
+<!--                <Label text="Payee" GridPane.rowIndex="1">-->
+<!--                    <GridPane.margin>-->
+<!--                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />-->
+<!--                    </GridPane.margin>-->
+<!--                </Label>-->
+                <TextField fx:id="maxSizeField" GridPane.columnIndex="1">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField fx:id="payeeTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TextField>
-                <TextField fx:id="categoryTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TextField>
-                <TextField fx:id="inflowTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                    <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TextField>
-
+<!--                <TextField fx:id="payeeTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">-->
+<!--                    <GridPane.margin>-->
+<!--                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />-->
+<!--                    </GridPane.margin>-->
+<!--                </TextField>-->
             </children>
         </GridPane>
     </center>
