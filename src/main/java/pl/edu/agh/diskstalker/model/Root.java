@@ -48,7 +48,7 @@ public class Root {
     }
 
     public static List<Root> findAll() {
-        String sql = "SELECT * FROM Root";
+        String sql = "SELECT * FROM" + TABLE_NAME;
 
         try{
             ResultSet rs = QueryExecutor.read(sql);
