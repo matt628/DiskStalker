@@ -1,18 +1,17 @@
-package pl.edu.agh.diskstalker;
+package pl.edu.agh.diskstalker.model;
 
 import org.junit.jupiter.api.*;
 import pl.edu.agh.diskstalker.connection.ConnectionProvider;
 import pl.edu.agh.diskstalker.executor.QueryExecutor;
-import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-// TODO Separate this class to ItemTest and RootTest
-public class DatabaseTest {
+public class RootTest {
 
     @BeforeAll
     public static void init() {
@@ -22,7 +21,6 @@ public class DatabaseTest {
     @BeforeEach
     public void setUp() throws SQLException {
         QueryExecutor.delete("DELETE FROM Roots");
-        QueryExecutor.delete("DELETE FROM Items");
     }
 
     @AfterAll
@@ -73,55 +71,6 @@ public class DatabaseTest {
         Assertions.assertFalse(nonExistingRoot.isPresent());
     }
 
-    @Test
-    public void createItemTest() {
-        // When
-        var root = Root.create("some", "/home", "234342", "4545323");
-
-        var item1 = Item.create("folder1", "/home", null, "234", root.get());
-        var item2 = Item.create("file1", "/home/folder1", "jpg", "42", root.get());
-        var redundantItem = Item.create("folder1", "/home", null, "234", root.get());
-
-        // Then
-        checkItem(item1);
-        checkItem(item2);
-
-        assertNotEquals(item1.get().getId(), item2.get().getId());
-        assertFalse(redundantItem.isPresent());
-    }
-
-    @Test
-    public void findItemTest() {
-        // When
-        var root = Root.create("some", "/home", "234342", "4545323");
-
-        var item = Item.create("folder1", "/home/temp", null, "234", root.get());
-        var foundItemById = Item.findById(item.get().getId());
-        var nonExistingItem = Item.findById(Integer.MAX_VALUE);
-
-        // Then
-        checkItem(foundItemById);
-
-        Assertions.assertEquals(item.get(), foundItemById.get());
-        Assertions.assertFalse(nonExistingItem.isPresent());
-    }
-
-    @Test
-    public void findItemLocationTest() {
-        // When
-        var root = Root.create("some", "/home", "234342", "4545323");
-
-        var item = Item.create("folder1", "/home/temp", null, "234", root.get());
-        var foundItemById = Item.findByLocation(item.get().getName(), item.get().getPath());
-        var nonExistingItem = Item.findByLocation(null, null);
-
-        // Then
-        checkItem(foundItemById);
-
-        Assertions.assertEquals(item.get(), foundItemById.get());
-        Assertions.assertFalse(nonExistingItem.isPresent());
-    }
-
     private void checkRoot(final Optional<Root> root) {
         assertTrue(root.isPresent());
         root.ifPresent(r -> {
@@ -130,16 +79,6 @@ public class DatabaseTest {
             assertNotNull(r.getPath());
             assertNotNull(r.getSize());
             assertNotNull(r.getMaxSize());
-        });
-    }
-
-    private void checkItem(final Optional<Item> item) {
-        assertTrue(item.isPresent());
-        item.ifPresent(i -> {
-            assertTrue(i.getId() > 0);
-            assertNotNull(i.getName());
-            assertNotNull(i.getPath());
-            assertNotNull(i.getSize());
         });
     }
 }
