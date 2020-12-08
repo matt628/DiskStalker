@@ -4,8 +4,6 @@ import pl.edu.agh.diskstalker.executor.QueryExecutor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -21,8 +19,6 @@ public class Root {
     private final String size;
 
     private final String maxSize;
-
-    private final List<Item> rootChildren = new ArrayList<>();
 
     public Root(int id, String name, String path, String size, String maxSize) {
         this.id = id;
@@ -79,10 +75,6 @@ public class Root {
         return Optional.empty();
     }
 
-    public void addChild(Item item){
-        rootChildren.add(item);
-    }
-
     public int getId() {
         return id;
     }
@@ -103,14 +95,6 @@ public class Root {
         return maxSize;
     }
 
-    public List<Item> getChildren(){
-        return rootChildren;
-    }
-
-    public String getPathname() {
-        return path + '/' + name;
-    }
-
     public static class Columns {
 
         public static final String ID = "RootID";
@@ -122,6 +106,17 @@ public class Root {
         public static final String SIZE = "Size";
 
         public static final String MAX_SIZE = "MaxSize";
+    }
+
+    @Override
+    public String toString() {
+        return "Root{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", size='" + size + '\'' +
+                ", maxSize='" + maxSize +
+                '}';
     }
 
     @Override

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class Item {
 
@@ -45,9 +44,7 @@ public class Item {
                 return Optional.empty();
 
             int id = QueryExecutor.createAndObtainId(sql, args);
-            Optional<Item> itemOptional = Item.findById(id);
-            itemOptional.ifPresent(item -> item.getRoot().addChild(item));
-            return itemOptional;
+            return Item.findById(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,23 +83,22 @@ public class Item {
 
     // TODO Make this code look better by extracting some code to methods
     public static List<Item> getChildren(String pathname) {
-        String path = getPathFromPathname(pathname);
-        String name = getNameFromPathname(pathname);
-        return Item.findByLocation(name, path)
-                .map(value -> value.getRoot().getChildren().stream().filter(i -> i.isChild(pathname)).collect(Collectors.toList()))
-                .orElseGet(() -> Root.findByLocation(name, path).map(Root::getChildren).orElse(null));
+        return null;
     }
 
-    private static String getNameFromPathname(String pathname) {
-        return pathname.substring(pathname.lastIndexOf('/'), pathname.lastIndexOf('.') - 1);
+    public static String getNameFromPathname(String pathname) {
+        int slashIdx = pathname.lastIndexOf('/');
+        int dotIdx = pathname.lastIndexOf('.');
+        return dotIdx == -1 ? pathname.substring(slashIdx + 1) :
+                pathname.substring(slashIdx + 1, dotIdx);
     }
 
-    private static String getPathFromPathname(String pathname) {
-        return pathname.substring(0, pathname.lastIndexOf('/'));
+    public static String getPathFromPathname(String pathname) {
+        return pathname.substring(0, pathname.lastIndexOf('/') + 1);
     }
 
     private boolean isChild(String pathname) {
-            return path.equals(pathname);
+        return path.equals(pathname);
     }
 
     public int getId() {
@@ -146,6 +142,18 @@ public class Item {
         public static final String SIZE = "Size";
 
         public static final String ROOT = "RootID";
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", type='" + type + '\'' +
+                ", size='" + size + '\'' +
+                ", rootID=" + root.getId() +
+                '}';
     }
 
     @Override
