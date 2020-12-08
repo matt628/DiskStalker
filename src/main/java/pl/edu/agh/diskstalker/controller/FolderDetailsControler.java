@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import pl.edu.agh.diskstalker.presenter.DeleteHandler;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class FolderDetailsControler {
@@ -15,7 +14,7 @@ public class FolderDetailsControler {
     private boolean approved;
 
     @FXML
-    private TextField maxSizeField;
+    private TextField folderPath;
 
 
     public FolderDetailsControler() {
@@ -31,7 +30,7 @@ public class FolderDetailsControler {
     }
 
     private void updateDisplay(){
-        maxSizeField.setText(this.path);
+        folderPath.setText(this.path);
     }
 
     public boolean isApproved() {
@@ -75,7 +74,13 @@ public class FolderDetailsControler {
 
 
     @FXML
-    private void  handleFolderContentDeleteAction(ActionEvent event) {
+    private void handleFolderCleanAction(ActionEvent event) {
+        try {
+            DeleteHandler.directoryCleaner(this.path);
+        } catch (IOException e) {
+            e.printStackTrace();
+//            TODO do sth with this exception
+        }
         return;
     }
 }

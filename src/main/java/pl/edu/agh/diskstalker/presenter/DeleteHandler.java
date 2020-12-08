@@ -18,4 +18,10 @@ public class DeleteHandler {
         FileUtils.deleteDirectory(file);
         System.out.println("Folder deleted........");
     }
+
+    public static void directoryCleaner(String directoryPath) throws IOException{
+        File directory = new File(directoryPath);
+        FileUtils.cleanDirectory(directory);
+        System.out.println("Folder cleaned........");
+    }
 }
