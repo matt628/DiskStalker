@@ -2,11 +2,10 @@ package pl.edu.agh.diskstalker.model;
 
 import pl.edu.agh.diskstalker.executor.QueryExecutor;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class Item {
 
@@ -57,6 +56,30 @@ public class Item {
         return find(value, sql);
     }
 
+    public static List<Item> findByPath(final String path) {
+        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + Columns.PATH + " = (?)";
+        Object[] value = { path };
+
+        try{
+            ResultSet rs = QueryExecutor.read(sql, value);
+            List<Item> resultList = new LinkedList<>();
+
+            while(rs.next()){
+                resultList.add(new Item(rs.getInt(Columns.ID),
+                        rs.getString(Columns.NAME),
+                        rs.getString(Columns.PATH),
+                        rs.getString(Columns.TYPE),
+                        rs.getString(Columns.SIZE),
+                        Root.findById(rs.getInt(Columns.ROOT)).orElseThrow(SQLException::new)
+                ));
+            }
+            return resultList;
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
     public static Optional<Item> findByLocation(final String name, final String path) {
         String sql = "SELECT * FROM " + TABLE_NAME +
                 " WHERE " + Columns.NAME + " = (?) AND " + Columns.PATH + " = (?)";
@@ -81,24 +104,8 @@ public class Item {
         return Optional.empty();
     }
 
-    // TODO Make this code look better by extracting some code to methods
     public static List<Item> getChildren(String pathname) {
-        return null;
-    }
-
-    public static String getNameFromPathname(String pathname) {
-        int slashIdx = pathname.lastIndexOf('/');
-        int dotIdx = pathname.lastIndexOf('.');
-        return dotIdx == -1 ? pathname.substring(slashIdx + 1) :
-                pathname.substring(slashIdx + 1, dotIdx);
-    }
-
-    public static String getPathFromPathname(String pathname) {
-        return pathname.substring(0, pathname.lastIndexOf('/') + 1);
-    }
-
-    private boolean isChild(String pathname) {
-        return path.equals(pathname);
+        return findByPath(pathname + File.separator);
     }
 
     public int getId() {
