@@ -5,6 +5,7 @@ import pl.edu.agh.diskstalker.connection.ConnectionProvider;
 import pl.edu.agh.diskstalker.executor.QueryExecutor;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,61 +96,36 @@ public class ItemTest {
     }
 
     @Test
-    public void getNameFromPathname() {
-        // When
-        String pathname1 = "/home";
-        String pathname2 = "/home/folder";
-        String pathname3 = "/home/folder/picture.jpg";
-        String pathname4 = "/home/folder/file.txt";
-
-        String expectedName1 = "home";
-        String expectedName2 = "folder";
-        String expectedName3 = "picture";
-        String expectedName4 = "file";
-
-        // Then
-        Assertions.assertEquals(expectedName1, Item.getNameFromPathname(pathname1));
-        Assertions.assertEquals(expectedName2, Item.getNameFromPathname(pathname2));
-        Assertions.assertEquals(expectedName3, Item.getNameFromPathname(pathname3));
-        Assertions.assertEquals(expectedName4, Item.getNameFromPathname(pathname4));
-    }
-
-    @Test
-    public void getPathFromPathname() {
-        // When
-        String pathname1 = "/home";
-        String pathname2 = "/home/folder";
-        String pathname3 = "/home/folder/picture.jpg";
-        String pathname4 = "/home/folder/file.txt";
-
-        String expectedPath1 = "/";
-        String expectedPath2 = "/home/";
-        String expectedPath3 = "/home/folder/";
-        String expectedPath4 = "/home/folder/";
-
-        // Then
-        Assertions.assertEquals(expectedPath1, Item.getPathFromPathname(pathname1));
-        Assertions.assertEquals(expectedPath2, Item.getPathFromPathname(pathname2));
-        Assertions.assertEquals(expectedPath3, Item.getPathFromPathname(pathname3));
-        Assertions.assertEquals(expectedPath4, Item.getPathFromPathname(pathname4));
-    }
-
-    @Test
     public void getChildrenTest() {
         // When
         var root = getMockedRoot();
 
         var item1 = Item.create("folder1", "/home/", null, "234", root);
         var item2 = Item.create("folder2", "/home/", null, "245", root);
-        var item3 = Item.create("file", "/home/", "jpg", "542", root);
+        var item3 = Item.create("file", "/home/", ".txt", "34", root);
         var item4 = Item.create("folder", "/home/folder2/", null, "54", root);
-        var item5 = Item.create("file", "/home/folder1/", "jpg", "42", root);
+        var item5 = Item.create("file", "/home/folder1/", ".jpg", "42", root);
+        var item6 = Item.create("file", "/home/folder2/", ".jpg", "542", root);
 
         List<Item> children1 = Item.getChildren("/home/folder1");
+        List<Item> children2 = Item.getChildren("/home/folder2");
+        List<Item> children3 = Item.getChildren("/home");
+        List<Item> errorChildren = Item.getChildren("/path");
 
         Assertions.assertNotNull(children1);
         Assertions.assertEquals(1, children1.size());
         Assertions.assertTrue(children1.contains(item5.get()));
+
+        Assertions.assertNotNull(children2);
+        Assertions.assertEquals(2, children2.size());
+        Assertions.assertTrue(children2.containsAll(Arrays.asList(item4.get(), item6.get())));
+
+        Assertions.assertNotNull(children3);
+        Assertions.assertEquals(3, children3.size());
+        Assertions.assertTrue(children3.containsAll(Arrays.asList(item1.get(), item2.get(), item3.get())));
+
+        Assertions.assertNotNull(errorChildren);
+        Assertions.assertEquals(0, errorChildren.size());
     }
 
     private Root getMockedRoot() {
