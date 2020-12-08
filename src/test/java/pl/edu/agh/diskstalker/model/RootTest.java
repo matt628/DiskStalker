@@ -3,13 +3,11 @@ package pl.edu.agh.diskstalker.model;
 import org.junit.jupiter.api.*;
 import pl.edu.agh.diskstalker.connection.ConnectionProvider;
 import pl.edu.agh.diskstalker.executor.QueryExecutor;
-import pl.edu.agh.diskstalker.model.Root;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class RootTest {
 
