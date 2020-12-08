@@ -4,13 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
+import pl.edu.agh.diskstalker.model.Root;
 import pl.edu.agh.diskstalker.presenter.DeleteHandler;
 
 import java.io.IOException;
 
 public class FolderDetailsControler {
     private Stage dialogStage;
-    private String path; //Finaly it should be Root
+    private Root root; //Finaly it should be Root
     private boolean approved;
 
     @FXML
@@ -24,13 +25,13 @@ public class FolderDetailsControler {
         this.dialogStage = dialogStage;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setRoot(Root root) {
+        this.root = root;
         updateDisplay();
     }
 
     private void updateDisplay(){
-        folderPath.setText(this.path);
+        folderPath.setText(this.root.getPath());
     }
 
     public boolean isApproved() {
@@ -64,7 +65,7 @@ public class FolderDetailsControler {
     @FXML
     private void  handleFolderDeleteAction(ActionEvent event) {
         try {
-            DeleteHandler.deleter(this.path);
+            DeleteHandler.deleter(this.root.getPath());
         } catch (IOException e) {
             e.printStackTrace();
 //            TODO do sth with this exception
@@ -76,7 +77,7 @@ public class FolderDetailsControler {
     @FXML
     private void handleFolderCleanAction(ActionEvent event) {
         try {
-            DeleteHandler.directoryCleaner(this.path);
+            DeleteHandler.directoryCleaner(this.root.getPath());
         } catch (IOException e) {
             e.printStackTrace();
 //            TODO do sth with this exception

@@ -15,6 +15,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.presenter.TreeBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +30,7 @@ public class MainViewController {
     private Button addButton;
 
     @FXML
-    private ListView<String> folderListView;
+    private ListView<Root> folderListView;
 
     @FXML
     private TreeView<String> folderTreeView;
@@ -73,10 +75,12 @@ public class MainViewController {
     private void initialize() {
         // MOCK DATA CREATION
         // root paths
-        List<String> rootFolders = new ArrayList<String>();
-        rootFolders.add("myFirstPath");
+        List<Root> rootFolders = new ArrayList<>();
+        Root mockRoot = new Root(0, "myFirstPath", "C:\\Users\\Mateusz\\Desktop\\testowy", "", "" );
+        rootFolders.add(mockRoot);
 
         // tree view
+        //mock code
         //main root
         TreeItem<String> mainRoot = new TreeItem<>("roots");
 
@@ -94,13 +98,13 @@ public class MainViewController {
         TreeItem<String> rootPath2 = new TreeItem<>("rootPath");
         mainRoot.getChildren().add(rootPath2);
 
-
-        folderTreeView.setRoot(mainRoot);
+//        TreeBuilder treeBuilder = new TreeBuilder();
+//        folderTreeView = treeBuilder.buildTree("D:\\Dokumenty2\\MEMY");
 
 
 
         // WORKING CODE
-        for(String folder : rootFolders) {
+        for(Root folder : rootFolders) {
             folderListView.getItems().add(folder);
         }
 
@@ -123,13 +127,14 @@ public class MainViewController {
     @FXML
     private void handleAddAction(ActionEvent event) {
         // FOLDER CHOOSER
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDirectory = directoryChooser.showDialog(primaryStage);
-        folderListView.getItems().add(selectedDirectory.getAbsolutePath());
+        //TODO
+//        DirectoryChooser directoryChooser = new DirectoryChooser();
+//        File selectedDirectory = directoryChooser.showDialog(primaryStage);
+//        folderListView.getItems().add(selectedDirectory.getAbsolutePath());
     }
 
     @FXML
-    private boolean showRootConfigurationDialog(String path) {
+    private boolean showRootConfigurationDialog(Root root) {
         try {
             //loading Pane
             FXMLLoader loader = new FXMLLoader();
@@ -146,7 +151,7 @@ public class MainViewController {
 
             FolderDetailsControler folderDetailsControler = loader.getController();
             folderDetailsControler.setDialogStage(dialogStage);
-            folderDetailsControler.setPath(path);
+            folderDetailsControler.setRoot(root);
 
             dialogStage.showAndWait();
             return folderDetailsControler.isApproved();
