@@ -100,17 +100,17 @@ public class ItemTest {
         // When
         var root = getMockedRoot();
 
-        var item1 = Item.create("folder1", "/home/", null, "234", root);
-        var item2 = Item.create("folder2", "/home/", null, "245", root);
-        var item3 = Item.create("file", "/home/", ".txt", "34", root);
-        var item4 = Item.create("folder", "/home/folder2/", null, "54", root);
-        var item5 = Item.create("file", "/home/folder1/", ".jpg", "42", root);
-        var item6 = Item.create("file", "/home/folder2/", ".jpg", "542", root);
+        var item1 = Item.create("folder1", "\\home\\", null, "234", root);
+        var item2 = Item.create("folder2", "\\home\\", null, "245", root);
+        var item3 = Item.create("file", "\\home\\", ".txt", "34", root);
+        var item4 = Item.create("folder", "\\home\\folder2\\", null, "54", root);
+        var item5 = Item.create("file", "\\home\\folder1\\", ".jpg", "42", root);
+        var item6 = Item.create("file", "\\home\\folder2\\", ".jpg", "542", root);
 
-        List<Item> children1 = Item.getChildren("/home/folder1");
-        List<Item> children2 = Item.getChildren("/home/folder2");
-        List<Item> children3 = Item.getChildren("/home");
-        List<Item> errorChildren = Item.getChildren("/path");
+        List<Item> children1 = Item.getChildren("\\home\\folder1");
+        List<Item> children2 = Item.getChildren("\\home\\folder2");
+        List<Item> children3 = Item.getChildren("\\home");
+        List<Item> errorChildren = Item.getChildren("\\path");
 
         Assertions.assertNotNull(children1);
         Assertions.assertEquals(1, children1.size());
