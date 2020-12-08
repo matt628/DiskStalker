@@ -67,7 +67,12 @@ public class MainViewController {
 
     }
 
-
+    void updateRoots(){
+        folderListView.getItems().clear();
+        for(Root folder : Root.findAll()) {
+            folderListView.getItems().add(folder);
+        }
+    }
 
     @FXML
     @SuppressWarnings("Duplicates")
@@ -75,7 +80,7 @@ public class MainViewController {
     private void initialize() {
         // MOCK DATA CREATION
         // root paths
-        List<Root> rootFolders = new ArrayList<>();
+        List<Root> rootFolders = Root.findAll();
         Root mockRoot = new Root(0, "myFirstPath", "C:\\Users\\Mateusz\\Desktop\\testowy", "", "" );
         rootFolders.add(mockRoot);
 
@@ -127,9 +132,17 @@ public class MainViewController {
     @FXML
     private void handleAddAction(ActionEvent event) {
         // FOLDER CHOOSER
-        //TODO
-//        DirectoryChooser directoryChooser = new DirectoryChooser();
-//        File selectedDirectory = directoryChooser.showDialog(primaryStage);
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(primaryStage);
+
+        // ShowConfigData
+        String path = selectedDirectory.getAbsolutePath();
+        Root root = new Root(0,"", path, "", "");
+        showRootConfigurationDialog(root);
+        //TODO get max size and name
+        Root.create("", path, "", "");
+
+        updateRoots(); //TODO this should be in root.create()
 //        folderListView.getItems().add(selectedDirectory.getAbsolutePath());
     }
 

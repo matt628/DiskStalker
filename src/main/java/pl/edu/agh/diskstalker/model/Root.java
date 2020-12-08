@@ -1,5 +1,6 @@
 package pl.edu.agh.diskstalker.model;
 
+import pl.edu.agh.diskstalker.controller.MainViewController;
 import pl.edu.agh.diskstalker.executor.QueryExecutor;
 
 import java.sql.ResultSet;
@@ -34,7 +35,8 @@ public class Root {
                  Columns.SIZE + ", " + Columns.MAX_SIZE + ") VALUES (?, ?, ?, ?)";
 
         Object[] args = { name, path, size, maxSize };
-
+        // todo add spring and uncomment line below
+        // mainViewController.updateRoots
         try {
             if (findByLocation(name, path).isPresent())
                 return Optional.empty();
@@ -48,7 +50,7 @@ public class Root {
     }
 
     public static List<Root> findAll() {
-        String sql = "SELECT * FROM" + TABLE_NAME;
+        String sql = "SELECT * FROM " + TABLE_NAME;
 
         try{
             ResultSet rs = QueryExecutor.read(sql);
