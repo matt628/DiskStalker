@@ -32,7 +32,7 @@
                 <RowConstraints minHeight="10.0" />
             </rowConstraints>
             <children>
-                <Label text="Maksymalny Rozmiar">
+                <Label text="Sciezka Folderu">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
@@ -42,7 +42,7 @@
 <!--                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />-->
 <!--                    </GridPane.margin>-->
 <!--                </Label>-->
-                <TextField fx:id="maxSizeField" GridPane.columnIndex="1">
+                <TextField fx:id="folderPath" GridPane.columnIndex="1">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
@@ -78,7 +78,7 @@
                     <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin></Button>
-                <Button mnemonicParsing="false" onAction="#handleFolderContentDeleteAction"
+                <Button mnemonicParsing="false" onAction="#handleFolderCleanAction"
                         wrapText="true" prefWidth="120.0"
                         text="Usuń zawartość folderu DZIALA!">
                 <HBox.margin>
