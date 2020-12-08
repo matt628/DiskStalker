@@ -16,6 +16,6 @@ public class DeleteHandler {
         //Creating the File object
         File file = new File(filePath);
         FileUtils.deleteDirectory(file);
-        System.out.println("Files deleted........");
+        System.out.println("Folder deleted........");
     }
 }

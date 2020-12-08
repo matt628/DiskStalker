@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.*;
 
 public class Root {
     public static final String TABLE_NAME = "Roots";
@@ -44,6 +45,28 @@ public class Root {
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    public static List<Root> findAll() {
+        String sql = "SELECT * FROM Root";
+
+        try{
+            ResultSet rs = QueryExecutor.read(sql);
+            List<Root> resultList = new LinkedList<>();
+
+            while(rs.next()){
+                resultList.add(new Root(rs.getInt(Columns.ID),
+                        rs.getString(Columns.NAME),
+                        rs.getString(Columns.PATH),
+                        rs.getString(Columns.SIZE),
+                        rs.getString(Columns.MAX_SIZE))
+                );
+            }
+            return resultList;
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
     public static Optional<Root> findById(final int id) {
@@ -130,6 +153,8 @@ public class Root {
                 size.equals(root.size) &&
                 maxSize.equals(root.maxSize);
     }
+
+
 
     @Override
     public int hashCode() {

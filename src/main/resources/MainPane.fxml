@@ -35,7 +35,8 @@
                     </children>
                 </VBox>
                 <Button fx:id="addButton" maxWidth="1.7976931348623157E308"
-                        mnemonicParsing="false" onAction="#handleAddAction" text="+"></Button>
+                        mnemonicParsing="false" onAction="#handleAddAction" text="+"
+                layoutY="80.0"></Button>
             </HBox>
         </VBox>
         <VBox prefHeight="600.0" prefWidth="350.0">

@@ -113,7 +113,7 @@ public class MainViewController {
                     var currentItemSelected = folderListView.getSelectionModel()
                             .getSelectedItem();
                     //use this to do whatever you want to. Open Link etc.
-                    showRootConfigurationDialog();
+                    showRootConfigurationDialog(currentItemSelected);
                 }
             }
         });
@@ -129,7 +129,7 @@ public class MainViewController {
     }
 
     @FXML
-    private boolean showRootConfigurationDialog() {
+    private boolean showRootConfigurationDialog(String path) {
         try {
             //loading Pane
             FXMLLoader loader = new FXMLLoader();
@@ -146,6 +146,7 @@ public class MainViewController {
 
             FolderDetailsControler folderDetailsControler = loader.getController();
             folderDetailsControler.setDialogStage(dialogStage);
+            folderDetailsControler.setPath(path);
 
             dialogStage.showAndWait();
             return folderDetailsControler.isApproved();

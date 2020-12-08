@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class TreeBuilder {
     public TreeBuilder() {
-    } // dependency injection thish should be a singelton
+    } // dependency injection this should be a singelton
 
     void buildTree(String path){ // this string should be change to input folder
         // tree view
@@ -20,8 +20,6 @@ public class TreeBuilder {
         TreeItem<String> mainRoot = new TreeItem<>(path);
 
         buildChildrenTree(mainRoot);
-
-
 
     }
 
@@ -37,7 +35,4 @@ public class TreeBuilder {
     List<String> getChildren(String path){
         return Item.getChildren(path).stream().map(Item::getPathname).collect(Collectors.toList());
     }
-
-
-
 }
