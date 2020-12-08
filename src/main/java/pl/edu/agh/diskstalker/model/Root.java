@@ -4,10 +4,7 @@ import pl.edu.agh.diskstalker.executor.QueryExecutor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class Root {
     public static final String TABLE_NAME = "Roots";
@@ -63,12 +60,29 @@ public class Root {
         return find(value, sql);
     }
 
-//    TODO implement method find all
-//    public static Optional<Root> findAll(){
-//
-//    }
 
-    //
+    public static List<Root> findAll(){
+        String sql = "SELECT * FROM Root";
+        Object[] value = {};
+        try{
+            ResultSet rs = QueryExecutor.read(sql);
+            List<Root> resultList = new LinkedList<>();
+            while(rs.next()){
+                resultList.add(new Root(rs.getInt(Columns.ID),
+                        rs.getString(Columns.NAME),
+                        rs.getString(Columns.PATH),
+                        rs.getString(Columns.SIZE),
+                        rs.getString(Columns.MAX_SIZE))
+                );
+            }
+            return resultList;
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+
 
     public static Optional<Root> find(Object[] args, String sql) {
         try {
