@@ -1,5 +1,6 @@
 package pl.edu.agh.diskstalker.controller;
-
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import pl.edu.agh.diskstalker.Guice.GuiceModule;
 import pl.edu.agh.diskstalker.model.Root;
 import pl.edu.agh.diskstalker.presenter.SoundEffects;
 import pl.edu.agh.diskstalker.presenter.TreeBuilder;
@@ -44,9 +46,12 @@ public class MainViewController {
     public void initRootLayout() {
         try {
             this.primaryStage.setTitle("Disk Stalker");
-
+            Injector injector = Guice.createInjector(new GuiceModule());
             // load layout from FXML file
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(MainViewController.class.getResource("/MainPane.fxml"));
             HBox rootLayout = loader.load();
             //            BorderPane rootLayout = loader.load();
@@ -104,6 +109,7 @@ public class MainViewController {
         TreeItem<String> rootPath2 = new TreeItem<>("rootPath");
         mainRoot.getChildren().add(rootPath2);
 
+        folderTreeView.setRoot(mainRoot);
 //        TreeBuilder treeBuilder = new TreeBuilder();
 //        folderTreeView = treeBuilder.buildTree("D:\\Dokumenty2\\MEMY");
 
