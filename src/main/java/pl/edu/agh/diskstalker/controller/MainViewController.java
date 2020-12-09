@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.presenter.SoundEffects;
 import pl.edu.agh.diskstalker.presenter.TreeBuilder;
 
 import java.io.File;
@@ -141,7 +142,7 @@ public class MainViewController {
         showRootConfigurationDialog(root);
         //TODO get max size and name
         Root.create("", path, "", "");
-
+        SoundEffects.playSound("success.wav");
         updateRoots(); //TODO this should be in root.create()
 //        folderListView.getItems().add(selectedDirectory.getAbsolutePath());
     }
