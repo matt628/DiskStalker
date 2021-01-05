@@ -45,17 +45,33 @@ public class Item {
     }
 
     public String getPathname() {
-        return path + '/' + name;
+        return path + File.separator + name;
     }
 
     public List<Item> getChildren() {
         List<Item> rootChildren = root.getItems();
         return rootChildren.stream()
-                .filter(item -> isChild(getPathname()))
+                .filter(item -> isSubItem(item.getPath()))
                 .collect(Collectors.toList());
     }
 
-    private boolean isChild(String pathname) {
-        return pathname.equals(path + File.separator);
+    private boolean isSubItem(String pathname) {
+        return pathname.equals(getPathname());
+    }
+
+//    private boolean isChild(String pathname) {
+//        return
+//    }
+
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", type='" + type + '\'' +
+                ", size='" + size + '\'' +
+                ", root=" + root +
+                '}';
     }
 }

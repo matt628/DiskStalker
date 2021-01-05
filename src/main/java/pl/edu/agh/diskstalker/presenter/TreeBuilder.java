@@ -13,15 +13,16 @@ public class TreeBuilder {
         TreeItem<Item> mainRoot = new TreeItem<>(item);
         buildChildrenTree(mainRoot);
         treeView.setRoot(mainRoot);
+
         return treeView;
     }
 
     private void buildChildrenTree(TreeItem<Item> parent) {
         List<Item> children = getChildren(parent.getValue());
-        for (var child : children) {
+        for (Item child : children) {
             TreeItem<Item> childItem = new TreeItem<>(child);
+            parent.getChildren().add(childItem);
             buildChildrenTree(childItem);
-            childItem.getChildren().add(childItem);
         }
     }
 
