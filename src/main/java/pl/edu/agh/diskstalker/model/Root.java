@@ -2,6 +2,7 @@ package pl.edu.agh.diskstalker.model;
 
 import pl.edu.agh.diskstalker.database.executor.QueryExecutor;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -111,7 +112,7 @@ public class Root {
     }
 
     public String getPathname() {
-        return path + '/' + name;
+        return path + File.separator + name;
     }
 
     public List<Item> getItems() {

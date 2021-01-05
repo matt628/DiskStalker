@@ -20,16 +20,6 @@ public class Main extends Application {
 
         this.mainViewController = new MainViewController(primaryStage);
         this.mainViewController.initRootLayout();
-
-
-
-//        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("MainPane.fxml"));
-//        Label l = new Label("Hello, JavaFX " );
-//        Scene scene = new Scene(root, 640, 480);
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-//        this.appController = new pl.edu.agh.diskstalker.controller.DiskStalkerController(primaryStage);
-//        this.appController.initRootLayout();
     }
 
     public static void main(String[] args) throws SQLException {

@@ -5,27 +5,22 @@ import pl.edu.agh.diskstalker.controller.MainViewController;
 import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
 
-import java.util.List;
-
 public class TreeHandler {
-//    TODO is should connects root and tree builder
-    TreeBuilder treeBuilder;
-    MainViewController mainViewController;
+    private final TreeBuilder treeBuilder;
+    private final MainViewController mainViewController;
 
+    // TODO: Juice injection
     public TreeHandler(TreeBuilder treeBuilder, MainViewController mainViewController) {
         this.treeBuilder = treeBuilder;
         this.mainViewController = mainViewController;
     }
 
-    public void buildTree(){
+    public TreeView<Item> buildTree(Root root) {
+        Item itemRoot = root.getItems().stream()
+                .filter(item -> item.getPathname().equals(root.getPathname()))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
 
-
-
-    }
-
-    public TreeView<String> updateTree(Root root) {
-        List<Item> items = root.getItems();
-
-        return new TreeView<>();
+        return treeBuilder.buildTree(itemRoot);
     }
 }

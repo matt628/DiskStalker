@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -16,8 +15,10 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.Guice.GuiceModule;
+import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
-import pl.edu.agh.diskstalker.presenter.*;
+import pl.edu.agh.diskstalker.presenter.SoundEffects;
+import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,8 +34,9 @@ public class MainViewController {
     private ListView<Root> folderListView;
 
     @FXML
-    private TreeView<String> folderTreeView;
+    private TreeView<Item> folderTreeView;
 
+    // TODO: Juice injection
     private TreeHandler treeHandler;
 
     private FolderAnalyzerHandler folderAnalyzerHandler;
@@ -99,7 +101,7 @@ public class MainViewController {
             if (click.getClickCount() == 2) {
                 showRootConfigurationDialog(currentItemSelected);
             } else if (click.getClickCount() == 1) {
-                folderTreeView = treeHandler.updateTree(currentItemSelected);
+                folderTreeView = treeHandler.buildTree(currentItemSelected);
             }
         });
 
