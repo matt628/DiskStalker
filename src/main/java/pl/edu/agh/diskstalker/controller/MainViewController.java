@@ -39,10 +39,7 @@ public class MainViewController {
     // TODO: Juice injection
     private TreeHandler treeHandler;
 
-    private FolderAnalyzerHandler folderAnalyzerHandler;
-
-    public MainViewController() throws IOException {
-        folderAnalyzerHandler = new FolderAnalyzerHandler();
+    public MainViewController() {
     }
 
     public MainViewController(Stage primaryStage) {
@@ -108,7 +105,7 @@ public class MainViewController {
     }
 
     @FXML
-    private void handleAddAction(ActionEvent event) throws IOException {
+    private void handleAddAction(ActionEvent event) {
         // FOLDER CHOOSER
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(primaryStage);
@@ -116,7 +113,6 @@ public class MainViewController {
         // ShowConfigData
         String path = selectedDirectory.getAbsolutePath();
         Root root = new Root(0, "", path, "");
-        folderAnalyzerHandler.addWatchDirectory(root);
         showRootConfigurationDialog(root);
         //TODO get max size and name
         Root.create("some name", path, "0");
