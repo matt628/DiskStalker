@@ -2,6 +2,7 @@ package pl.edu.agh.diskstalker.model;
 
 import pl.edu.agh.diskstalker.database.executor.QueryExecutor;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -31,8 +32,6 @@ public class Root {
                  Columns.MAX_SIZE + ") VALUES (?, ?, ?)";
 
         Object[] args = { name, path, maxSize };
-        // todo add spring and uncomment line below
-        // mainViewController.updateRoots
         try {
             if (findByLocation(name, path).isPresent())
                 return Optional.empty();
@@ -94,6 +93,17 @@ public class Root {
         return Optional.empty();
     }
 
+    public static void deleteById(int id) {
+        String sql = "DELETE FROM " + TABLE_NAME +
+                " WHERE " + Columns.ID + " = (?)";
+        Object[] value = { id };
+        try {
+            QueryExecutor.delete(sql, value);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public int getId() {
         return id;
     }
@@ -111,7 +121,7 @@ public class Root {
     }
 
     public String getPathname() {
-        return path + '/' + name;
+        return path + File.separator + name;
     }
 
     public List<Item> getItems() {

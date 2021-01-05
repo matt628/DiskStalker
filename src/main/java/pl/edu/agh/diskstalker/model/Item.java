@@ -1,5 +1,9 @@
 package pl.edu.agh.diskstalker.model;
 
+import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Item {
 
     private final String name;
@@ -36,11 +40,22 @@ public class Item {
         return size;
     }
 
+    public Root getRoot() {
+        return root;
+    }
+
     public String getPathname() {
         return path + '/' + name;
     }
 
-//    public List<Item> getChildren() {
-//        List<Item> rootChildren = root.getChildren();
-//    }
+    public List<Item> getChildren() {
+        List<Item> rootChildren = root.getItems();
+        return rootChildren.stream()
+                .filter(item -> isChild(getPathname()))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isChild(String pathname) {
+        return pathname.equals(path + File.separator);
+    }
 }

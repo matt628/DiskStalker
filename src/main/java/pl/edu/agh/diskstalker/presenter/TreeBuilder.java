@@ -2,40 +2,30 @@ package pl.edu.agh.diskstalker.presenter;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import pl.edu.agh.diskstalker.model.Item;
 
 import java.util.List;
 
 public class TreeBuilder {
-    public TreeBuilder() {
-    } // dependency injection this should be a singleton
 
-    public TreeView<String> buildTree(String path) { // this string should be change to input folder
-        // tree view
-        TreeView<String> treeView = new TreeView<>();
-
-        //main root
-        TreeItem<String> mainRoot = new TreeItem<>(path);
-
+    public TreeView<Item> buildTree(Item item) {
+        TreeView<Item> treeView = new TreeView<>();
+        TreeItem<Item> mainRoot = new TreeItem<>(item);
         buildChildrenTree(mainRoot);
-
+        treeView.setRoot(mainRoot);
         return treeView;
     }
 
-    private void buildChildrenTree(TreeItem<String> parent) {
-        List<String> children = getChildren(parent.getValue());
+    private void buildChildrenTree(TreeItem<Item> parent) {
+        List<Item> children = getChildren(parent.getValue());
         for (var child : children) {
-            TreeItem<String> childItem = new TreeItem<>(child);
+            TreeItem<Item> childItem = new TreeItem<>(child);
             buildChildrenTree(childItem);
             childItem.getChildren().add(childItem);
         }
     }
 
-    private List<String> getChildren(String path) {
-
-        // TODO: Create getChildren method
-
-        return null;
-//        return item.getChildren();
-//        return Item.getChildren(path).stream().map(Item::getPathname).collect(Collectors.toList());
+    private List<Item> getChildren(Item item) {
+        return item.getChildren();
     }
 }
