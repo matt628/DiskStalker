@@ -1,5 +1,6 @@
 package pl.edu.agh.diskstalker;
 
+// Guice imports
 
 import javafx.application.Application;
 import javafx.stage.Stage;
