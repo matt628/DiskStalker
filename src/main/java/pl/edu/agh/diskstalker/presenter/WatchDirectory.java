@@ -167,9 +167,10 @@ public class WatchDirectory {
         closeWatcherThread = true;
     }
 
-    public static void main(String[] args) throws IOException {
-        //args[0] - String of full path to dir
-//        Path dir = Paths.get(args[0]);
-//        new WatchDirectory(new Root()).processEvents();
+    public static WatchDirectory watch(Root root, FolderAnalyzerHandler handler) throws IOException {
+        final WatchDirectory watchDir = new WatchDirectory(root, handler);
+        watchDir.closeWatcherThread = false;
+        new Thread(watchDir::processEvents, "DirWatcherThread").start();
+        return watchDir;
     }
 }
