@@ -32,8 +32,6 @@ public class Root {
                  Columns.MAX_SIZE + ") VALUES (?, ?, ?)";
 
         Object[] args = { name, path, maxSize };
-        // todo add spring and uncomment line below
-        // mainViewController.updateRoots
         try {
             if (findByLocation(name, path).isPresent())
                 return Optional.empty();
@@ -93,6 +91,17 @@ public class Root {
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    public static void deleteById(int id) {
+        String sql = "DELETE FROM " + TABLE_NAME +
+                " WHERE " + Columns.ID + " = (?)";
+        Object[] value = { id };
+        try {
+            QueryExecutor.delete(sql, value);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getId() {

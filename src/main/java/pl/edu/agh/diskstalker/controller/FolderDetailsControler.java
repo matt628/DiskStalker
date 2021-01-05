@@ -59,8 +59,8 @@ public class FolderDetailsControler {
 
     @FXML
     private void  handleRootUnsubscribeAction(ActionEvent event) {
-
-        return;
+        Root.deleteById(root.getId());
+        SoundEffects.playSound("delete_surprise.wav");
     }
 
     @FXML
@@ -72,7 +72,6 @@ public class FolderDetailsControler {
             e.printStackTrace();
 //            TODO do sth with this exception
         }
-        return;
     }
 
 
@@ -85,6 +84,5 @@ public class FolderDetailsControler {
             e.printStackTrace();
 //            TODO do sth with this exception
         }
-        return;
     }
 }
