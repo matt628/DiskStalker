@@ -4,9 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
-public class DeleteHandler {
-    public DeleteHandler() {
+public class FolderDetailsHandler {
+    public FolderDetailsHandler() {
     }
+
+    public void updateModel() {
+
+    }
+
 
     /**
      * This method delete a folder and files in it. USE WITH CAUTION!

@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import pl.edu.agh.diskstalker.model.Root;
-import pl.edu.agh.diskstalker.presenter.DeleteHandler;
+import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 import pl.edu.agh.diskstalker.presenter.SoundEffects;
 
 import java.io.IOException;
@@ -66,7 +66,7 @@ public class FolderDetailsControler {
     @FXML
     private void  handleFolderDeleteAction(ActionEvent event) {
         try {
-            DeleteHandler.deleter(this.root.getPath());
+            FolderDetailsHandler.deleter(this.root.getPath());
             SoundEffects.playSound("delete_surprise.wav");
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,7 +79,7 @@ public class FolderDetailsControler {
     @FXML
     private void handleFolderCleanAction(ActionEvent event) {
         try {
-            DeleteHandler.directoryCleaner(this.root.getPath());
+            FolderDetailsHandler.directoryCleaner(this.root.getPath());
             SoundEffects.playSound("delete_surprise.wav");
         } catch (IOException e) {
             e.printStackTrace();
