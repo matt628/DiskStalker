@@ -1,6 +1,7 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import org.apache.commons.io.FileUtils;
+import pl.edu.agh.diskstalker.model.Root;
 
 import java.nio.file.*;
 
@@ -21,6 +22,9 @@ public class WatchDirectory {
     private final WatchService watcher;
     private final Map<WatchKey, Path> keys;
     private final boolean trace;
+    private volatile boolean closeWatcherThread;
+    private final Root root;
+    private final FolderAnalyzerHandler folderAnalyzerHandler;
 
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
@@ -64,11 +68,13 @@ public class WatchDirectory {
     /**
      * Creates a WatchService and registers the given directory
      */
-    WatchDirectory(Path dir) throws IOException {
+    WatchDirectory(Root root, FolderAnalyzerHandler folderAnalyzerHandler) throws IOException {
+        this.folderAnalyzerHandler = folderAnalyzerHandler;
+        this.root = root;
         this.watcher = FileSystems.getDefault().newWatchService();
         this.keys = new HashMap<WatchKey, Path>();
-        System.out.format("Scanning %s ...\n", dir);
-        registerAll(dir);
+        System.out.format("Scanning %s ...\n", root.getPath());
+        registerAll(Paths.get(root.getPath()));
         System.out.println("Done.");
 
         // enable trace after initial registration
@@ -93,7 +99,7 @@ public class WatchDirectory {
      * Process all events for keys queued to the watcher
      */
     void processEvents() {
-        for (; ; ) {
+        while (!closeWatcherThread) {
             // wait for key to be signalled
             WatchKey key;
             try {
@@ -118,16 +124,15 @@ public class WatchDirectory {
                 Path child = dir.resolve(name);
 
                 if (kind == ENTRY_CREATE) {
-                    //TODO: on create handler; child is type of Path
+                    this.folderAnalyzerHandler.analyzeRoot(root);
                     System.out.format("%s: %s \n", event.kind().name(), child);
                 } else if (kind == ENTRY_DELETE) {
-                    //TODO: on delete handler
+                    this.folderAnalyzerHandler.analyzeRoot(root);
                     System.out.format("%s: %s \n", event.kind().name(), child);
                 } else if (kind == ENTRY_MODIFY) {
-                    //TODO: on modify handler; child - type of Path; child.toFile().length() - size of file in bytes
+                    this.folderAnalyzerHandler.analyzeRoot(root);
                     System.out.format("%s: %s %s\n", event.kind().name(), child, getFileOrDirSize(child.toFile()));
                 }
-
                 // if directory is created, and watching recursively, then
                 // register it and its sub-directories
                 if (kind == ENTRY_CREATE) {
@@ -154,9 +159,17 @@ public class WatchDirectory {
         }
     }
 
+    public void stopWatching(){
+        try{
+            watcher.close();
+        }catch(IOException ioe){
+        }
+        closeWatcherThread = true;
+    }
+
     public static void main(String[] args) throws IOException {
         //args[0] - String of full path to dir
-        Path dir = Paths.get(args[0]);
-        new WatchDirectory(dir).processEvents();
+//        Path dir = Paths.get(args[0]);
+//        new WatchDirectory(new Root()).processEvents();
     }
 }

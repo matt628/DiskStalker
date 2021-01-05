@@ -13,6 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 public class FolderAnalyzerHandler {
+    private List<WatchDirectory> watchDirectories;
+
+    public FolderAnalyzerHandler() throws IOException {
+        for(Root root : Root.findAll()){
+            addWatchDirectory(root);
+        }
+    }
 
     public void analyzeAll() {
         List<Root> roots = Root.findAll();
@@ -35,5 +42,11 @@ public class FolderAnalyzerHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void addWatchDirectory(Root root) throws IOException {
+        WatchDirectory watchDirectory = new WatchDirectory(root, this);
+        watchDirectory.processEvents();
+        watchDirectories.add(watchDirectory);
     }
 }
