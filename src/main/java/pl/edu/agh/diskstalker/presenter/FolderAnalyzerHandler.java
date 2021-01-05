@@ -1,6 +1,5 @@
 package pl.edu.agh.diskstalker.presenter;
 
-import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
 import pl.edu.agh.diskstalker.controller.PopUpNotification;
 
@@ -8,9 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class FolderAnalyzerHandler {
     private List<WatchDirectory> watchDirectories;
@@ -45,8 +42,8 @@ public class FolderAnalyzerHandler {
     }
 
     public void addWatchDirectory(Root root) throws IOException {
-        WatchDirectory watchDirectory = new WatchDirectory(root, this);
-//        watchDirectory.processEvents();
+        WatchDirectory watchDirectory = WatchDirectory.watch(root, this);
+//        watchDirectory.stopWatching();
 //        watchDirectories.add(watchDirectory);
     }
 }
