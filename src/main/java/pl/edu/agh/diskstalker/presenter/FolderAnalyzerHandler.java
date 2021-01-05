@@ -46,7 +46,7 @@ public class FolderAnalyzerHandler {
 
     public void addWatchDirectory(Root root) throws IOException {
         WatchDirectory watchDirectory = new WatchDirectory(root, this);
-        watchDirectory.processEvents();
-        watchDirectories.add(watchDirectory);
+//        watchDirectory.processEvents();
+//        watchDirectories.add(watchDirectory);
     }
 }
