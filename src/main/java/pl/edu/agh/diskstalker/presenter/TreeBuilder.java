@@ -2,16 +2,14 @@ package pl.edu.agh.diskstalker.presenter;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import pl.edu.agh.diskstalker.model.Item;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TreeBuilder {
     public TreeBuilder() {
-    } // dependency injection this should be a singelton
+    } // dependency injection this should be a singleton
 
-    public TreeView<String> buildTree(String path){ // this string should be change to input folder
+    public TreeView<String> buildTree(String path) { // this string should be change to input folder
         // tree view
         TreeView<String> treeView = new TreeView<>();
 
@@ -21,19 +19,23 @@ public class TreeBuilder {
         buildChildrenTree(mainRoot);
 
         return treeView;
-
     }
 
-    void buildChildrenTree(TreeItem<String> parent){
+    private void buildChildrenTree(TreeItem<String> parent) {
         List<String> children = getChildren(parent.getValue());
-        for(var child : children){
+        for (var child : children) {
             TreeItem<String> childItem = new TreeItem<>(child);
             buildChildrenTree(childItem);
             childItem.getChildren().add(childItem);
         }
     }
 
-    List<String> getChildren(String path){
-        return Item.getChildren(path).stream().map(Item::getPathname).collect(Collectors.toList());
+    private List<String> getChildren(String path) {
+
+        // TODO: Create getChildren method
+
+        return null;
+//        return item.getChildren();
+//        return Item.getChildren(path).stream().map(Item::getPathname).collect(Collectors.toList());
     }
 }

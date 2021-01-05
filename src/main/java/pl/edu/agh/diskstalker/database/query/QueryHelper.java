@@ -1,11 +1,11 @@
-package pl.edu.agh.diskstalker.query;
+package pl.edu.agh.diskstalker.database.query;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import pl.edu.agh.diskstalker.connection.ConnectionProvider;
+import pl.edu.agh.diskstalker.database.connection.ConnectionProvider;
 
 public class QueryHelper {
 

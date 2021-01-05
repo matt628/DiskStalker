@@ -1,20 +1,10 @@
 package pl.edu.agh.diskstalker;
 
-// Guice imports
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
-// java FX imports
 import javafx.application.Application;
 import javafx.stage.Stage;
-//improts from our code
 import pl.edu.agh.diskstalker.controller.MainViewController;
-import pl.edu.agh.diskstalker.presenter.DeleteHandler;
-import pl.edu.agh.diskstalker.view.PopUpNotification;
 
 import java.sql.SQLException;
-
-// javaFX imports
 
 public class Main extends Application {
 
@@ -40,21 +30,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws SQLException {
-        runNotification();
         launch();
-    }
-
-    public static void runNotification(){ //this method is only a placeholder for code to use later
-        // Notification code
-        try {
-            PopUpNotification.displayTray("DiskStalker", "Hi notification works");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//  Notification optional code to ensure proper working
-//        if (SystemTray.isSupported()) {
-//        } else {
-//            System.err.println("System tray not supported!");
-//        }
     }
 }

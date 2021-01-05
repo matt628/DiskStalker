@@ -1,12 +1,9 @@
 package pl.edu.agh.diskstalker.model;
 
-import pl.edu.agh.diskstalker.controller.MainViewController;
-import pl.edu.agh.diskstalker.executor.QueryExecutor;
+import pl.edu.agh.diskstalker.database.executor.QueryExecutor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.*;
 
 public class Root {
@@ -18,23 +15,22 @@ public class Root {
 
     private final String path;
 
-    private final String size;
-
     private final String maxSize;
 
-    public Root(int id, String name, String path, String size, String maxSize) {
+    private final List<Item> items = new ArrayList<>();
+
+    public Root(int id, String name, String path, String maxSize) {
         this.id = id;
         this.name = name;
         this.path = path;
-        this.size = size;
         this.maxSize = maxSize;
     }
 
-    public static Optional<Root> create(final String name, final String path, final String size, final String maxSize) {
+    public static Optional<Root> create(final String name, final String path, final String maxSize) {
         String sql = "INSERT INTO " + TABLE_NAME + " (" + Columns.NAME + ", " + Columns.PATH + ", " +
-                 Columns.SIZE + ", " + Columns.MAX_SIZE + ") VALUES (?, ?, ?, ?)";
+                 Columns.MAX_SIZE + ") VALUES (?, ?, ?)";
 
-        Object[] args = { name, path, size, maxSize };
+        Object[] args = { name, path, maxSize };
         // todo add spring and uncomment line below
         // mainViewController.updateRoots
         try {
@@ -42,7 +38,7 @@ public class Root {
                 return Optional.empty();
 
             int id = QueryExecutor.createAndObtainId(sql, args);
-            return Root.findByLocation(name, path);
+            return Root.findById(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -60,7 +56,6 @@ public class Root {
                 resultList.add(new Root(rs.getInt(Columns.ID),
                         rs.getString(Columns.NAME),
                         rs.getString(Columns.PATH),
-                        rs.getString(Columns.SIZE),
                         rs.getString(Columns.MAX_SIZE))
                 );
             }
@@ -91,7 +86,6 @@ public class Root {
                     rs.getInt(Columns.ID),
                     rs.getString(Columns.NAME),
                     rs.getString(Columns.PATH),
-                    rs.getString(Columns.SIZE),
                     rs.getString(Columns.MAX_SIZE)
             ));
         } catch (SQLException e) {
@@ -112,12 +106,21 @@ public class Root {
         return path;
     }
 
-    public String getSize() {
-        return size;
-    }
-
     public String getMaxSize() {
         return maxSize;
+    }
+
+    public String getPathname() {
+        return path + '/' + name;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    // TODO: Count size of the folder
+    public String getSize() {
+        return "0";
     }
 
     public static class Columns {
@@ -128,8 +131,6 @@ public class Root {
 
         public static final String PATH = "Path";
 
-        public static final String SIZE = "Size";
-
         public static final String MAX_SIZE = "MaxSize";
     }
 
@@ -139,7 +140,6 @@ public class Root {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", path='" + path + '\'' +
-                ", size='" + size + '\'' +
                 ", maxSize='" + maxSize +
                 '}';
     }
@@ -152,14 +152,11 @@ public class Root {
         return id == root.id &&
                 name.equals(root.name) &&
                 path.equals(root.path) &&
-                size.equals(root.size) &&
                 maxSize.equals(root.maxSize);
     }
 
-
-
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, path, size, maxSize);
+        return Objects.hash(id, name, path, maxSize);
     }
 }

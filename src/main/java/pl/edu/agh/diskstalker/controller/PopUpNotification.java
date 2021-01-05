@@ -1,4 +1,4 @@
-package pl.edu.agh.diskstalker.view;
+package pl.edu.agh.diskstalker.controller;
 import java.awt.*;
 import java.awt.TrayIcon.MessageType;
 

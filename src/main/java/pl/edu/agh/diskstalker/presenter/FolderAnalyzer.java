@@ -1,4 +1,4 @@
-package pl.edu.agh.diskstalker.analyzer;
+package pl.edu.agh.diskstalker.presenter;
 
 import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
@@ -20,7 +20,6 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
         this.root = root;
     }
 
-    // Save regular files and symbolic links to the database
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
         String nameWithType = file.getFileName().toString();
@@ -28,11 +27,11 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
         String type = nameWithType.substring(nameWithType.lastIndexOf('.'));
         String path = file.getParent() + File.separator;
 
-        Item.create(name, path, type, String.valueOf(attr.size()), root);
+        root.getItems().add(new Item(name, path, type, String.valueOf(attr.size()), root));
+
         return CONTINUE;
     }
 
-    // Save directories to the database
     @Override
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
         String name = dir.getFileName().toString();
@@ -42,22 +41,8 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
             return CONTINUE;
         }
 
-        Item.create(name, path, null, "0", root);
+        root.getItems().add(new Item(name, path, null, "0", root));
+
         return CONTINUE;
     }
-
-//    This was quick testing, bigger tests are coming
-//
-//    public static void main(String[] args) {
-//        Path startingDir = Paths.get("C:\\Users\\vladi\\Desktop\\TestFolder");
-//        Optional<Root> root = Root.create("TestFolder", "C:\\Users\\vladi\\Desktop\\", "3453", "354645");
-//        if (root.isPresent()) {
-//            FolderAnalyzer fa = new FolderAnalyzer(root.get());
-//            try {
-//                Files.walkFileTree(startingDir, fa);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }

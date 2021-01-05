@@ -1,7 +1,7 @@
-package pl.edu.agh.diskstalker.executor;
+package pl.edu.agh.diskstalker.database.executor;
 
-import pl.edu.agh.diskstalker.connection.ConnectionProvider;
-import pl.edu.agh.diskstalker.query.QueryHelper;
+import pl.edu.agh.diskstalker.database.connection.ConnectionProvider;
+import pl.edu.agh.diskstalker.database.query.QueryHelper;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,23 +18,11 @@ public class QueryExecutor {
 
     static {
         try {
-            LOGGER.info("Creating table Items");
-            create("CREATE TABLE IF NOT EXISTS Items (" +
-                    "ItemID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "Name VARCHAR(100) NOT NULL," +
-                    "Path VARCHAR(200) NOT NULL," +
-                    "Type VARCHAR(20)," +
-                    "Size VARCHAR(20) NOT NULL," +
-                    "RootID INTEGER NOT NULL," +
-                    "FOREIGN KEY (RootID) REFERENCES Roots (RootID)" +
-                    ");");
-
             LOGGER.info("Creating table Roots");
             create("CREATE TABLE IF NOT EXISTS Roots (" +
                     "RootID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Name VARCHAR(100) NOT NULL," +
                     "Path VARCHAR(100) NOT NULL," +
-                    "Size VARCHAR(20) NOT NULL," +
                     "MaxSize VARCHAR(20)" +
                     ");");
         } catch (SQLException e) {

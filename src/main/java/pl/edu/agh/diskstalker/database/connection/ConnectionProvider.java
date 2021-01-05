@@ -1,4 +1,4 @@
-package pl.edu.agh.diskstalker.connection;
+package pl.edu.agh.diskstalker.database.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
