@@ -37,21 +37,21 @@
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Label>
-<!--                <Label text="Payee" GridPane.rowIndex="1">-->
-<!--                    <GridPane.margin>-->
-<!--                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />-->
-<!--                    </GridPane.margin>-->
-<!--                </Label>-->
+                <Label text="Maksymalny rozmiar foderu" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </Label>
                 <TextField fx:id="folderPath" GridPane.columnIndex="1">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
-<!--                <TextField fx:id="payeeTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">-->
-<!--                    <GridPane.margin>-->
-<!--                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />-->
-<!--                    </GridPane.margin>-->
-<!--                </TextField>-->
+                <TextField fx:id="folderMaxSize" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </TextField>
             </children>
         </GridPane>
     </center>

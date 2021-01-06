@@ -16,6 +16,9 @@ public class FolderDetailsController {
     @FXML
     private TextField folderPath;
 
+    @FXML
+    private TextField folderMaxSize;
+
     @Inject
     private FolderDetailsHandler detailsHandler;
 

@@ -51,7 +51,9 @@
             </children>
         </VBox>
         <VBox prefHeight="600.0" prefWidth="350.0">
+            <children>
 
+            </children>
         </VBox>
     </children>
 </HBox>
