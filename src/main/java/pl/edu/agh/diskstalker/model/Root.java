@@ -81,6 +81,7 @@ public class Root {
     public static Optional<Root> find(Object[] args, String sql) {
         try {
             ResultSet rs = QueryExecutor.read(sql, args);
+
             if(!rs.isClosed()) {
                 return Optional.of(new Root(
                         rs.getInt(Columns.ID),
