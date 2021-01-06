@@ -44,7 +44,10 @@ public class FolderDetailsController {
 
     @FXML
     private void handleOkAction(ActionEvent event) {
-        detailsHandler.updateRoot(root);
+        long maxSize = Long.parseLong(folderMaxSize.getText());
+        String folderPathText = folderPath.getText();
+        Root root = new Root(0,  "", folderPathText, maxSize);
+//        detailsHandler.updateRoot(root); TODO
         approved = true;
         dialogStage.close();
     }
