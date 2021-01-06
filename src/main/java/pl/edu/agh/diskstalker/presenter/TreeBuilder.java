@@ -1,20 +1,16 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import pl.edu.agh.diskstalker.model.Item;
 
 import java.util.List;
 
 public class TreeBuilder {
 
-    public TreeView<Item> buildTree(Item item) {
-        TreeView<Item> treeView = new TreeView<>();
-        TreeItem<Item> mainRoot = new TreeItem<>(item);
-        buildChildrenTree(mainRoot);
-        treeView.setRoot(mainRoot);
-
-        return treeView;
+    public TreeItem<Item> buildTree(Item item) {
+        TreeItem<Item> root = new TreeItem<>(item);
+        buildChildrenTree(root);
+        return root;
     }
 
     private void buildChildrenTree(TreeItem<Item> parent) {

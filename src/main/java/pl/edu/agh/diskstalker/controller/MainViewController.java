@@ -1,31 +1,28 @@
 package pl.edu.agh.diskstalker.controller;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import pl.edu.agh.diskstalker.guice.GuiceModule;
 import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
 import pl.edu.agh.diskstalker.presenter.SoundEffects;
 import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class MainViewController {
-    private Stage primaryStage;
 
     @FXML
     private Button addButton;
@@ -36,8 +33,13 @@ public class MainViewController {
     @FXML
     private TreeView<Item> folderTreeView;
 
-    // TODO: Juice injection
+    private Stage primaryStage;
+
+    @Inject
     private TreeHandler treeHandler;
+
+    @Inject
+    private FolderAnalyzerHandler analyzerHandler;
 
     public MainViewController() {
     }
@@ -46,59 +48,21 @@ public class MainViewController {
         this.primaryStage = primaryStage;
     }
 
-    public void initRootLayout() {
-        try {
-            this.primaryStage.setTitle("Disk Stalker");
-            Injector injector = Guice.createInjector(new GuiceModule());
-            // load layout from FXML file
-            FXMLLoader loader = new FXMLLoader();
-            loader.setControllerFactory(injector::getInstance);
-            loader.setLocation(MainViewController.class.getResource("/MainPane.fxml"));
-            HBox rootLayout = loader.load();
-            //            BorderPane rootLayout = loader.load();
-
-            // set initial data into controller
-//            AccountOverviewController controller = loader.getController();
-//            controller.setAppController(this);
-//            controller.setData(DataGenerator.generateAccountData());
-
-            // add layout to a scene and show them all
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        } catch (IOException e) {
-            // don't do this in common apps
-            e.printStackTrace();
-        }
-
-    }
-
-    void updateRoots() {
-        folderListView.getItems().clear();
-        for (Root folder : Root.findAll()) {
-            folderListView.getItems().add(folder);
-        }
-    }
-
     @FXML
     @SuppressWarnings("Duplicates")
     //noinspection Duplicates
     private void initialize() {
-        // WORKING CODE
-        List<Root> rootFolders = Root.findAll();
-        for (Root folder : rootFolders) {
-            folderListView.getItems().add(folder);
-        }
+        treeHandler.updateRootList();
 
-        // handle double click on ListView item
+        // handle clicks on ListView item
         folderListView.setOnMouseClicked(click -> {
             var currentItemSelected = folderListView.getSelectionModel()
                     .getSelectedItem();
             if (click.getClickCount() == 2) {
                 showRootConfigurationDialog(currentItemSelected);
             } else if (click.getClickCount() == 1) {
-                folderTreeView = treeHandler.buildTree(currentItemSelected);
+                analyzerHandler.analyzeRoot(currentItemSelected);
+                treeHandler.buildTree(currentItemSelected);
             }
         });
 
@@ -106,19 +70,23 @@ public class MainViewController {
 
     @FXML
     private void handleAddAction(ActionEvent event) {
-        // FOLDER CHOOSER
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(primaryStage);
 
-        // ShowConfigData
-        String path = selectedDirectory.getAbsolutePath();
-        Root root = new Root(0, "", path, 0);
-        showRootConfigurationDialog(root);
-        //TODO get max size and name
-        Root.create("some name", path, "0");
-        SoundEffects.playSound("success.wav");
-        updateRoots(); //TODO this should be in root.create()
-//        folderListView.getItems().add(selectedDirectory.getAbsolutePath());
+        if (selectedDirectory != null) {
+            String pathname = selectedDirectory.getAbsolutePath();
+            System.out.println(pathname);
+            String name = pathname.substring(pathname.lastIndexOf(File.separator) + 1);
+            System.out.println(name);
+            String path = pathname.substring(0, pathname.lastIndexOf(File.separator));
+            System.out.println(path);
+            Root root = new Root(0, "", path, 0);
+            showRootConfigurationDialog(root);
+            //TODO get max size
+            Root.create(name, path, "0");
+            SoundEffects.playSound("success.wav");
+            treeHandler.updateRootList(); //TODO this should be in root.create()
+        }
     }
 
     @FXML
@@ -131,22 +99,31 @@ public class MainViewController {
 
             //creating dialog scene
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit root folder propeties");
+            dialogStage.setTitle("Edit root folder properties");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
 
-            FolderDetailsControler folderDetailsControler = loader.getController();
-            folderDetailsControler.setDialogStage(dialogStage);
-            folderDetailsControler.setRoot(root);
+            FolderDetailsController folderDetailsController = loader.getController();
+            folderDetailsController.setDialogStage(dialogStage);
+            folderDetailsController.setRoot(root);
 
             dialogStage.showAndWait();
-            return folderDetailsControler.isApproved();
+            return folderDetailsController.isApproved();
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void updateFolderRootList(List<Root> roots) {
+        folderListView.getItems().clear();
+        folderListView.getItems().addAll(roots);
+    }
+
+    public void updateFolderTreeView(TreeItem<Item> root) {
+        folderTreeView.setRoot(root);
     }
 }

@@ -1,25 +1,36 @@
 package pl.edu.agh.diskstalker;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pl.edu.agh.diskstalker.controller.MainViewController;
+import pl.edu.agh.diskstalker.guice.GuiceModule;
 
-import java.sql.SQLException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Main extends Application {
 
-    private Stage primaryStage;
-    private MainViewController mainViewController;
+    public static void main(String[] args) {
+        Main.launch();
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
+        Injector injector = Guice.createInjector(new GuiceModule());
+        FXMLLoader loader = new FXMLLoader();
+        loader.setControllerFactory(injector::getInstance);
 
-        this.mainViewController = new MainViewController(primaryStage);
-        this.mainViewController.initRootLayout();
-    }
-
-    public static void main(String[] args) throws SQLException {
-        launch();
+        try (InputStream fxmlInputStream = ClassLoader.getSystemResourceAsStream("MainPane.fxml")) {
+            Parent parent = loader.load(fxmlInputStream);
+            primaryStage.setScene(new Scene(parent));
+            primaryStage.setTitle("Disk Stalker");
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
