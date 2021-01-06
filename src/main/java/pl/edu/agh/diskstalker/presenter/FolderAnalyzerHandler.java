@@ -37,11 +37,19 @@ public class FolderAnalyzerHandler {
             e.printStackTrace();
         }
         treeHandler.updateTree(root);
+        if (exceedSpace(root)) {
+            notifyByPopUp(root);
+        }
     }
 
-    public void notifyByPopUp(String rootPath) {
+    private boolean  exceedSpace(Root root) {
+        return root.getSize() > root.getMaxSize();
+    }
+
+    public void notifyByPopUp(Root root) {
         try {
-            PopUpNotification.displayTray("DiskStalker", rootPath + "exceeded the space limit of space");
+            PopUpNotification.displayTray("DiskStalker",
+                    root.getPathname() + "exceeded the space limit of space");
         } catch (Exception e) {
             e.printStackTrace();
         }
