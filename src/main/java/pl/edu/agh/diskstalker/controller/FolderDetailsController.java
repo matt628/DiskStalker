@@ -1,5 +1,6 @@
 package pl.edu.agh.diskstalker.controller;
 
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
@@ -12,11 +13,14 @@ import java.io.IOException;
 
 public class FolderDetailsController {
     private Stage dialogStage;
-    private Root root; //Finaly it should be Root
+    private Root root;
     private boolean approved;
 
     @FXML
     private TextField folderPath;
+
+    @Inject
+    private FolderDetailsHandler detailsHandler;
 
     public FolderDetailsController() {
     }
@@ -31,7 +35,7 @@ public class FolderDetailsController {
     }
 
     private void updateDisplay(){
-        folderPath.setText(this.root.getPath());
+        folderPath.setText(root.getPath());
     }
 
     public boolean isApproved() {
@@ -58,15 +62,14 @@ public class FolderDetailsController {
 
     @FXML
     private void  handleRootUnsubscribeAction(ActionEvent event) {
-        Root.deleteById(root.getId());
-        SoundEffects.playSound("delete_surprise.wav");
+        detailsHandler.unsubscribeFromRoot(root);
+        dialogStage.close();
     }
 
     @FXML
     private void  handleFolderDeleteAction(ActionEvent event) {
         try {
-            FolderDetailsHandler.deleter(this.root.getPath());
-            SoundEffects.playSound("delete_surprise.wav");
+            detailsHandler.deleteRoot(root.getPath());
         } catch (IOException e) {
             e.printStackTrace();
 //            TODO do sth with this exception
@@ -76,12 +79,12 @@ public class FolderDetailsController {
 
     @FXML
     private void handleFolderCleanAction(ActionEvent event) {
-        try {
-            FolderDetailsHandler.directoryCleaner(this.root.getPath());
-            SoundEffects.playSound("delete_surprise.wav");
-        } catch (IOException e) {
-            e.printStackTrace();
-//            TODO do sth with this exception
-        }
+//        try {
+////            FolderDetailsHandler.cleanRoot(root.getPath());
+//            SoundEffects.playSound("delete_surprise.wav");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+////            TODO do sth with this exception
+//        }
     }
 }

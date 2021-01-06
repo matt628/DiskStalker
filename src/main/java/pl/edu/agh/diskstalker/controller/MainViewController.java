@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
 import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
+import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 import pl.edu.agh.diskstalker.presenter.SoundEffects;
 import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
