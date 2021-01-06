@@ -1,8 +1,8 @@
-package pl.edu.agh.diskstalker.Guice;
+package pl.edu.agh.diskstalker.guice;
 
 import com.google.inject.AbstractModule;
 import javafx.fxml.FXMLLoader;
-import pl.edu.agh.diskstalker.Guice.Provider.FXMLLoaderProvider;
+import pl.edu.agh.diskstalker.guice.provider.FXMLLoaderProvider;
 
 public class GuiceModule extends AbstractModule {
     @Override

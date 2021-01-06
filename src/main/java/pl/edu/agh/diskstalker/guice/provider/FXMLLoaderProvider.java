@@ -1,4 +1,4 @@
-package pl.edu.agh.diskstalker.Guice.Provider;
+package pl.edu.agh.diskstalker.guice.provider;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -12,9 +12,7 @@ public class FXMLLoaderProvider implements Provider<FXMLLoader> {
     @Override
     public FXMLLoader get() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setControllerFactory(p -> {
-            return injector.getInstance(p);
-        });
+        loader.setControllerFactory(p -> injector.getInstance(p));
         return loader;
     }
 }

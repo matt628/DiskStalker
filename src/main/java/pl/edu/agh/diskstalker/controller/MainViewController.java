@@ -14,7 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import pl.edu.agh.diskstalker.Guice.GuiceModule;
+import pl.edu.agh.diskstalker.guice.GuiceModule;
 import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
 import pl.edu.agh.diskstalker.presenter.SoundEffects;
@@ -149,6 +149,4 @@ public class MainViewController {
             return false;
         }
     }
-
-
 }
