@@ -46,7 +46,8 @@ public class FolderDetailsController {
     private void handleOkAction(ActionEvent event) {
         long maxSize = Long.parseLong(folderMaxSize.getText());
         String folderPathText = folderPath.getText();
-        Root root = new Root(0,  "", folderPathText, maxSize);
+        Root.create(root.getName(), folderPathText, maxSize); // TODO it creates not updates
+        // TODO make update work
 //        detailsHandler.updateRoot(root); TODO
         approved = true;
         dialogStage.close();
