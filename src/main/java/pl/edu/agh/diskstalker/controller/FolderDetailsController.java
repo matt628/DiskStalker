@@ -10,7 +10,7 @@ import pl.edu.agh.diskstalker.presenter.SoundEffects;
 
 import java.io.IOException;
 
-public class FolderDetailsControler {
+public class FolderDetailsController {
     private Stage dialogStage;
     private Root root; //Finaly it should be Root
     private boolean approved;
@@ -18,8 +18,7 @@ public class FolderDetailsControler {
     @FXML
     private TextField folderPath;
 
-
-    public FolderDetailsControler() {
+    public FolderDetailsController() {
     }
 
     public void setDialogStage(Stage dialogStage) {
