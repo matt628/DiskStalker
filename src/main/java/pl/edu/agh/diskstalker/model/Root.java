@@ -81,12 +81,14 @@ public class Root {
     public static Optional<Root> find(Object[] args, String sql) {
         try {
             ResultSet rs = QueryExecutor.read(sql, args);
-            return Optional.of(new Root(
-                    rs.getInt(Columns.ID),
-                    rs.getString(Columns.NAME),
-                    rs.getString(Columns.PATH),
-                    rs.getLong(Columns.MAX_SIZE)
-            ));
+            if(!rs.isClosed()) {
+                return Optional.of(new Root(
+                        rs.getInt(Columns.ID),
+                        rs.getString(Columns.NAME),
+                        rs.getString(Columns.PATH),
+                        rs.getLong(Columns.MAX_SIZE)
+                ));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
