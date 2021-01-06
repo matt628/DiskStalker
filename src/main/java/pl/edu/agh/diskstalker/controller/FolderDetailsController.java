@@ -36,6 +36,7 @@ public class FolderDetailsController {
 
     private void updateDisplay(){
         folderPath.setText(root.getPathname());
+        //folderMaxSize.setText(root.getMaxSize()); //todo
     }
 
     public boolean isApproved() {
@@ -44,7 +45,10 @@ public class FolderDetailsController {
 
     @FXML
     private void handleOkAction(ActionEvent event) {
-        long maxSize = Long.parseLong(folderMaxSize.getText());
+        long maxSize = 0;
+        if (folderMaxSize.getText() != "")
+             maxSize = Long.parseLong(folderMaxSize.getText());
+//        String folderPathText = folderPath.getText();
         FolderDetailsHandler.updateRoot(root.getName(), root.getPath(), maxSize);
         approved = true;
         dialogStage.close();
