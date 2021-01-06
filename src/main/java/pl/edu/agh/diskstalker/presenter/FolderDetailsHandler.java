@@ -42,11 +42,13 @@ public class FolderDetailsHandler {
         }
     }
 
-    public void updateRoot(Root root) {
-        Optional<Root> rootToDelete = Root.findByLocation(root.getName(), root.getPath());
+    public static void updateRoot(String name, String path, long maxSize) {
+        Optional<Root> rootToDelete = Root.findByLocation(name, path);
         rootToDelete.ifPresent(value -> Root.deleteById(value.getId()));
 
-        Root.create(root.getName(), root.getPath(), root.getMaxSize());
-        treeHandler.updateRootList();
+        Root.create(name, path, maxSize);
+
+        // TODO: Uncomment when FolderDetailsController will get FolderDetailsHandler
+//        treeHandler.updateRootList();
     }
 }
