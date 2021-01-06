@@ -6,6 +6,7 @@ import pl.edu.agh.diskstalker.model.Root;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 public class FolderDetailsHandler {
 
@@ -42,6 +43,10 @@ public class FolderDetailsHandler {
     }
 
     public void updateRoot(Root root) {
+        Optional<Root> rootToDelete = Root.findByLocation(root.getName(), root.getPath());
+        rootToDelete.ifPresent(value -> Root.deleteById(value.getId()));
 
+        Root.create(root.getName(), root.getPath(), root.getMaxSize());
+        treeHandler.updateRootList();
     }
 }

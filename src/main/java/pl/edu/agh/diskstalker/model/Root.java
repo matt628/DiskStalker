@@ -27,7 +27,7 @@ public class Root {
         this.maxSize = maxSize;
     }
 
-    public static Optional<Root> create(final String name, final String path, final String maxSize) {
+    public static Optional<Root> create(final String name, final String path, final long maxSize) {
         String sql = "INSERT INTO " + TABLE_NAME + " (" + Columns.NAME + ", " + Columns.PATH + ", " +
                  Columns.MAX_SIZE + ") VALUES (?, ?, ?)";
 

@@ -81,7 +81,7 @@ public class MainViewController {
             showRootConfigurationDialog(root);
 
             //TODO get max size
-            Root.create(name, path, "0");
+            Root.create(name, path, 0);
             SoundEffects.playSound("success.wav");
             treeHandler.updateRootList(); //TODO this should be in root.create()
         }
