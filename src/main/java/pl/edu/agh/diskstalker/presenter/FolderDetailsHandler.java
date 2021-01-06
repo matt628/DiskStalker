@@ -19,16 +19,29 @@ public class FolderDetailsHandler {
         System.out.println("Unsubscribed from " + root.getName());
     }
 
-    public void deleteRoot(String filePath) throws IOException {
+    public void deleteRoot(String filePath) {
         File file = new File(filePath);
-        FileUtils.deleteDirectory(file);
-        SoundEffects.playSound("delete_surprise.wav");
-        System.out.println("Folder deleted........");
+        try {
+            FileUtils.deleteDirectory(file);
+            SoundEffects.playSound("delete_surprise.wav");
+            System.out.println("Folder deleted........");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void cleanRoot(String directoryPath) throws IOException{
+    public void cleanRoot(String directoryPath){
         File directory = new File(directoryPath);
-        FileUtils.cleanDirectory(directory);
-        System.out.println("Folder cleaned........");
+        try {
+            FileUtils.cleanDirectory(directory);
+            SoundEffects.playSound("delete_surprise.wav");
+            System.out.println("Folder cleaned........");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateRoot(Root root) {
+
     }
 }

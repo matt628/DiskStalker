@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.model.Item;
 import pl.edu.agh.diskstalker.model.Root;
 import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
-import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 import pl.edu.agh.diskstalker.presenter.SoundEffects;
 import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
@@ -63,7 +62,7 @@ public class MainViewController {
                 showRootConfigurationDialog(currentItemSelected);
             } else if (click.getClickCount() == 1) {
                 analyzerHandler.analyzeRoot(currentItemSelected);
-                treeHandler.buildTree(currentItemSelected);
+                treeHandler.updateTree(currentItemSelected);
             }
         });
 
@@ -76,12 +75,9 @@ public class MainViewController {
 
         if (selectedDirectory != null) {
             String pathname = selectedDirectory.getAbsolutePath();
-            System.out.println(pathname);
             String name = pathname.substring(pathname.lastIndexOf(File.separator) + 1);
-            System.out.println(name);
             String path = pathname.substring(0, pathname.lastIndexOf(File.separator));
-            System.out.println(path);
-            Root root = new Root(0, "", path, 0);
+            Root root = new Root(0, "", pathname, 0);
             showRootConfigurationDialog(root);
             //TODO get max size
             Root.create(name, path, "0");
