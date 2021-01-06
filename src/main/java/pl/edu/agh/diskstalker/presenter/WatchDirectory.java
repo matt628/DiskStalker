@@ -33,6 +33,26 @@ public class WatchDirectory {
     }
 
     /**
+     * Creates a WatchService and registers the given directory
+     */
+    WatchDirectory(Root root, FolderAnalyzerHandler folderAnalyzerHandler) throws IOException {
+        this.folderAnalyzerHandler = folderAnalyzerHandler;
+        this.root = root;
+        this.watcher = FileSystems.getDefault().newWatchService();
+        this.keys = new HashMap<WatchKey, Path>();
+        System.out.format("Scanning %s ...\n", root.getPath());
+        registerAll(Paths.get(root.getPath()));
+        System.out.println("Done.");
+
+        // enable trace after initial registration
+        this.trace = true;
+    }
+
+    public Root getRoot() {
+        return root;
+    }
+
+    /**
      * Register the given directory with the WatchService
      */
     private void register(Path dir) throws IOException {
@@ -66,21 +86,6 @@ public class WatchDirectory {
         });
     }
 
-    /**
-     * Creates a WatchService and registers the given directory
-     */
-    WatchDirectory(Root root, FolderAnalyzerHandler folderAnalyzerHandler) throws IOException {
-        this.folderAnalyzerHandler = folderAnalyzerHandler;
-        this.root = root;
-        this.watcher = FileSystems.getDefault().newWatchService();
-        this.keys = new HashMap<WatchKey, Path>();
-        System.out.format("Scanning %s ...\n", root.getPath());
-        registerAll(Paths.get(root.getPath()));
-        System.out.println("Done.");
-
-        // enable trace after initial registration
-        this.trace = true;
-    }
 
     private long getFileOrDirSize(File fileOrDir) {
         if(fileOrDir.isFile()){
@@ -167,6 +172,8 @@ public class WatchDirectory {
         }
         closeWatcherThread = true;
     }
+
+
 
     public static WatchDirectory watch(Root root, FolderAnalyzerHandler handler) throws IOException {
         final WatchDirectory watchDir = new WatchDirectory(root, handler);

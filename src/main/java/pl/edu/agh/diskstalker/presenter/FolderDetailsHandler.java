@@ -14,6 +14,7 @@ public class FolderDetailsHandler {
     private TreeHandler treeHandler;
 
     public void unsubscribeFromRoot(Root root) {
+//        FolderAnalyzerHandler.stopWatchDirectory(root);
         Root.deleteById(root.getId());
         treeHandler.updateRootList();
         SoundEffects.playSound("delete_surprise.wav");

@@ -78,6 +78,7 @@ public class MainViewController {
             String name = pathname.substring(pathname.lastIndexOf(File.separator) + 1);
             String path = pathname.substring(0, pathname.lastIndexOf(File.separator));
             Root root = new Root(0, name, path, 0);
+            analyzerHandler.addWatchDirectory(root);
             showRootConfigurationDialog(root);
             SoundEffects.playSound("success.wav");
             treeHandler.updateRootList();
