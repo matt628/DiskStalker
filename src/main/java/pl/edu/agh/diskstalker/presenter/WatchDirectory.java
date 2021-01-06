@@ -1,16 +1,17 @@
 package pl.edu.agh.diskstalker.presenter;
 
-import org.apache.commons.io.FileUtils;
+import javafx.application.Platform;
 import pl.edu.agh.diskstalker.model.Root;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashMap;
+import java.util.Map;
 
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardWatchEventKinds.*;
-import static java.nio.file.LinkOption.*;
-
-import java.nio.file.attribute.*;
-import java.io.*;
-import java.util.*;
 
 
 /**
@@ -124,13 +125,13 @@ public class WatchDirectory {
                 Path child = dir.resolve(name);
 
                 if (kind == ENTRY_CREATE) {
-                    this.folderAnalyzerHandler.analyzeRoot(root);
+                    Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
                     System.out.format("%s: %s \n", event.kind().name(), child);
                 } else if (kind == ENTRY_DELETE) {
-                    this.folderAnalyzerHandler.analyzeRoot(root);
+                    Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
                     System.out.format("%s: %s \n", event.kind().name(), child);
                 } else if (kind == ENTRY_MODIFY) {
-                    this.folderAnalyzerHandler.analyzeRoot(root);
+                    Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
                     System.out.format("%s: %s %s\n", event.kind().name(), child, getFileOrDirSize(child.toFile()));
                 }
                 // if directory is created, and watching recursively, then

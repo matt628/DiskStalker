@@ -1,5 +1,6 @@
 package pl.edu.agh.diskstalker.presenter;
 
+import com.google.inject.Inject;
 import pl.edu.agh.diskstalker.model.Root;
 import pl.edu.agh.diskstalker.controller.PopUpNotification;
 
@@ -10,6 +11,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class FolderAnalyzerHandler {
+
+    @Inject
+    private TreeHandler treeHandler;
+
     private List<WatchDirectory> watchDirectories;
 
     public FolderAnalyzerHandler() throws IOException {
@@ -31,6 +36,7 @@ public class FolderAnalyzerHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        treeHandler.updateTree(root);
     }
 
     public void notifyByPopUp(String rootPath) {

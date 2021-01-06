@@ -16,7 +16,7 @@ public class TreeHandler {
     @Inject
     private MainViewController mainViewController;
 
-    public void buildTree(Root root) {
+    public void updateTree(Root root) {
         Item itemRoot = root.getItems().stream()
                 .filter(item -> item.getPathname().equals(root.getPathname()))
                 .findFirst()
