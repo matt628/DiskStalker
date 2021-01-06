@@ -112,7 +112,7 @@ public class MainViewController {
 
         // ShowConfigData
         String path = selectedDirectory.getAbsolutePath();
-        Root root = new Root(0, "", path, "");
+        Root root = new Root(0, "", path, 0);
         showRootConfigurationDialog(root);
         //TODO get max size and name
         Root.create("some name", path, "0");

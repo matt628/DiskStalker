@@ -12,11 +12,11 @@ public class Item {
 
     private final String type;
 
-    private final String size;
+    private final long size;
 
     private final Root root;
 
-    public Item(String name, String path, String type, String size, Root root) {
+    public Item(String name, String path, String type, long size, Root root) {
         this.name = name;
         this.path = path;
         this.type = type;
@@ -36,7 +36,7 @@ public class Item {
         return type;
     }
 
-    public String getSize() {
+    public long getSize() {
         return size;
     }
 
@@ -48,6 +48,10 @@ public class Item {
         return path + File.separator + name;
     }
 
+    public boolean isFile() {
+        return type != null;
+    }
+
     public List<Item> getChildren() {
         List<Item> rootChildren = root.getItems();
         return rootChildren.stream()
@@ -55,13 +59,13 @@ public class Item {
                 .collect(Collectors.toList());
     }
 
-    private boolean isSubItem(String pathname) {
-        return pathname.equals(getPathname());
+    private boolean isSubItem(String path) {
+        return path.equals(getPathname());
     }
 
-//    private boolean isChild(String pathname) {
-//        return
-//    }
+    public boolean isChild(String pathname) {
+        return getPath().contains(pathname);
+    }
 
 
     @Override

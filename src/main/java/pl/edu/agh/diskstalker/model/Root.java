@@ -16,11 +16,11 @@ public class Root {
 
     private final String path;
 
-    private final String maxSize;
+    private final long maxSize;
 
     private final List<Item> items = new ArrayList<>();
 
-    public Root(int id, String name, String path, String maxSize) {
+    public Root(int id, String name, String path, long maxSize) {
         this.id = id;
         this.name = name;
         this.path = path;
@@ -55,7 +55,7 @@ public class Root {
                 resultList.add(new Root(rs.getInt(Columns.ID),
                         rs.getString(Columns.NAME),
                         rs.getString(Columns.PATH),
-                        rs.getString(Columns.MAX_SIZE))
+                        rs.getLong(Columns.MAX_SIZE))
                 );
             }
             return resultList;
@@ -85,7 +85,7 @@ public class Root {
                     rs.getInt(Columns.ID),
                     rs.getString(Columns.NAME),
                     rs.getString(Columns.PATH),
-                    rs.getString(Columns.MAX_SIZE)
+                    rs.getLong(Columns.MAX_SIZE)
             ));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class Root {
         return path;
     }
 
-    public String getMaxSize() {
+    public long getMaxSize() {
         return maxSize;
     }
 
@@ -128,9 +128,19 @@ public class Root {
         return items;
     }
 
-    // TODO: Count size of the folder
-    public String getSize() {
-        return "0";
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public Item getRootItem() {
+        return items.stream()
+                .filter(item -> item.getPathname().equals(getPathname()))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public long getSize() {
+        return getRootItem().getSize();
     }
 
     public static class Columns {
@@ -162,7 +172,7 @@ public class Root {
         return id == root.id &&
                 name.equals(root.name) &&
                 path.equals(root.path) &&
-                maxSize.equals(root.maxSize);
+                maxSize == root.maxSize;
     }
 
     @Override

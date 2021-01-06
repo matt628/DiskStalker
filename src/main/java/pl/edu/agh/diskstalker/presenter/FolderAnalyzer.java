@@ -21,12 +21,15 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
         String nameWithType = file.getFileName().toString();
+
         String name = nameWithType.substring(0, nameWithType.lastIndexOf('.'));
         String type = nameWithType.substring(nameWithType.lastIndexOf('.'));
         String path = file.getParent().toString();
+        long size = attr.size();
 
-        root.getItems().add(new Item(name, path, type, String.valueOf(attr.size()), root));
-        System.out.println("file: " + name + " " + path + " " + type);
+        Item fileItem = new Item(name, path, type, size, root);
+
+        root.addItem(fileItem);
 
         return CONTINUE;
     }
@@ -35,21 +38,16 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
         String name = dir.getFileName().toString();
         String path = dir.getParent().toString();
+        long size = root.getItems().stream()
+                .filter(item -> item.isChild(path + File.separator + name))
+                .filter(Item::isFile)
+                .map(Item::getSize)
+                .reduce(0L, Long::sum);
 
-        root.getItems().add(new Item(name, path, null, "0", root));
-        System.out.println("folder: " + name + " " + path);
+        Item folderItem = new Item(name, path, null, size, root);
+
+        root.getItems().add(folderItem);
 
         return CONTINUE;
-    }
-
-    public static void main(String[] args) {
-        Root root = new Root(0, "folder", "C:\\Users\\vladi\\Desktop", "100");
-        Path startingDir = Paths.get(root.getPathname());
-        root.getItems().clear();
-        try {
-            Files.walkFileTree(startingDir, new FolderAnalyzer(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
