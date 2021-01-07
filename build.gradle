@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'application'
+}
+
+group = 'pl.edu.agh.diskstalker'
+version = '1.0'
+
+
+
+
+
+repositories {
+    mavenCentral()
+}
+
+
+
+application {
+    applicationDefaultJvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
+    mainClassName = 'pl.edu.agh.diskstalker.Main'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    implementation 'org.xerial:sqlite-jdbc:3.8.11.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    implementation group: 'com.google.inject', name: 'guice', version: '4.2.3'
+    implementation group: 'com.google.inject.extensions', name: 'guice-multibindings', version: '4.2.3'
+}
+
+javafx {
+    version = '14'
+    modules = ['javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.media', 'javafx.swing', 'javafx.web']
+}
