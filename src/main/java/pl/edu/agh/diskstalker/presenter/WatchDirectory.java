@@ -9,6 +9,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardWatchEventKinds.*;
@@ -106,7 +107,6 @@ public class WatchDirectory {
      */
     void processEvents() {
         while (!closeWatcherThread) {
-            // wait for key to be signalled
             WatchKey key;
             try {
                 key = watcher.take();
@@ -122,45 +122,41 @@ public class WatchDirectory {
             }
 
             for (WatchEvent<?> event : key.pollEvents()) {
-                WatchEvent.Kind kind = event.kind();
-
-                // Context for directory entry event is the file name of entry
-                WatchEvent<Path> ev = cast(event);
-                Path name = ev.context();
-                Path child = dir.resolve(name);
-
-                if (kind == ENTRY_CREATE) {
-                    Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
-                    System.out.format("%s: %s \n", event.kind().name(), child);
-                } else if (kind == ENTRY_DELETE) {
-                    Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
-                    System.out.format("%s: %s \n", event.kind().name(), child);
-                } else if (kind == ENTRY_MODIFY) {
-                    Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
-                    System.out.format("%s: %s %s\n", event.kind().name(), child, getFileOrDirSize(child.toFile()));
-                }
-                // if directory is created, and watching recursively, then
-                // register it and its sub-directories
-                if (kind == ENTRY_CREATE) {
-                    try {
-                        if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
-                            registerAll(child);
-                        }
-                    } catch (IOException x) {
-                        // ignore to keep sample readbale
-                    }
-                }
+                handleEvent(event, dir);
             }
 
-            // reset key and remove from set if directory no longer accessible
             boolean valid = key.reset();
             if (!valid) {
                 keys.remove(key);
-
-                // all directories are inaccessible
                 if (keys.isEmpty()) {
                     break;
                 }
+            }
+        }
+    }
+
+    private void handleEvent(WatchEvent<?> event, Path dir){
+        WatchEvent.Kind kind = event.kind();
+
+        WatchEvent<Path> ev = cast(event);
+        Path name = ev.context();
+        Path child = dir.resolve(name);
+
+        if (Objects.equals(kind, ENTRY_DELETE)) {
+            Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
+            System.out.format("%s: %s \n", event.kind().name(), child);
+        } else if (Objects.equals(kind, ENTRY_MODIFY)) {
+            Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
+            System.out.format("%s: %s %s\n", event.kind().name(), child, getFileOrDirSize(child.toFile()));
+        }else if (Objects.equals(kind,ENTRY_CREATE)) {
+            Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
+            System.out.format("%s: %s \n", event.kind().name(), child);
+            try {
+                if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
+                    registerAll(child);
+                }
+            } catch (IOException x) {
+                // ignore to keep sample readbale
             }
         }
     }
@@ -181,4 +177,5 @@ public class WatchDirectory {
         new Thread(watchDir::processEvents, "DirWatcherThread").start();
         return watchDir;
     }
+
 }
