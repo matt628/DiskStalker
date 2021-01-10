@@ -2,7 +2,8 @@ package pl.edu.agh.diskstalker.presenter;
 
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
-import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.database.datamapper.RootDataMapper;
+import pl.edu.agh.diskstalker.database.model.Root;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,9 +14,12 @@ public class FolderDetailsHandler {
     @Inject
     private TreeHandler treeHandler;
 
+    @Inject
+    private RootDataMapper rootDataMapper;
+
     public void unsubscribeFromRoot(Root root) {
 //        FolderAnalyzerHandler.stopWatchDirectory(root);
-        Root.deleteById(root.getId());
+        rootDataMapper.deleteById(root.getId());
         treeHandler.updateRootList();
         SoundEffects.playSound("delete_surprise.wav");
         System.out.println("Unsubscribed from " + root.getName());
@@ -43,11 +47,11 @@ public class FolderDetailsHandler {
         }
     }
 
-    public static void updateRoot(String name, String path, long maxSize) {
-        Optional<Root> rootToDelete = Root.findByLocation(name, path);
-        rootToDelete.ifPresent(value -> Root.deleteById(value.getId()));
+    public void updateRoot(String name, String path, long maxSize) {
+        Optional<Root> rootToDelete = rootDataMapper.findByLocation(name, path);
+        rootToDelete.ifPresent(value -> rootDataMapper.deleteById(value.getId()));
 
-        Root.create(name, path, maxSize);
+        rootDataMapper.create(name, path, maxSize);
 
         // TODO: Uncomment when FolderDetailsController will get FolderDetailsHandler
 //        treeHandler.updateRootList();

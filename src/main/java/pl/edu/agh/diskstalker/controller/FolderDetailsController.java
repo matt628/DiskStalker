@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 
 public class FolderDetailsController {
@@ -36,7 +36,7 @@ public class FolderDetailsController {
 
     private void updateDisplay(){
         folderPath.setText(root.getPathname());
-        //folderMaxSize.setText(root.getMaxSize()); //todo
+        //folderMaxSize.setText(getMaxSize()); //todo
     }
 
     public boolean isApproved() {
@@ -46,10 +46,9 @@ public class FolderDetailsController {
     @FXML
     private void handleOkAction(ActionEvent event) {
         long maxSize = 0;
-        if (folderMaxSize.getText() != "")
+        if (!folderMaxSize.getText().equals(""))
              maxSize = Long.parseLong(folderMaxSize.getText());
-//        String folderPathText = folderPath.getText();
-        FolderDetailsHandler.updateRoot(root.getName(), root.getPath(), maxSize);
+        detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize);
         approved = true;
         dialogStage.close();
     }

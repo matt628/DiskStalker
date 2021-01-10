@@ -1,0 +1,89 @@
+package pl.edu.agh.diskstalker.database.model;
+
+import com.google.inject.Inject;
+import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
+
+import java.io.File;
+import java.util.Objects;
+
+public class Root {
+
+    @Inject
+    private ItemDataMapper itemDataMapper;
+
+    private final int id;
+
+    private final String name;
+
+    private final String path;
+
+    private final long maxSize;
+
+    public Root(int id, String name, String path, long maxSize) {
+        this.id = id;
+        this.name = name;
+        this.path = path;
+        this.maxSize = maxSize;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public long getMaxSize() {
+        return maxSize;
+    }
+
+    public String getPathname() {
+        return path + File.separator + name;
+    }
+
+    public boolean  exceedSpace() {
+        return getSize() > maxSize;
+    }
+
+    public Item getRootItem() {
+        return itemDataMapper.findAllByRoot(this).stream()
+                .filter(item -> item.getPathname().equals(getPathname()))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public long getSize() {
+        return getRootItem().getSize();
+    }
+
+    @Override
+    public String toString() {
+        return "Root{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", maxSize='" + maxSize +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Root root = (Root) o;
+        return id == root.id &&
+                name.equals(root.name) &&
+                path.equals(root.path) &&
+                maxSize == root.maxSize;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, path, maxSize);
+    }
+}

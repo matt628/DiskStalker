@@ -1,7 +1,9 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import com.google.inject.Inject;
-import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
+import pl.edu.agh.diskstalker.database.datamapper.RootDataMapper;
+import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.controller.PopUpNotification;
 
 import java.io.IOException;
@@ -19,35 +21,37 @@ public class FolderAnalyzerHandler {
     @Inject
     private PopUpNotification popUpNotification;
 
-    private static List<WatchDirectory> watchDirectories = new ArrayList<WatchDirectory>();
+    @Inject
+    private RootDataMapper rootDataMapper;
+
+    @Inject
+    private ItemDataMapper itemDataMapper;
+
+    private final static List<WatchDirectory> watchDirectories = new ArrayList<WatchDirectory>();
 
     public FolderAnalyzerHandler() throws IOException {
-        for(Root root : Root.findAll()){
+        for(Root root : rootDataMapper.findAll()){
             addWatchDirectory(root);
         }
     }
 
     public void analyzeAll() {
-        List<Root> roots = Root.findAll();
+        List<Root> roots = rootDataMapper.findAll();
         roots.forEach(this::analyzeRoot);
     }
 
     public void analyzeRoot(Root root) {
         Path startingDir = Paths.get(root.getPathname());
-        root.getItems().clear();
+        itemDataMapper.deleteAllByRoot(root);
         try {
-            Files.walkFileTree(startingDir, new FolderAnalyzer(root));
+            Files.walkFileTree(startingDir, new FolderAnalyzer(itemDataMapper, root));
         } catch (IOException e) {
             e.printStackTrace();
         }
         treeHandler.updateTree(root);
-        if (exceedSpace(root)) {
+        if (root.exceedSpace()) {
             notifyByPopUp(root);
         }
-    }
-
-    private boolean  exceedSpace(Root root) {
-        return root.getSize() > root.getMaxSize();
     }
 
     public void notifyByPopUp(Root root) {
@@ -64,7 +68,7 @@ public class FolderAnalyzerHandler {
             WatchDirectory watchDirectory = WatchDirectory.watch(root, this);
             watchDirectories.add(watchDirectory);
         }catch (IOException e){
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
         }
 
     }
