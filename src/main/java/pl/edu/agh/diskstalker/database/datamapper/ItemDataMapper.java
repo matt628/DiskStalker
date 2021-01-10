@@ -14,4 +14,6 @@ public interface ItemDataMapper {
     void deleteAllByRoot(Root root);
 
     List<Item> getChildren(Item rootItem);
+
+    Item getRootItem(Root root);
 }

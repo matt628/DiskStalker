@@ -3,10 +3,12 @@ package pl.edu.agh.diskstalker.database.datamapper;
 import pl.edu.agh.diskstalker.database.executor.QueryExecutor;
 import pl.edu.agh.diskstalker.database.model.Root;
 
+import javax.inject.Singleton;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+@Singleton
 public class RootDataMapperImpl implements RootDataMapper {
 
     private final List<Root> roots;

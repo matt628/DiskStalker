@@ -25,11 +25,7 @@ public class TreeHandler {
     private MainViewController mainViewController;
 
     public void updateTree(Root root) {
-        Item itemRoot = itemDataMapper.findAllByRoot(root).stream()
-                .filter(item -> item.getPathname().equals(root.getPathname()))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-
+        Item itemRoot = itemDataMapper.getRootItem(root);
         TreeItem<Item> treeRoot = treeBuilder.buildTree(itemRoot);
         mainViewController.updateFolderTreeView(treeRoot);
     }

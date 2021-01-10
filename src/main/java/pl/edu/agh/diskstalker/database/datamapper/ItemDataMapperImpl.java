@@ -3,12 +3,14 @@ package pl.edu.agh.diskstalker.database.datamapper;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Singleton
 public class ItemDataMapperImpl implements ItemDataMapper {
 
     private final Map<Root, List<Item>> rootItems = new HashMap<>();
@@ -36,5 +38,15 @@ public class ItemDataMapperImpl implements ItemDataMapper {
         return rootChildren.stream()
                 .filter(item -> rootItem.isSubItem(item.getPath()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Item getRootItem(Root root) {
+        List<Item> items = findAllByRoot(root);
+        System.out.println(items);
+        return items.stream()
+                .filter(item -> item.getPathname().equals(root.getPathname()))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

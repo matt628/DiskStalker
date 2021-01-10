@@ -15,18 +15,22 @@ public class FolderDetailsHandler {
     private TreeHandler treeHandler;
 
     @Inject
+    private FolderAnalyzerHandler analyzerHandler;
+
+    @Inject
     private RootDataMapper rootDataMapper;
 
+
     public void unsubscribeFromRoot(Root root) {
-//        FolderAnalyzerHandler.stopWatchDirectory(root);
+        analyzerHandler.stopWatchDirectory(root);
         rootDataMapper.deleteById(root.getId());
         treeHandler.updateRootList();
         SoundEffects.playSound("delete_surprise.wav");
         System.out.println("Unsubscribed from " + root.getName());
     }
 
-    public void deleteRoot(String filePath) {
-        File file = new File(filePath);
+    public void deleteRoot(Root root) {
+        File file = new File(root.getPathname());
         try {
             FileUtils.deleteDirectory(file);
             SoundEffects.playSound("delete_surprise.wav");
@@ -36,8 +40,8 @@ public class FolderDetailsHandler {
         }
     }
 
-    public void cleanRoot(String directoryPath){
-        File directory = new File(directoryPath);
+    public void cleanRoot(Root root) {
+        File directory = new File(root.getPathname());
         try {
             FileUtils.cleanDirectory(directory);
             SoundEffects.playSound("delete_surprise.wav");
@@ -52,8 +56,6 @@ public class FolderDetailsHandler {
         rootToDelete.ifPresent(value -> rootDataMapper.deleteById(value.getId()));
 
         rootDataMapper.create(name, path, maxSize);
-
-        // TODO: Uncomment when FolderDetailsController will get FolderDetailsHandler
-//        treeHandler.updateRootList();
+        treeHandler.updateRootList();
     }
 }

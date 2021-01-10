@@ -66,13 +66,13 @@ public class FolderDetailsController {
 
     @FXML
     private void  handleFolderDeleteAction(ActionEvent event) {
-        detailsHandler.deleteRoot(root.getPath());
+        detailsHandler.deleteRoot(root);
         dialogStage.close();
     }
 
     @FXML
     private void handleFolderCleanAction(ActionEvent event) {
-        detailsHandler.cleanRoot(root.getPath());
+        detailsHandler.cleanRoot(root);
         dialogStage.close();
     }
 }

@@ -1,15 +1,9 @@
 package pl.edu.agh.diskstalker.database.model;
 
-import com.google.inject.Inject;
-import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
-
 import java.io.File;
 import java.util.Objects;
 
 public class Root {
-
-    @Inject
-    private ItemDataMapper itemDataMapper;
 
     private final int id;
 
@@ -44,21 +38,6 @@ public class Root {
 
     public String getPathname() {
         return path + File.separator + name;
-    }
-
-    public boolean  exceedSpace() {
-        return getSize() > maxSize;
-    }
-
-    public Item getRootItem() {
-        return itemDataMapper.findAllByRoot(this).stream()
-                .filter(item -> item.getPathname().equals(getPathname()))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-    }
-
-    public long getSize() {
-        return getRootItem().getSize();
     }
 
     @Override

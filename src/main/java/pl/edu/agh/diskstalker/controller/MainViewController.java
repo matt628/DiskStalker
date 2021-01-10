@@ -15,13 +15,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
+import pl.edu.agh.diskstalker.guice.provider.FXMLLoaderProvider;
 import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
 import pl.edu.agh.diskstalker.presenter.SoundEffects;
 import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
+import javax.inject.Singleton;
 import java.io.File;
 import java.util.List;
 
+@Singleton
 public class MainViewController {
 
     @FXML
@@ -34,6 +37,9 @@ public class MainViewController {
     private TreeView<Item> folderTreeView;
 
     private Stage primaryStage;
+
+    @Inject
+    private FXMLLoaderProvider fxmlLoaderProvider;
 
     @Inject
     private TreeHandler treeHandler;
@@ -50,22 +56,20 @@ public class MainViewController {
 
     @FXML
     @SuppressWarnings("Duplicates")
-    //noinspection Duplicates
     private void initialize() {
         treeHandler.updateRootList();
+        analyzerHandler.analyzeAll();
+        analyzerHandler.loadDirectories();
 
-        // handle clicks on ListView item
         folderListView.setOnMouseClicked(click -> {
             var currentItemSelected = folderListView.getSelectionModel()
                     .getSelectedItem();
             if (click.getClickCount() == 2) {
                 showRootConfigurationDialog(currentItemSelected);
             } else if (click.getClickCount() == 1) {
-                analyzerHandler.analyzeRoot(currentItemSelected);
                 treeHandler.updateTree(currentItemSelected);
             }
         });
-
     }
 
     @FXML
@@ -77,11 +81,16 @@ public class MainViewController {
             String pathname = selectedDirectory.getAbsolutePath();
             String name = pathname.substring(pathname.lastIndexOf(File.separator) + 1);
             String path = pathname.substring(0, pathname.lastIndexOf(File.separator));
+
             Root root = new Root(0, name, path, 0);
-            analyzerHandler.addWatchDirectory(root);
+
             showRootConfigurationDialog(root);
-            SoundEffects.playSound("success.wav");
+
+            analyzerHandler.analyzeRoot(root);
+            analyzerHandler.addWatchDirectory(root);
             treeHandler.updateRootList();
+
+            SoundEffects.playSound("success.wav");
         }
     }
 
@@ -89,7 +98,7 @@ public class MainViewController {
     private boolean showRootConfigurationDialog(Root root) {
         try {
             //loading Pane
-            FXMLLoader loader = new FXMLLoader();
+            FXMLLoader loader = fxmlLoaderProvider.get();
             loader.setLocation(MainViewController.class.getResource("/FolderDetails.fxml"));
             BorderPane page = loader.load();
 
