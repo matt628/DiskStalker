@@ -1,8 +1,11 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import com.google.inject.Inject;
-import pl.edu.agh.diskstalker.model.Root;
 import pl.edu.agh.diskstalker.controller.PopUpNotification;
+import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
+import pl.edu.agh.diskstalker.database.datamapper.RootDataMapper;
+import pl.edu.agh.diskstalker.database.model.Item;
+import pl.edu.agh.diskstalker.database.model.Root;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,30 +16,35 @@ import java.util.List;
 
 public class FolderAnalyzerHandler {
 
+    private final List<WatchDirectory> watchDirectories = new ArrayList<WatchDirectory>();
+    @Inject
+    private RootDataMapper rootDataMapper;
+    @Inject
+    private ItemDataMapper itemDataMapper;
     @Inject
     private TreeHandler treeHandler;
-
     @Inject
     private PopUpNotification popUpNotification;
 
-    private static List<WatchDirectory> watchDirectories = new ArrayList<WatchDirectory>();
-
-    public FolderAnalyzerHandler() throws IOException {
-        for(Root root : Root.findAll()){
-            addWatchDirectory(root);
+    public void stopWatchDirectory(Root root) {
+        for (WatchDirectory w : watchDirectories) {
+            if (w.getRoot().equals(root)) {
+                watchDirectories.remove(w);
+                w.stopWatching();
+            }
         }
     }
 
     public void analyzeAll() {
-        List<Root> roots = Root.findAll();
+        List<Root> roots = rootDataMapper.findAll();
         roots.forEach(this::analyzeRoot);
     }
 
     public void analyzeRoot(Root root) {
         Path startingDir = Paths.get(root.getPathname());
-        root.getItems().clear();
+        itemDataMapper.deleteAllByRoot(root);
         try {
-            Files.walkFileTree(startingDir, new FolderAnalyzer(root));
+            Files.walkFileTree(startingDir, new FolderAnalyzer(itemDataMapper, root));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,8 +54,9 @@ public class FolderAnalyzerHandler {
         }
     }
 
-    private boolean  exceedSpace(Root root) {
-        return root.getSize() > root.getMaxSize();
+    private boolean exceedSpace(Root root) {
+        Item rootItem = itemDataMapper.getRootItem(root);
+        return rootItem.getSize() > root.getMaxSize();
     }
 
     public void notifyByPopUp(Root root) {
@@ -59,22 +68,18 @@ public class FolderAnalyzerHandler {
         }
     }
 
-    public void addWatchDirectory(Root root){
-        try{
-            WatchDirectory watchDirectory = WatchDirectory.watch(root, this);
-            watchDirectories.add(watchDirectory);
-        }catch (IOException e){
-            System.out.println(e.getStackTrace());
+    public void loadDirectories() {
+        for (Root root : rootDataMapper.findAll()) {
+            addWatchDirectory(root);
         }
-
     }
 
-    static void stopWatchDirectory(Root root){
-        for(WatchDirectory w : watchDirectories){
-            if(w.getRoot().equals(root)){
-                watchDirectories.remove(w);
-                w.stopWatching();
-            }
+    public void addWatchDirectory(Root root) {
+        try {
+            WatchDirectory watchDirectory = WatchDirectory.watch(root, this);
+            watchDirectories.add(watchDirectory);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

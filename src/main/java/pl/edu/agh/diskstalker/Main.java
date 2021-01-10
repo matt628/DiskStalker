@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.guice.GuiceModule;
+import pl.edu.agh.diskstalker.guice.provider.FXMLLoaderProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +22,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Injector injector = Guice.createInjector(new GuiceModule());
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoaderProvider fxmlLoaderProvider = new FXMLLoaderProvider();
+        FXMLLoader loader = fxmlLoaderProvider.get();
         loader.setControllerFactory(injector::getInstance);
 
         try (InputStream fxmlInputStream = ClassLoader.getSystemResourceAsStream("MainPane.fxml")) {

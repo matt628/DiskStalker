@@ -1,11 +1,16 @@
 package pl.edu.agh.diskstalker.presenter;
 
+import com.google.inject.Inject;
 import javafx.scene.control.TreeItem;
-import pl.edu.agh.diskstalker.model.Item;
+import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
+import pl.edu.agh.diskstalker.database.model.Item;
 
 import java.util.List;
 
 public class TreeBuilder {
+
+    @Inject
+    private ItemDataMapper itemDataMapper;
 
     public TreeItem<Item> buildTree(Item item) {
         TreeItem<Item> root = new TreeItem<>(item);
@@ -23,6 +28,6 @@ public class TreeBuilder {
     }
 
     private List<Item> getChildren(Item item) {
-        return item.getChildren();
+        return itemDataMapper.getChildren(item);
     }
 }
