@@ -25,6 +25,7 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
     public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
         String nameWithType = file.getFileName().toString();
 
+        System.out.println(nameWithType);
         String name = nameWithType.substring(0, nameWithType.lastIndexOf('.'));
         String type = nameWithType.substring(nameWithType.lastIndexOf('.'));
         String path = file.getParent().toString();

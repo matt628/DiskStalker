@@ -1,19 +1,13 @@
 package pl.edu.agh.diskstalker.database.model;
 
 import java.io.File;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class Item {
-
     private final String name;
-
     private final String path;
-
     private final String type;
-
     private final long size;
-
     private final Root root;
 
     public Item(String name, String path, String type, long size, Root root) {
@@ -52,14 +46,13 @@ public class Item {
         return type != null;
     }
 
-    public boolean isSubItem(String path) {
-        return path.equals(getPathname());
+    public boolean isClosestParent(Item item) {
+        return getPathname().equals(item.getPath());
     }
 
-    public boolean isChild(String pathname) {
-        return getPath().contains(pathname);
+    public boolean isChild(String rootPathname) {
+        return getPath().contains(rootPathname);
     }
-
 
     @Override
     public String toString() {
@@ -70,5 +63,18 @@ public class Item {
                 ", size='" + size + '\'' +
                 ", root=" + root +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+        Item item = (Item) o;
+        return size == item.size && name.equals(item.name) && path.equals(item.path) && Objects.equals(type, item.type) && root.equals(item.root);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, path, type, size, root);
     }
 }

@@ -49,14 +49,13 @@ public class RootTest {
     public void findRootTest() {
         // When
         var root = rootDataMapper.create("some", "/home", 234342);
-
         var foundRootById = rootDataMapper.findById(root.get().getId());
         var nonExistingRoot = rootDataMapper.findById(Integer.MAX_VALUE);
 
         // Then
         checkRoot(foundRootById);
 
-        Assertions.assertEquals(root.get(), foundRootById.get());
+        assertEquals(root.get(), foundRootById.get());
         assertFalse(nonExistingRoot.isPresent());
     }
 
@@ -70,19 +69,21 @@ public class RootTest {
         // Then
         checkRoot(foundRootByLocation);
 
-        Assertions.assertEquals(root.get(), foundRootByLocation.get());
+        assertEquals(root.get(), foundRootByLocation.get());
         assertFalse(nonExistingRoot.isPresent());
     }
 
     @Test
     public void deleteByIdTest() {
-        // When
+        // Given
         var root = rootDataMapper.create("name", "/home", 224242);
         var rootToDelete = rootDataMapper.create("name1", "/home/name", 6211);
         var id = rootToDelete.get().getId();
-        //Then
+
+        // When
         rootDataMapper.deleteById(id);
 
+        // Then
         assertFalse(root.isEmpty());
     }
 

@@ -36,7 +36,7 @@ public class ItemDataMapperImpl implements ItemDataMapper {
     public List<Item> getChildren(Item rootItem) {
         List<Item> rootChildren = findAllByRoot(rootItem.getRoot());
         return rootChildren.stream()
-                .filter(item -> rootItem.isSubItem(item.getPath()))
+                .filter(rootItem::isClosestParent)
                 .collect(Collectors.toList());
     }
 
