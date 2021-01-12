@@ -1,4 +1,4 @@
-package pl.edu.agh.diskstalker.model;
+package pl.edu.agh.diskstalker.database.model;
 
 import java.io.File;
 import java.util.List;
@@ -52,14 +52,7 @@ public class Item {
         return type != null;
     }
 
-    public List<Item> getChildren() {
-        List<Item> rootChildren = root.getItems();
-        return rootChildren.stream()
-                .filter(item -> isSubItem(item.getPath()))
-                .collect(Collectors.toList());
-    }
-
-    private boolean isSubItem(String path) {
+    public boolean isSubItem(String path) {
         return path.equals(getPathname());
     }
 

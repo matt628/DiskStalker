@@ -1,7 +1,7 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import javafx.application.Platform;
-import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.database.model.Root;
 
 import java.io.File;
 import java.io.IOException;

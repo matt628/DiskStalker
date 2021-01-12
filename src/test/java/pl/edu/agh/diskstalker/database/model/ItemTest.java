@@ -1,4 +1,4 @@
-package pl.edu.agh.diskstalker.model;
+package pl.edu.agh.diskstalker.database.model;
 
 public class ItemTest {
 
@@ -118,7 +118,7 @@ public class ItemTest {
 //    }
 //
 //    private Root getMockedRoot() {
-//        return Root.create("home", "/", "234342", "4545323").get();
+//        return create("home", "/", "234342", "4545323").get();
 //    }
 //
 //    private void checkItem(final Optional<Item> item) {

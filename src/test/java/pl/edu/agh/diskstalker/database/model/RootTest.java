@@ -1,17 +1,19 @@
-package pl.edu.agh.diskstalker.model;
+package pl.edu.agh.diskstalker.database.model;
 
-import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.*;
 import pl.edu.agh.diskstalker.database.connection.ConnectionProvider;
+import pl.edu.agh.diskstalker.database.datamapper.RootDataMapper;
+import pl.edu.agh.diskstalker.database.datamapper.RootDataMapperImpl;
 import pl.edu.agh.diskstalker.database.executor.QueryExecutor;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RootTest {
+
+    private final RootDataMapper rootDataMapper = new RootDataMapperImpl();
 
     @BeforeAll
     public static void init() {
@@ -31,9 +33,9 @@ public class RootTest {
     @Test
     public void createRootTest() {
         // When
-        var root1 = Root.create("some", "/home", 234342);
-        var root2 = Root.create("other", "/home/loc", 3454334 );
-        var redundantRoot = Root.create("other", "/home/loc", 3454334 );
+        var root1 = rootDataMapper.create("some", "/home", 234342);
+        var root2 = rootDataMapper.create("other", "/home/loc", 3454334 );
+        var redundantRoot = rootDataMapper.create("other", "/home/loc", 3454334 );
 
         // Then
         checkRoot(root1);
@@ -46,10 +48,10 @@ public class RootTest {
     @Test
     public void findRootTest() {
         // When
-        var root = Root.create("some", "/home", 234342);
+        var root = rootDataMapper.create("some", "/home", 234342);
 
-        var foundRootById = Root.findById(root.get().getId());
-        var nonExistingRoot = Root.findById(Integer.MAX_VALUE);
+        var foundRootById = rootDataMapper.findById(root.get().getId());
+        var nonExistingRoot = rootDataMapper.findById(Integer.MAX_VALUE);
 
         // Then
         checkRoot(foundRootById);
@@ -61,9 +63,9 @@ public class RootTest {
     @Test
     public void findRootByLocationTest() {
         // When
-        var root = Root.create("some", "/home", 234342);
-        var foundRootByLocation = Root.findByLocation(root.get().getName(), root.get().getPath());
-        var nonExistingRoot = Root.findByLocation(null, null);
+        var root = rootDataMapper.create("some", "/home", 234342);
+        var foundRootByLocation = rootDataMapper.findByLocation(root.get().getName(), root.get().getPath());
+        var nonExistingRoot = rootDataMapper.findByLocation(null, null);
 
         // Then
         checkRoot(foundRootByLocation);
@@ -71,28 +73,18 @@ public class RootTest {
         Assertions.assertEquals(root.get(), foundRootByLocation.get());
         assertFalse(nonExistingRoot.isPresent());
     }
+
     @Test
     public void deleteByIdTest() {
         // When
-        var root = Root.create("name", "/home", 224242);
-        var rootToDelete = Root.create("name1", "/home/name", 6211);
+        var root = rootDataMapper.create("name", "/home", 224242);
+        var rootToDelete = rootDataMapper.create("name1", "/home/name", 6211);
         var id = rootToDelete.get().getId();
         //Then
-        Root.deleteById(id);
+        rootDataMapper.deleteById(id);
 
         assertFalse(root.isEmpty());
-
     }
-
-    //@Test
-//    public void getPathNameTest(){
-//        //When
-//        var root = Root.create("name", "/home", 224242);
-//        var pathname = root.get().getPathname();
-//        assertEquals(pathname, root.get().getPath() + File.separator + );
-//    }
-
-
 
     private void checkRoot(final Optional<Root> root) {
         assertTrue(root.isPresent());
@@ -100,7 +92,6 @@ public class RootTest {
             assertTrue(r.getId() > 0);
             assertNotNull(r.getName());
             assertNotNull(r.getPath());
-            assertNotNull(r.getMaxSize());
         });
     }
 }
