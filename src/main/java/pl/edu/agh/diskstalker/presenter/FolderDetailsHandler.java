@@ -28,7 +28,6 @@ public class FolderDetailsHandler {
         analyzerHandler.stopWatchDirectory(root);
         rootDataMapper.deleteById(root.getId());
         treeHandler.updateRootList();
-        SoundEffects.playSound("delete_surprise.wav");
         System.out.println("Unsubscribed from " + root.getName());
     }
 
@@ -36,7 +35,6 @@ public class FolderDetailsHandler {
         File file = new File(root.getPathname());
         try {
             FileUtils.deleteDirectory(file);
-            SoundEffects.playSound("delete_surprise.wav");
             System.out.println("Folder deleted........");
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,7 +45,6 @@ public class FolderDetailsHandler {
         File directory = new File(root.getPathname());
         try {
             FileUtils.cleanDirectory(directory);
-            SoundEffects.playSound("delete_surprise.wav");
             System.out.println("Folder cleaned........");
         } catch (IOException e) {
             e.printStackTrace();

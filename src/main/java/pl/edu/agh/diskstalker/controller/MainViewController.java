@@ -19,7 +19,6 @@ import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.guice.provider.FXMLLoaderProvider;
 import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
-import pl.edu.agh.diskstalker.presenter.SoundEffects;
 import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
 import javax.inject.Singleton;
@@ -95,7 +94,6 @@ public class MainViewController {
             analyzerHandler.addWatchDirectory(root);
             treeHandler.updateRootList();
 
-            SoundEffects.playSound("success.wav");
         }
     }
 
