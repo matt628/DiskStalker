@@ -45,9 +45,9 @@ public class FolderDetailsController {
 
     @FXML
     private void handleOkAction(ActionEvent event) {
-        long maxSize = 0;
+        long maxSize = Long.MAX_VALUE;
         if (!folderMaxSize.getText().equals(""))
-             maxSize = Long.parseLong(folderMaxSize.getText());
+            maxSize = Long.parseLong(folderMaxSize.getText());
         detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize);
         approved = true;
         dialogStage.close();

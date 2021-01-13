@@ -39,15 +39,8 @@ public class Item {
     }
 
     public String getPathname() {
-        return path + File.separator + name;
-    }
-
-    public String getPathname2() {
-        if (type == null) {
-            return path + File.separator + name;
-        } else{
-            return path + File.separator + name + type;
-        }
+        String pathname = path + File.separator + name;
+        return type == null ? pathname : pathname + type;
     }
 
     public boolean isFile() {
@@ -67,12 +60,12 @@ public class Item {
         return name + getConvertedSizeString();
     }
 
-    private String getConvertedSizeString(){
+    private String getConvertedSizeString() {
         float s = size;
-        if(size/1000000 > 1){
-            return " " + s/1000000 + " MB";
+        if (size / 1000000 > 1) {
+            return " " + s / 1000000 + " MB";
         }
-        return " " + s/1000 + " KB";
+        return " " + s / 1000 + " KB";
     }
 
     @Override

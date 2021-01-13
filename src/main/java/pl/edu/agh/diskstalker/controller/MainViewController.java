@@ -2,17 +2,14 @@ package pl.edu.agh.diskstalker.controller;
 
 import com.google.inject.Inject;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
@@ -93,7 +90,6 @@ public class MainViewController {
             analyzerHandler.analyzeRoot(root);
             analyzerHandler.addWatchDirectory(root);
             treeHandler.updateRootList();
-
         }
     }
 
@@ -134,8 +130,8 @@ public class MainViewController {
     public void updateFolderTreeView(TreeItem<Item> root) {
         folderTreeView.setRoot(root);
         addContextMenuToTreeView();
-
     }
+
     private void addContextMenuToTreeView() {
         ContextMenu contextMenu = new ContextMenu();
         folderTreeView.setOnMouseClicked(click -> {
@@ -143,22 +139,16 @@ public class MainViewController {
                     .getSelectedItem();
             if (click.getButton() == (MouseButton.SECONDARY)) {
                 showContextMenu(currentItemSelected, click.getScreenX(), click.getScreenY(), contextMenu);
-                System.out.println("Right click works");
-                System.out.println(currentItemSelected);
             } else if (click.getButton() == (MouseButton.PRIMARY)) {
-                System.out.println("showing menu");
                 contextMenu.hide();
             }
         });
     }
 
-    private void showContextMenu(TreeItem<Item> item, double x, double y, ContextMenu contextMenu)
-    {
+    private void showContextMenu(TreeItem<Item> item, double x, double y, ContextMenu contextMenu) {
         MenuItem menuItem1 = new MenuItem("Delete");
         menuItem1.setOnAction((event) -> this.detailsHandler.deleteItem(item.getValue()));
         contextMenu.getItems().setAll(menuItem1);
         contextMenu.show(this.folderTreeView.getScene().getWindow(), x, y);
-
-
     }
 }

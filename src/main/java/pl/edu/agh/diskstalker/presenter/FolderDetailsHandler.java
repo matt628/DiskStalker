@@ -7,9 +7,7 @@ import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Optional;
 
 public class FolderDetailsHandler {
@@ -35,6 +33,8 @@ public class FolderDetailsHandler {
         File file = new File(root.getPathname());
         try {
             FileUtils.deleteDirectory(file);
+            rootDataMapper.deleteById(root.getId());
+            treeHandler.updateRootList();
             System.out.println("Folder deleted........");
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,18 +59,18 @@ public class FolderDetailsHandler {
         treeHandler.updateRootList();
     }
 
-    public void deleteItem(Item item){
+    public void deleteItem(Item item) {
         // FileUtils
-        File file = new File(item.getPathname2());
-        if(file.isDirectory()) {
+        File file = new File(item.getPathname());
+        if (file.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(file);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if(file.isFile()){
-            if(!file.delete()) {
-                System.out.println("File was not deleted succesfully");
+        } else if (file.isFile()) {
+            if (!file.delete()) {
+                System.out.println("File was not deleted successfully");
             }
         }
     }
