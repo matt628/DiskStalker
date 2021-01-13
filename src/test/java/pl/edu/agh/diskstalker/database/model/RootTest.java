@@ -1,33 +1,43 @@
 package pl.edu.agh.diskstalker.database.model;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.*;
 import pl.edu.agh.diskstalker.database.connection.ConnectionProvider;
+import pl.edu.agh.diskstalker.database.connection.QueryExecutor;
 import pl.edu.agh.diskstalker.database.datamapper.RootDataMapper;
-import pl.edu.agh.diskstalker.database.datamapper.RootDataMapperImpl;
-import pl.edu.agh.diskstalker.database.executor.QueryExecutor;
+import pl.edu.agh.diskstalker.guice.GuiceModule;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RootTest {
 
-    private final RootDataMapper rootDataMapper = new RootDataMapperImpl();
+    private static final String TEST_DB_ADDRESS = "jdbc:sqlite:disk_stalker_test.db";
+
+    private final Injector injector = Guice.createInjector(new GuiceModule());
+
+    private final ConnectionProvider connectionProvider = injector.getInstance(ConnectionProvider.class);
+    private final QueryExecutor queryExecutor = injector.getInstance(QueryExecutor.class);
+    private final RootDataMapper rootDataMapper = injector.getInstance(RootDataMapper.class);
 
     @BeforeAll
-    public static void init() {
-        ConnectionProvider.init("jdbc:sqlite:disk_stalker_test.db");
+    public void init() {
+        connectionProvider.init(TEST_DB_ADDRESS);
+        queryExecutor.init();
     }
 
     @BeforeEach
     public void setUp() throws SQLException {
-        QueryExecutor.delete("DELETE FROM Roots");
+        queryExecutor.delete("DELETE FROM Roots");
     }
 
     @AfterAll
-    public static void cleanUp() throws SQLException {
-        ConnectionProvider.close();
+    public void close() throws SQLException {
+        connectionProvider.close();
     }
 
     @Test

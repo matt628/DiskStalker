@@ -24,7 +24,7 @@ public class QueryExecutor {
         init();
     }
 
-    private void init() {
+    public void init() {
         try {
             logger.info("Creating table Roots");
             create("CREATE TABLE IF NOT EXISTS Roots (" +
