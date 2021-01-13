@@ -31,7 +31,7 @@ public final class ConnectionProvider {
             connection = Optional.of(DriverManager.getConnection(jdbcAddress));
             logger.info("Connection created");
         } catch (Exception e) {
-            logger.info("Error during initialization: " + e.getMessage());
+            throw new RuntimeException("Error during initialization");
         }
     }
 
@@ -46,5 +46,4 @@ public final class ConnectionProvider {
             connection = Optional.empty();
         }
     }
-
 }
