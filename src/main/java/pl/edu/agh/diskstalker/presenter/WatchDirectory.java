@@ -41,8 +41,8 @@ public class WatchDirectory {
         this.root = root;
         this.watcher = FileSystems.getDefault().newWatchService();
         this.keys = new HashMap<WatchKey, Path>();
-        System.out.format("Scanning %s ...\n", root.getPath());
-        registerAll(Paths.get(root.getPath()));
+        System.out.format("Scanning %s ...\n", root.getPathname());
+        registerAll(Paths.get(root.getPathname()));
         System.out.println("Done.");
 
         // enable trace after initial registration

@@ -36,7 +36,7 @@ public class FolderDetailsController {
 
     private void updateDisplay(){
         folderPath.setText(root.getPathname());
-        //folderMaxSize.setText(getMaxSize()); //todo
+        folderMaxSize.setText(String.valueOf(root.getMaxSize()));
     }
 
     public boolean isApproved() {

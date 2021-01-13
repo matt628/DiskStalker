@@ -23,8 +23,6 @@ public class FolderAnalyzerHandler {
     private ItemDataMapper itemDataMapper;
     @Inject
     private TreeHandler treeHandler;
-    @Inject
-    private PopUpNotification popUpNotification;
 
     public void stopWatchDirectory(Root root) {
         for (WatchDirectory w : watchDirectories) {
@@ -61,7 +59,7 @@ public class FolderAnalyzerHandler {
 
     public void notifyByPopUp(Root root) {
         try {
-            popUpNotification.displayTray("DiskStalker",
+            PopUpNotification.displayTray("DiskStalker",
                     root.getPathname() + "exceeded the space limit of space");
         } catch (Exception e) {
             e.printStackTrace();
