@@ -4,7 +4,7 @@ import java.awt.TrayIcon.MessageType;
 
 public class PopUpNotification {
 
-    public void displayTray(String caption, String text) throws AWTException {
+    public static void displayTray(String caption, String text) throws AWTException {
         SystemTray tray = SystemTray.getSystemTray();
         Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
         TrayIcon trayIcon = new TrayIcon(image, "Tray Demo");
