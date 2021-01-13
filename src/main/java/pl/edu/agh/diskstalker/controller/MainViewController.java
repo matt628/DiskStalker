@@ -62,9 +62,12 @@ public class MainViewController {
     @FXML
     @SuppressWarnings("Duplicates")
     private void initialize() {
-        treeHandler.updateRootList();
         analyzerHandler.analyzeAll();
         analyzerHandler.loadDirectories();
+
+        treeHandler.updateRootList();
+        treeHandler.cleanTree();
+        treeHandler.cleanProgressBar();
 
         folderListView.setOnMouseClicked(click -> {
             var currentItemSelected = folderListView.getSelectionModel()
@@ -107,7 +110,7 @@ public class MainViewController {
             Stage dialogStage = createDialogStage(loader);
 
             FolderDetailsController folderDetailsController =
-                    runFolderDetailsControler(loader, dialogStage, root);
+                    runFolderDetailsController(loader, dialogStage, root);
 
             dialogStage.showAndWait();
             return folderDetailsController.isApproved();
@@ -129,7 +132,7 @@ public class MainViewController {
         return dialogStage;
     }
 
-    private FolderDetailsController runFolderDetailsControler(FXMLLoader loader, Stage dialogStage, Root root){
+    private FolderDetailsController runFolderDetailsController(FXMLLoader loader, Stage dialogStage, Root root){
         FolderDetailsController folderDetailsController = loader.getController();
         folderDetailsController.setDialogStage(dialogStage);
         folderDetailsController.setRoot(root);
