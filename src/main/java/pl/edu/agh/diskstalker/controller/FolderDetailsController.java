@@ -84,7 +84,13 @@ public class FolderDetailsController {
 
     @FXML
     private void handleFolderCleanAction(ActionEvent event) {
-        detailsHandler.cleanRoot(root);
+        var result  = showAlert("Folder content will be deleted!", "Are you sure?");
+        if (result.get() == ButtonType.OK){
+            detailsHandler.cleanRoot(root);
+        } else {
+            // ... user chose CANCEL or closed the dialog
+            dialogStage.close();
+        }
         dialogStage.close();
     }
 
