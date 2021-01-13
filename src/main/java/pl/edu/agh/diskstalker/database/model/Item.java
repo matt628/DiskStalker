@@ -42,6 +42,14 @@ public class Item {
         return path + File.separator + name;
     }
 
+    public String getPathname2() {
+        if (type == null) {
+            return path + File.separator + name;
+        } else{
+            return path + File.separator + name + type;
+        }
+    }
+
     public boolean isFile() {
         return type != null;
     }
