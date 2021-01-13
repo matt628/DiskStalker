@@ -1,23 +1,28 @@
-package pl.edu.agh.diskstalker.database.query;
+package pl.edu.agh.diskstalker.database.connection;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import pl.edu.agh.diskstalker.database.connection.ConnectionProvider;
-
+@Singleton
 public class QueryHelper {
 
-    public static PreparedStatement prepareStatement(String query) throws SQLException {
-        return ConnectionProvider.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+    @Inject
+    private ConnectionProvider connectionProvider;
+
+    public PreparedStatement prepareStatement(String query) throws SQLException {
+        return connectionProvider.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
     }
 
-    public static int readIdFromResultSet(final ResultSet resultSet) throws SQLException {
+    public int readIdFromResultSet(final ResultSet resultSet) throws SQLException {
         return resultSet.next() ? resultSet.getInt(1) : -1;
     }
 
-    public static void mapParams(PreparedStatement ps, Object... args) throws SQLException {
+    public void mapParams(PreparedStatement ps, Object... args) throws SQLException {
         int i = 1;
         for (Object arg : args) {
             if (arg instanceof Integer) {

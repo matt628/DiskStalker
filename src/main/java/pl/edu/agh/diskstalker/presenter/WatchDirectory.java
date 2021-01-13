@@ -1,9 +1,8 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import javafx.application.Platform;
-import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.database.model.Root;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -24,14 +23,9 @@ public class WatchDirectory {
     private final WatchService watcher;
     private final Map<WatchKey, Path> keys;
     private final boolean trace;
-    private volatile boolean closeWatcherThread;
     private final Root root;
     private final FolderAnalyzerHandler folderAnalyzerHandler;
-
-    @SuppressWarnings("unchecked")
-    static <T> WatchEvent<T> cast(WatchEvent<?> event) {
-        return (WatchEvent<T>) event;
-    }
+    private volatile boolean closeWatcherThread;
 
     /**
      * Creates a WatchService and registers the given directory
@@ -47,6 +41,18 @@ public class WatchDirectory {
 
         // enable trace after initial registration
         this.trace = true;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T> WatchEvent<T> cast(WatchEvent<?> event) {
+        return (WatchEvent<T>) event;
+    }
+
+    public static WatchDirectory watch(Root root, FolderAnalyzerHandler handler) throws IOException {
+        final WatchDirectory watchDir = new WatchDirectory(root, handler);
+        watchDir.closeWatcherThread = false;
+        new Thread(watchDir::processEvents, "DirWatcherThread").start();
+        return watchDir;
     }
 
     public Root getRoot() {
@@ -87,21 +93,6 @@ public class WatchDirectory {
         });
     }
 
-
-    private long getFileOrDirSize(File fileOrDir) {
-        if(fileOrDir.isFile()){
-            return fileOrDir.length();
-        }else{
-            long length = 0;
-            for (File file : fileOrDir.listFiles()) {
-                if (file.isFile())
-                    length += file.length();
-                else
-                    length += getFileOrDirSize(file);
-            }
-            return length;
-        }
-    }
     /**
      * Process all events for keys queued to the watcher
      */
@@ -135,7 +126,7 @@ public class WatchDirectory {
         }
     }
 
-    private void handleEvent(WatchEvent<?> event, Path dir){
+    private void handleEvent(WatchEvent<?> event, Path dir) {
         WatchEvent.Kind kind = event.kind();
 
         WatchEvent<Path> ev = cast(event);
@@ -147,8 +138,8 @@ public class WatchDirectory {
             System.out.format("%s: %s \n", event.kind().name(), child);
         } else if (Objects.equals(kind, ENTRY_MODIFY)) {
             Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
-            System.out.format("%s: %s %s\n", event.kind().name(), child, getFileOrDirSize(child.toFile()));
-        }else if (Objects.equals(kind,ENTRY_CREATE)) {
+            System.out.format("%s: %s\n", event.kind().name(), child);
+        } else if (Objects.equals(kind, ENTRY_CREATE)) {
             Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
             System.out.format("%s: %s \n", event.kind().name(), child);
             try {
@@ -156,26 +147,17 @@ public class WatchDirectory {
                     registerAll(child);
                 }
             } catch (IOException x) {
-                // ignore to keep sample readbale
+                // ignore to keep sample readable
             }
         }
     }
 
-    public void stopWatching(){
-        try{
+    public void stopWatching() {
+        try {
             watcher.close();
-        }catch(IOException ioe){
+        } catch (IOException ioe) {
+            System.out.println("This is it");
         }
         closeWatcherThread = true;
     }
-
-
-
-    public static WatchDirectory watch(Root root, FolderAnalyzerHandler handler) throws IOException {
-        final WatchDirectory watchDir = new WatchDirectory(root, handler);
-        watchDir.closeWatcherThread = false;
-        new Thread(watchDir::processEvents, "DirWatcherThread").start();
-        return watchDir;
-    }
-
 }

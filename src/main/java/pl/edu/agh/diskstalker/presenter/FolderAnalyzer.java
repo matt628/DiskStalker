@@ -1,7 +1,8 @@
 package pl.edu.agh.diskstalker.presenter;
 
-import pl.edu.agh.diskstalker.model.Item;
-import pl.edu.agh.diskstalker.model.Root;
+import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
+import pl.edu.agh.diskstalker.database.model.Item;
+import pl.edu.agh.diskstalker.database.model.Root;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,9 +13,11 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class FolderAnalyzer extends SimpleFileVisitor<Path> {
 
+    private final ItemDataMapper itemDataMapper;
     private final Root root;
 
-    public FolderAnalyzer(Root root) {
+    public FolderAnalyzer(ItemDataMapper itemDataMapper, Root root) {
+        this.itemDataMapper = itemDataMapper;
         this.root = root;
     }
 
@@ -29,7 +32,7 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
 
         Item fileItem = new Item(name, path, type, size, root);
 
-        root.addItem(fileItem);
+        itemDataMapper.addItem(root, fileItem);
 
         return CONTINUE;
     }
@@ -38,16 +41,20 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
         String name = dir.getFileName().toString();
         String path = dir.getParent().toString();
-        long size = root.getItems().stream()
+        long size = getDirSize(path, name);
+
+        Item folderItem = new Item(name, path, null, size, root);
+
+        itemDataMapper.addItem(root, folderItem);
+
+        return CONTINUE;
+    }
+
+    private long getDirSize(String path, String name) {
+        return itemDataMapper.findAllByRoot(root).stream()
                 .filter(item -> item.isChild(path + File.separator + name))
                 .filter(Item::isFile)
                 .map(Item::getSize)
                 .reduce(0L, Long::sum);
-
-        Item folderItem = new Item(name, path, null, size, root);
-
-        root.getItems().add(folderItem);
-
-        return CONTINUE;
     }
 }
