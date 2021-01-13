@@ -2,14 +2,17 @@ package pl.edu.agh.diskstalker.controller;
 
 import com.google.inject.Inject;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
@@ -20,6 +23,7 @@ import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
 import javax.inject.Singleton;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Singleton
@@ -33,6 +37,9 @@ public class MainViewController {
 
     @FXML
     private TreeView<Item> folderTreeView;
+
+    @FXML
+    private ProgressBar progressBar;
 
     private Stage primaryStage;
 
@@ -99,19 +106,11 @@ public class MainViewController {
             //loading Pane
             FXMLLoader loader = fxmlLoaderProvider.get();
             loader.setLocation(MainViewController.class.getResource("/FolderDetails.fxml"));
-            BorderPane page = loader.load();
 
-            //creating dialog scene
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit root folder properties");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+            Stage dialogStage = createDialogStage(loader);
 
-            FolderDetailsController folderDetailsController = loader.getController();
-            folderDetailsController.setDialogStage(dialogStage);
-            folderDetailsController.setRoot(root);
+            FolderDetailsController folderDetailsController =
+                    runFolderDetailsControler(loader, dialogStage, root);
 
             dialogStage.showAndWait();
             return folderDetailsController.isApproved();
@@ -122,6 +121,24 @@ public class MainViewController {
         }
     }
 
+    private Stage createDialogStage(FXMLLoader loader) throws IOException {
+        BorderPane page = loader.load();
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Edit root folder properties");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(primaryStage);
+        Scene scene = new Scene(page);
+        dialogStage.setScene(scene);
+        return dialogStage;
+    }
+
+    private FolderDetailsController runFolderDetailsControler(FXMLLoader loader, Stage dialogStage, Root root){
+        FolderDetailsController folderDetailsController = loader.getController();
+        folderDetailsController.setDialogStage(dialogStage);
+        folderDetailsController.setRoot(root);
+        return folderDetailsController;
+    }
+
     public void updateFolderRootList(List<Root> roots) {
         folderListView.getItems().clear();
         folderListView.getItems().addAll(roots);
@@ -130,6 +147,11 @@ public class MainViewController {
     public void updateFolderTreeView(TreeItem<Item> root) {
         folderTreeView.setRoot(root);
         addContextMenuToTreeView();
+
+    }
+
+    public void updateProgressBarView(double progress){
+        progressBar.setProgress(progress);
     }
 
     private void addContextMenuToTreeView() {

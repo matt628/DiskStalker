@@ -9,8 +9,11 @@ import pl.edu.agh.diskstalker.database.model.Root;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class FolderDetailsHandler {
+
+    private final Logger logger = Logger.getGlobal();
 
     @Inject
     private TreeHandler treeHandler;
@@ -26,16 +29,17 @@ public class FolderDetailsHandler {
         analyzerHandler.stopWatchDirectory(root);
         rootDataMapper.deleteById(root.getId());
         treeHandler.updateRootList();
-        System.out.println("Unsubscribed from " + root.getName());
+        treeHandler.cleanTree();
+        treeHandler.cleanProgressBar();
+        logger.info("Unsubscribed from " + root.getName());
     }
 
     public void deleteRoot(Root root) {
         File file = new File(root.getPathname());
         try {
+            unsubscribeFromRoot(root);
             FileUtils.deleteDirectory(file);
-            rootDataMapper.deleteById(root.getId());
-            treeHandler.updateRootList();
-            System.out.println("Folder deleted........");
+            logger.info("Folder " + root.getPathname() + " deleted");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,7 +49,7 @@ public class FolderDetailsHandler {
         File directory = new File(root.getPathname());
         try {
             FileUtils.cleanDirectory(directory);
-            System.out.println("Folder cleaned........");
+            logger.info("Folder " + root.getPathname() + " cleaned");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,17 +64,17 @@ public class FolderDetailsHandler {
     }
 
     public void deleteItem(Item item) {
-        // FileUtils
         File file = new File(item.getPathname());
         if (file.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(file);
+                logger.info("Folder " + item.getPathname() + " deleted");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (file.isFile()) {
             if (!file.delete()) {
-                System.out.println("File was not deleted successfully");
+                logger.info("File " + item.getPathname() + " deleted");
             }
         }
     }

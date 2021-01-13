@@ -3,7 +3,6 @@ package pl.edu.agh.diskstalker.presenter;
 import javafx.application.Platform;
 import pl.edu.agh.diskstalker.database.model.Root;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -94,21 +93,6 @@ public class WatchDirectory {
         });
     }
 
-    private long getFileOrDirSize(File fileOrDir) {
-        if (fileOrDir.isFile()) {
-            return fileOrDir.length();
-        } else {
-            long length = 0;
-            for (File file : fileOrDir.listFiles()) {
-                if (file.isFile())
-                    length += file.length();
-                else
-                    length += getFileOrDirSize(file);
-            }
-            return length;
-        }
-    }
-
     /**
      * Process all events for keys queued to the watcher
      */
@@ -154,7 +138,7 @@ public class WatchDirectory {
             System.out.format("%s: %s \n", event.kind().name(), child);
         } else if (Objects.equals(kind, ENTRY_MODIFY)) {
             Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
-            System.out.format("%s: %s %s\n", event.kind().name(), child, getFileOrDirSize(child.toFile()));
+            System.out.format("%s: %s\n", event.kind().name(), child);
         } else if (Objects.equals(kind, ENTRY_CREATE)) {
             Platform.runLater(() -> folderAnalyzerHandler.analyzeRoot(root));
             System.out.format("%s: %s \n", event.kind().name(), child);
@@ -163,7 +147,7 @@ public class WatchDirectory {
                     registerAll(child);
                 }
             } catch (IOException x) {
-                // ignore to keep sample readbale
+                // ignore to keep sample readable
             }
         }
     }
@@ -176,5 +160,4 @@ public class WatchDirectory {
         }
         closeWatcherThread = true;
     }
-
 }
