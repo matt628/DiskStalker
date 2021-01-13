@@ -70,12 +70,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "name='" + name + '\'' +
-                ", path='" + path + '\'' +
-                ", type='" + type + '\'' +
-                ", size='" + size + '\'' +
-                ", root=" + root +
-                '}';
+        return name;
+
     }
 }

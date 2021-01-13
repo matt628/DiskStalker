@@ -159,12 +159,13 @@ public class Root {
 
     @Override
     public String toString() {
-        return "Root{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", path='" + path + '\'' +
-                ", maxSize='" + maxSize +
-                '}';
+        return name;
+//        return "Root{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", path='" + path + '\'' +
+//                ", maxSize='" + maxSize +
+//                '}';
     }
 
     @Override
