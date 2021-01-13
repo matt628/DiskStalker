@@ -40,11 +40,11 @@
             </HBox>
         </VBox>
         <VBox prefHeight="600.0" prefWidth="350.0">
-            <ProgressBar layoutY="10.0"  prefHeight="20.0" prefWidth="350.0" progress="0.3">
+            <ProgressBar fx:id="progressBar" layoutY="10.0"  prefHeight="20.0" prefWidth="350.0" progress="0.3">
 
             </ProgressBar>
             <padding>
-                <Insets bottom="10.0" left="5.0" right="5.0" top="10.0"/>
+                <Insets  bottom="10.0" left="5.0" right="5.0" top="10.0"/>
             </padding>
             <children>
                 <TreeView fx:id="folderTreeView" prefHeight="458.0" prefWidth="350.0" />

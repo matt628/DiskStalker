@@ -38,6 +38,9 @@ public class MainViewController {
     @FXML
     private TreeView<Item> folderTreeView;
 
+    @FXML
+    private ProgressBar progressBar;
+
     private Stage primaryStage;
 
     @Inject
@@ -51,6 +54,8 @@ public class MainViewController {
 
     @Inject
     private FolderDetailsHandler detailsHandler;
+
+
 
     public MainViewController() {
     }
@@ -146,6 +151,10 @@ public class MainViewController {
         folderTreeView.setRoot(root);
         addContextMenuToTreeView();
 
+    }
+
+    public void updateProgressBarView(double progress){
+        progressBar.setProgress(progress);
     }
     private void addContextMenuToTreeView() {
         ContextMenu contextMenu = new ContextMenu();

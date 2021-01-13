@@ -28,6 +28,8 @@ public class TreeHandler {
         Item itemRoot = itemDataMapper.getRootItem(root);
         TreeItem<Item> treeRoot = treeBuilder.buildTree(itemRoot);
         mainViewController.updateFolderTreeView(treeRoot);
+        double progress = (double)itemRoot.getSize() / (double)root.getMaxSize();
+        mainViewController.updateProgressBarView(progress);
     }
 
     public void updateRootList() {
