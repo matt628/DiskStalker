@@ -1,5 +1,7 @@
 package pl.edu.agh.diskstalker.presenter;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
 import pl.edu.agh.diskstalker.database.model.Root;
 
@@ -51,7 +53,11 @@ public class WatchDirectory {
     public static WatchDirectory watch(Root root, FolderAnalyzerHandler handler) throws IOException {
         final WatchDirectory watchDir = new WatchDirectory(root, handler);
         watchDir.closeWatcherThread = false;
-        new Thread(watchDir::processEvents, "DirWatcherThread").start();
+
+        Completable.fromRunnable(watchDir::processEvents)
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+
         return watchDir;
     }
 
