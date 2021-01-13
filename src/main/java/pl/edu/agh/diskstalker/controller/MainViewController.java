@@ -23,6 +23,7 @@ import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
 import javax.inject.Singleton;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Singleton
@@ -103,19 +104,11 @@ public class MainViewController {
             //loading Pane
             FXMLLoader loader = fxmlLoaderProvider.get();
             loader.setLocation(MainViewController.class.getResource("/FolderDetails.fxml"));
-            BorderPane page = loader.load();
 
-            //creating dialog scene
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit root folder properties");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+            Stage dialogStage = createDialogStage(loader);
 
-            FolderDetailsController folderDetailsController = loader.getController();
-            folderDetailsController.setDialogStage(dialogStage);
-            folderDetailsController.setRoot(root);
+            FolderDetailsController folderDetailsController =
+                    runFolderDetailsControler(loader, dialogStage, root);
 
             dialogStage.showAndWait();
             return folderDetailsController.isApproved();
@@ -124,6 +117,24 @@ public class MainViewController {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private Stage createDialogStage(FXMLLoader loader) throws IOException {
+        BorderPane page = loader.load();
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Edit root folder properties");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(primaryStage);
+        Scene scene = new Scene(page);
+        dialogStage.setScene(scene);
+        return dialogStage;
+    }
+
+    private FolderDetailsController runFolderDetailsControler(FXMLLoader loader, Stage dialogStage, Root root){
+        FolderDetailsController folderDetailsController = loader.getController();
+        folderDetailsController.setDialogStage(dialogStage);
+        folderDetailsController.setRoot(root);
+        return folderDetailsController;
     }
 
     public void updateFolderRootList(List<Root> roots) {
@@ -143,10 +154,7 @@ public class MainViewController {
                     .getSelectedItem();
             if (click.getButton() == (MouseButton.SECONDARY)) {
                 showContextMenu(currentItemSelected, click.getScreenX(), click.getScreenY(), contextMenu);
-                System.out.println("Right click works");
-                System.out.println(currentItemSelected);
             } else if (click.getButton() == (MouseButton.PRIMARY)) {
-                System.out.println("showing menu");
                 contextMenu.hide();
             }
         });
