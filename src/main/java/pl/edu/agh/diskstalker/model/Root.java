@@ -160,12 +160,6 @@ public class Root {
     @Override
     public String toString() {
         return name;
-//        return "Root{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", path='" + path + '\'' +
-//                ", maxSize='" + maxSize +
-//                '}';
     }
 
     @Override

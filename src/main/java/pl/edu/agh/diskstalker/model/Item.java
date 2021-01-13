@@ -70,7 +70,14 @@ public class Item {
 
     @Override
     public String toString() {
-        return name;
+        return name + getConvertedSizeString();
+    }
 
+    private String getConvertedSizeString(){
+        float s = size;
+        if(size/1000000 > 1){
+            return " " + s/1000000 + " MB";
+        }
+        return " " + s/1000 + " KB";
     }
 }
