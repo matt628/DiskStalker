@@ -7,12 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
+import pl.edu.agh.diskstalker.database.model.Type;
 import pl.edu.agh.diskstalker.guice.provider.FXMLLoaderProvider;
 import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
@@ -27,7 +29,7 @@ import java.util.List;
 public class MainViewController {
 
     @FXML
-    private Button addButton;
+    public Button addButton;
 
     @FXML
     private ListView<Root> folderListView;
@@ -37,6 +39,21 @@ public class MainViewController {
 
     @FXML
     private ProgressBar progressBar;
+
+    @FXML
+    public TableView<Type> statisticsTable;
+
+    @FXML
+    public TableColumn<Type, String> extensionColumn;
+
+    @FXML
+    public TableColumn<Type, String> descriptionColumn;
+
+    @FXML
+    public TableColumn<Type, Double> BytesColumn;
+
+    @FXML
+    public TableColumn<Type, Double> PercentageColumn;
 
     private Stage primaryStage;
 
@@ -69,15 +86,17 @@ public class MainViewController {
         treeHandler.cleanTree();
         treeHandler.cleanProgressBar();
 
-        folderListView.setOnMouseClicked(click -> {
-            var currentItemSelected = folderListView.getSelectionModel()
-                    .getSelectedItem();
-            if (click.getClickCount() == 2) {
-                showRootConfigurationDialog(currentItemSelected);
-            } else if (click.getClickCount() == 1) {
-                treeHandler.updateTree(currentItemSelected);
-            }
-        });
+        folderListView.setOnMouseClicked(this::rootItemOnClick);
+    }
+
+    private void rootItemOnClick(MouseEvent click) {
+        var selectedRoot = folderListView.getSelectionModel().getSelectedItem();
+        if (selectedRoot == null) return;
+
+        switch (click.getClickCount()) {
+            case 1 -> treeHandler.updateTree(selectedRoot);
+            case 2 -> showRootConfigurationDialog(selectedRoot);
+        }
     }
 
     @FXML
