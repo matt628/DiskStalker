@@ -1,8 +1,6 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import com.google.inject.Inject;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
 import pl.edu.agh.diskstalker.database.model.Item;

@@ -93,10 +93,6 @@ public class MainViewController {
             Root root = new Root(0, name, path, 0);
 
             showRootConfigurationDialog(root);
-
-            analyzerHandler.analyzeRoot(root);
-            analyzerHandler.addWatchDirectory(root);
-            treeHandler.updateRootList();
         }
     }
 

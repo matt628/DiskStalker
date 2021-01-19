@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FolderAnalyzerHandler {
 
-    private final List<WatchDirectory> watchDirectories = new ArrayList<WatchDirectory>();
+    private final List<WatchDirectory> watchDirectories = new ArrayList<>();
     @Inject
     private RootDataMapper rootDataMapper;
     @Inject

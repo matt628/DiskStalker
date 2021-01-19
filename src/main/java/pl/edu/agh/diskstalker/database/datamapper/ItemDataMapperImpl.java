@@ -43,7 +43,6 @@ public class ItemDataMapperImpl implements ItemDataMapper {
     @Override
     public Item getRootItem(Root root) {
         List<Item> items = findAllByRoot(root);
-        System.out.println(items);
         return items.stream()
                 .filter(item -> item.getPathname().equals(root.getPathname()))
                 .findFirst()
