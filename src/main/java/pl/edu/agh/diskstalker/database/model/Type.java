@@ -4,16 +4,20 @@ import java.util.Objects;
 
 public class Type {
 
-    private final String extension;
-    private final String description;
-    private final double bytes;
-    private final double percentage;
+    private final int id;
 
-    public Type(String extension, String description, double bytes, double percentage) {
+    private final String extension;
+
+    private final String description;
+
+    public Type(int id, String extension, String description) {
+        this.id = id;
         this.extension = extension;
         this.description = description;
-        this.bytes = bytes;
-        this.percentage = percentage;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getExtension() {
@@ -24,12 +28,10 @@ public class Type {
         return description;
     }
 
-    public double getBytes() {
-        return bytes;
-    }
 
-    public double getPercentage() {
-        return percentage;
+    @Override
+    public String toString() {
+        return extension;
     }
 
     @Override
@@ -37,14 +39,13 @@ public class Type {
         if (this == o) return true;
         if (!(o instanceof Type)) return false;
         Type type = (Type) o;
-        return Double.compare(type.bytes, bytes) == 0 &&
-                Double.compare(type.percentage, percentage) == 0 &&
+        return id == type.id &&
                 extension.equals(type.extension) &&
-                description.equals(type.description);
+                Objects.equals(description, type.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(extension, description, bytes, percentage);
+        return Objects.hash(id, extension, description);
     }
 }
