@@ -44,8 +44,8 @@
             <columns>
                 <TableColumn fx:id="extensionColumn" text="Extension" />
                 <TableColumn fx:id="descriptionColumn" text="Description" />
-                <TableColumn fx:id="BytesColumn" text="Bytes" />
-                <TableColumn fx:id="PercentageColumn" text="'%'Bytes" />
+                <TableColumn fx:id="bytesColumn" text="Bytes" />
+                <TableColumn fx:id="percentageColumn" text="'%'Bytes" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

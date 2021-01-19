@@ -22,8 +22,10 @@ public class FolderDetailsHandler {
     private FolderAnalyzerHandler analyzerHandler;
 
     @Inject
-    private RootDataMapper rootDataMapper;
+    private StatisticsHandler statisticsHandler;
 
+    @Inject
+    private RootDataMapper rootDataMapper;
 
     public void unsubscribeFromRoot(Root root) {
         analyzerHandler.stopWatchDirectory(root);
@@ -31,6 +33,7 @@ public class FolderDetailsHandler {
         treeHandler.updateRootList();
         treeHandler.cleanTree();
         treeHandler.cleanProgressBar();
+        statisticsHandler.cleanStatistics();
         logger.info("Unsubscribed from " + root.getName());
     }
 

@@ -10,6 +10,10 @@ public class Type {
 
     private final String description;
 
+    private long bytes;
+
+    private double percentage;
+
     public Type(int id, String extension, String description) {
         this.id = id;
         this.extension = extension;
@@ -28,6 +32,21 @@ public class Type {
         return description;
     }
 
+    public double getBytes() {
+        return bytes;
+    }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public void setBytes(long bytes) {
+        this.bytes = bytes;
+    }
+
+    public void setPercentage(double percentage) {
+        this.percentage = percentage;
+    }
 
     @Override
     public String toString() {

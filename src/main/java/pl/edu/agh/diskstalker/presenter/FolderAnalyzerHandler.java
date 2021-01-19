@@ -26,6 +26,8 @@ public class FolderAnalyzerHandler {
     private TypeDataMapper typeDataMapper;
     @Inject
     private TreeHandler treeHandler;
+    @Inject
+    private StatisticsHandler statisticsHandler;
 
     public void stopWatchDirectory(Root root) {
         for (WatchDirectory w : watchDirectories) {
@@ -49,7 +51,10 @@ public class FolderAnalyzerHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         treeHandler.updateTree(root);
+        statisticsHandler.updateStatistics(root);
+
         if (exceedSpace(root)) {
             notifyByPopUp(root);
         }
