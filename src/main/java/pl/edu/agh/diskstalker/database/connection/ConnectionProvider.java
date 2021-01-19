@@ -19,20 +19,16 @@ public final class ConnectionProvider {
 
     private Optional<Connection> connection = Optional.empty();
 
-    {
+    public ConnectionProvider() throws Exception {
         init(JDBC_ADDRESS);
     }
 
-    public void init(final String jdbcAddress) {
-        try {
-            close();
-            logger.info("Loading driver");
-            Class.forName(JDBC_DRIVER);
-            connection = Optional.of(DriverManager.getConnection(jdbcAddress));
-            logger.info("Connection created");
-        } catch (Exception e) {
-            throw new RuntimeException("Error during initialization");
-        }
+    public void init(final String jdbcAddress) throws Exception {
+        close();
+        logger.info("Loading driver");
+        Class.forName(JDBC_DRIVER);
+        connection = Optional.of(DriverManager.getConnection(jdbcAddress));
+        logger.info("Connection created");
     }
 
     public Connection getConnection() {
