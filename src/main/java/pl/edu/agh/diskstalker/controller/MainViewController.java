@@ -92,6 +92,7 @@ public class MainViewController {
         treeHandler.updateRootList();
         treeHandler.cleanTree();
         treeHandler.cleanProgressBar();
+        statisticsHandler.cleanStatistics();
 
         extensionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getExtension()));
         descriptionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getDescription()));

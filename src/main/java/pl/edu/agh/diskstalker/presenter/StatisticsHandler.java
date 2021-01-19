@@ -9,6 +9,8 @@ import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.database.model.Type;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,10 +26,23 @@ public class StatisticsHandler {
         List<Item> items = itemDataMapper.findAllByRoot(root);
         List<Type> types = getRootTypes(items);
 
-        setBytes(items, types);
+        for (Type type : types) {
+            long itemBytes = getItemBytes(items, type);
+            type.setBytes(itemBytes);
+
+            double itemPercentage = getItemPercentage(root, (double) itemBytes);
+            type.setPercentage(itemPercentage);
+        }
 
         ObservableList<Type> observableTypes = FXCollections.observableArrayList(types);
         mainViewController.updateStatisticsTable(observableTypes);
+    }
+
+    private double getItemPercentage(Root root, double itemBytes) {
+        long rootSize = itemDataMapper.getRootItem(root).getSize();
+        return BigDecimal.valueOf(itemBytes / rootSize * 100)
+                .setScale(1, RoundingMode.HALF_DOWN)
+                .doubleValue();
     }
 
     private List<Type> getRootTypes(List<Item> items) {
@@ -37,13 +52,6 @@ public class StatisticsHandler {
                 .distinct()
                 .collect(Collectors.toList());
 
-    }
-
-    private void setBytes(List<Item> items, List<Type> types) {
-        for (Type type : types) {
-            long itemBytes = getItemBytes(items, type);
-            type.setBytes(itemBytes);
-        }
     }
 
     private Long getItemBytes(List<Item> items, Type type) {
