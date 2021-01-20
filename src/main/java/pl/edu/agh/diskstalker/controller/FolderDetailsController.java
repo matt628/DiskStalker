@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class FolderDetailsController {

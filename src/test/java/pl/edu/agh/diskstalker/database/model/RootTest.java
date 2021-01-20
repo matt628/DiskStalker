@@ -25,7 +25,7 @@ public class RootTest {
     private final RootDataMapper rootDataMapper = injector.getInstance(RootDataMapper.class);
 
     @BeforeAll
-    public void init() {
+    public void init() throws Exception {
         connectionProvider.init(TEST_DB_ADDRESS);
         queryExecutor.init();
     }

@@ -22,8 +22,10 @@ public class FolderDetailsHandler {
     private FolderAnalyzerHandler analyzerHandler;
 
     @Inject
-    private RootDataMapper rootDataMapper;
+    private StatisticsHandler statisticsHandler;
 
+    @Inject
+    private RootDataMapper rootDataMapper;
 
     public void unsubscribeFromRoot(Root root) {
         analyzerHandler.stopWatchDirectory(root);
@@ -31,6 +33,7 @@ public class FolderDetailsHandler {
         treeHandler.updateRootList();
         treeHandler.cleanTree();
         treeHandler.cleanProgressBar();
+        statisticsHandler.cleanStatistics();
         logger.info("Unsubscribed from " + root.getName());
     }
 
@@ -59,8 +62,13 @@ public class FolderDetailsHandler {
         Optional<Root> rootToDelete = rootDataMapper.findByLocation(name, path);
         rootToDelete.ifPresent(value -> rootDataMapper.deleteById(value.getId()));
 
-        rootDataMapper.create(name, path, maxSize);
-        treeHandler.updateRootList();
+        Optional<Root> optionalRoot = rootDataMapper.create(name, path, maxSize);
+
+        optionalRoot.ifPresent(root -> {
+            analyzerHandler.analyzeRoot(root);
+            analyzerHandler.addWatchDirectory(root);
+            treeHandler.updateRootList();
+        });
     }
 
     public void deleteItem(Item item) {

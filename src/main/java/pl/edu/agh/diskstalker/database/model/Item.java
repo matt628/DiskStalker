@@ -6,11 +6,11 @@ import java.util.Objects;
 public class Item {
     private final String name;
     private final String path;
-    private final String type;
+    private final Type type;
     private final long size;
     private final Root root;
 
-    public Item(String name, String path, String type, long size, Root root) {
+    public Item(String name, String path, Type type, long size, Root root) {
         this.name = name;
         this.path = path;
         this.type = type;
@@ -26,7 +26,7 @@ public class Item {
         return path;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
@@ -40,11 +40,11 @@ public class Item {
 
     public String getPathname() {
         String pathname = path + File.separator + name;
-        return type == null ? pathname : pathname + type;
+        return type.getExtension().equals("folder") ? pathname : pathname + type;
     }
 
     public boolean isFile() {
-        return type != null;
+        return !type.getExtension().equals("folder");
     }
 
     public boolean isClosestParent(Item item) {

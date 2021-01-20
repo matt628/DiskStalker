@@ -33,6 +33,14 @@ public class QueryExecutor {
                     "Path VARCHAR(100) NOT NULL," +
                     "MaxSize VARCHAR(20)" +
                     ");");
+
+            logger.info("Creating table Types");
+            create("CREATE TABLE IF NOT EXISTS Types (" +
+                    "TypeID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "Extension VARCHAR(20) NOT NULL UNIQUE," +
+                    "Description VARCHAR(200)" +
+                    ");");
+
         } catch (SQLException e) {
             logger.info("Error during create tables: " + e.getMessage());
             throw new RuntimeException("Cannot create tables");

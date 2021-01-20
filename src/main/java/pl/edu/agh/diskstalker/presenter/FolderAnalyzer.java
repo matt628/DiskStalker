@@ -1,8 +1,10 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
+import pl.edu.agh.diskstalker.database.datamapper.TypeDataMapper;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
+import pl.edu.agh.diskstalker.database.model.Type;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +16,12 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 public class FolderAnalyzer extends SimpleFileVisitor<Path> {
 
     private final ItemDataMapper itemDataMapper;
+    private final TypeDataMapper typeDataMapper;
     private final Root root;
 
-    public FolderAnalyzer(ItemDataMapper itemDataMapper, Root root) {
+    public FolderAnalyzer(ItemDataMapper itemDataMapper, TypeDataMapper typeDataMapper, Root root) {
         this.itemDataMapper = itemDataMapper;
+        this.typeDataMapper = typeDataMapper;
         this.root = root;
     }
 
@@ -26,8 +30,10 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
         String nameWithType = file.getFileName().toString();
 
         String name = nameWithType.substring(0, nameWithType.lastIndexOf('.'));
-        String type = nameWithType.substring(nameWithType.lastIndexOf('.'));
+        String typeString = nameWithType.substring(nameWithType.lastIndexOf('.'));
         String path = file.getParent().toString();
+
+        Type type = typeDataMapper.getType(typeString);
         long size = attr.size();
 
         Item fileItem = new Item(name, path, type, size, root);
@@ -41,9 +47,12 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
         String name = dir.getFileName().toString();
         String path = dir.getParent().toString();
+
+        Type type = typeDataMapper.getType("folder");
         long size = getDirSize(path, name);
 
-        Item folderItem = new Item(name, path, null, size, root);
+
+        Item folderItem = new Item(name, path, type, size, root);
 
         itemDataMapper.addItem(root, folderItem);
 

@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import pl.edu.agh.diskstalker.controller.PopUpNotification;
 import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
 import pl.edu.agh.diskstalker.database.datamapper.RootDataMapper;
+import pl.edu.agh.diskstalker.database.datamapper.TypeDataMapper;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
 
@@ -16,13 +17,17 @@ import java.util.List;
 
 public class FolderAnalyzerHandler {
 
-    private final List<WatchDirectory> watchDirectories = new ArrayList<WatchDirectory>();
+    private final List<WatchDirectory> watchDirectories = new ArrayList<>();
     @Inject
     private RootDataMapper rootDataMapper;
     @Inject
     private ItemDataMapper itemDataMapper;
     @Inject
+    private TypeDataMapper typeDataMapper;
+    @Inject
     private TreeHandler treeHandler;
+    @Inject
+    private StatisticsHandler statisticsHandler;
 
     public void stopWatchDirectory(Root root) {
         for (WatchDirectory w : watchDirectories) {
@@ -42,11 +47,14 @@ public class FolderAnalyzerHandler {
         Path startingDir = Paths.get(root.getPathname());
         itemDataMapper.deleteAllByRoot(root);
         try {
-            Files.walkFileTree(startingDir, new FolderAnalyzer(itemDataMapper, root));
+            Files.walkFileTree(startingDir, new FolderAnalyzer(itemDataMapper, typeDataMapper, root));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         treeHandler.updateTree(root);
+        statisticsHandler.updateStatistics(root);
+
         if (exceedSpace(root)) {
             notifyByPopUp(root);
         }

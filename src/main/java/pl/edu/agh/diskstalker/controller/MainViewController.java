@@ -1,21 +1,27 @@
 package pl.edu.agh.diskstalker.controller;
 
 import com.google.inject.Inject;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
+import pl.edu.agh.diskstalker.database.model.Type;
 import pl.edu.agh.diskstalker.guice.provider.FXMLLoaderProvider;
 import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
+import pl.edu.agh.diskstalker.presenter.StatisticsHandler;
 import pl.edu.agh.diskstalker.presenter.TreeHandler;
 
 import javax.inject.Singleton;
@@ -27,7 +33,7 @@ import java.util.List;
 public class MainViewController {
 
     @FXML
-    private Button addButton;
+    public Button addButton;
 
     @FXML
     private ListView<Root> folderListView;
@@ -37,6 +43,21 @@ public class MainViewController {
 
     @FXML
     private ProgressBar progressBar;
+
+    @FXML
+    public TableView<Type> statisticsTable;
+
+    @FXML
+    public TableColumn<Type, String> extensionColumn;
+
+    @FXML
+    public TableColumn<Type, String> descriptionColumn;
+
+    @FXML
+    public TableColumn<Type, Double> bytesColumn;
+
+    @FXML
+    public TableColumn<Type, Double> percentageColumn;
 
     private Stage primaryStage;
 
@@ -51,6 +72,9 @@ public class MainViewController {
 
     @Inject
     private FolderDetailsHandler detailsHandler;
+
+    @Inject
+    private StatisticsHandler statisticsHandler;
 
     public MainViewController() {
     }
@@ -68,16 +92,29 @@ public class MainViewController {
         treeHandler.updateRootList();
         treeHandler.cleanTree();
         treeHandler.cleanProgressBar();
+        statisticsHandler.cleanStatistics();
 
-        folderListView.setOnMouseClicked(click -> {
-            var currentItemSelected = folderListView.getSelectionModel()
-                    .getSelectedItem();
-            if (click.getClickCount() == 2) {
-                showRootConfigurationDialog(currentItemSelected);
-            } else if (click.getClickCount() == 1) {
-                treeHandler.updateTree(currentItemSelected);
-            }
-        });
+        extensionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getExtension()));
+        descriptionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getDescription()));
+        bytesColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(dataValue.getValue().getBytes()));
+        percentageColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(dataValue.getValue().getPercentage()));
+
+        folderListView.setOnMouseClicked(this::rootItemOnClick);
+    }
+
+    private void rootItemOnClick(MouseEvent click) {
+        var selectedRoot = folderListView.getSelectionModel().getSelectedItem();
+        if (selectedRoot == null) return;
+
+        switch (click.getClickCount()) {
+            case 1 -> handleSingleClick(selectedRoot);
+            case 2 -> showRootConfigurationDialog(selectedRoot);
+        }
+    }
+
+    private void handleSingleClick(Root root) {
+        treeHandler.updateTree(root);
+        statisticsHandler.updateStatistics(root);
     }
 
     @FXML
@@ -93,10 +130,6 @@ public class MainViewController {
             Root root = new Root(0, name, path, 0);
 
             showRootConfigurationDialog(root);
-
-            analyzerHandler.analyzeRoot(root);
-            analyzerHandler.addWatchDirectory(root);
-            treeHandler.updateRootList();
         }
     }
 
@@ -139,21 +172,6 @@ public class MainViewController {
         return folderDetailsController;
     }
 
-    public void updateFolderRootList(List<Root> roots) {
-        folderListView.getItems().clear();
-        folderListView.getItems().addAll(roots);
-    }
-
-    public void updateFolderTreeView(TreeItem<Item> root) {
-        folderTreeView.setRoot(root);
-        addContextMenuToTreeView();
-
-    }
-
-    public void updateProgressBarView(double progress){
-        progressBar.setProgress(progress);
-    }
-
     private void addContextMenuToTreeView() {
         ContextMenu contextMenu = new ContextMenu();
         folderTreeView.setOnMouseClicked(click -> {
@@ -172,5 +190,24 @@ public class MainViewController {
         menuItem1.setOnAction((event) -> this.detailsHandler.deleteItem(item.getValue()));
         contextMenu.getItems().setAll(menuItem1);
         contextMenu.show(this.folderTreeView.getScene().getWindow(), x, y);
+    }
+
+    public void updateFolderRootList(List<Root> roots) {
+        folderListView.getItems().clear();
+        folderListView.getItems().addAll(roots);
+    }
+
+    public void updateFolderTreeView(TreeItem<Item> root) {
+        folderTreeView.setRoot(root);
+        addContextMenuToTreeView();
+
+    }
+
+    public void updateProgressBarView(double progress){
+        progressBar.setProgress(progress);
+    }
+
+    public void updateStatisticsTable(ObservableList<Type> types) {
+        statisticsTable.setItems(types);
     }
 }
