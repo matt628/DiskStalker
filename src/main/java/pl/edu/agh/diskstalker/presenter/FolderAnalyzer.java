@@ -36,7 +36,7 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
         long size = attr.size();
 
         Item fileItem = new Item(name, path, type, size, root);
-        itemDataMapper.addItem(root, fileItem);
+        itemDataMapper.addItem(fileItem);
 
         return CONTINUE;
     }
@@ -50,7 +50,7 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
         long size = getDirSize(path, name);
 
         Item folderItem = new Item(name, path, type, size, root);
-        itemDataMapper.addItem(root, folderItem);
+        itemDataMapper.addItem(folderItem);
 
         return CONTINUE;
     }

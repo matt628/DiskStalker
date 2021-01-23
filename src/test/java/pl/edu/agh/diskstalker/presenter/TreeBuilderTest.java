@@ -26,8 +26,8 @@ public class TreeBuilderTest {
         Item item2 = new Item("item1", File.separator + "rootfolder" + File.separator + "newroot", Type.JPG, 7699, root);
 
         ItemDataMapper itemDataMapper = injector.getInstance(ItemDataMapper.class);
-        itemDataMapper.addItem(root, item1);
-        itemDataMapper.addItem(root, item2);
+        itemDataMapper.addItem(item1);
+        itemDataMapper.addItem(item2);
 
         // When
         TreeBuilder treeBuilder = injector.getInstance(TreeBuilder.class);

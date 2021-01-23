@@ -12,10 +12,10 @@ public class ItemDataMapper {
 
     private final Map<Root, List<Item>> rootItems = new HashMap<>();
 
-    public void addItem(Root root, Item item) {
-        List<Item> items = findAllByRoot(root);
+    public void addItem(Item item) {
+        List<Item> items = findAllByRoot(item.getRoot());
         items.add(item);
-        rootItems.put(root, items);
+        rootItems.put(item.getRoot(), items);
     }
 
     public List<Item> findAllByRoot(Root root) {
