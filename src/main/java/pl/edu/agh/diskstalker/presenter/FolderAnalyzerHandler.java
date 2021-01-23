@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import pl.edu.agh.diskstalker.controller.PopUpNotification;
 import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
 import pl.edu.agh.diskstalker.database.datamapper.RootDataMapper;
-import pl.edu.agh.diskstalker.database.datamapper.TypeDataMapper;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
 
@@ -22,8 +21,6 @@ public class FolderAnalyzerHandler {
     private RootDataMapper rootDataMapper;
     @Inject
     private ItemDataMapper itemDataMapper;
-    @Inject
-    private TypeDataMapper typeDataMapper;
     @Inject
     private TreeHandler treeHandler;
     @Inject
@@ -47,12 +44,13 @@ public class FolderAnalyzerHandler {
         Path startingDir = Paths.get(root.getPathname());
         itemDataMapper.deleteAllByRoot(root);
         try {
-            Files.walkFileTree(startingDir, new FolderAnalyzer(itemDataMapper, typeDataMapper, root));
+            Files.walkFileTree(startingDir, new FolderAnalyzer(itemDataMapper, root));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         treeHandler.updateTree(root);
+        System.out.println("UPDATED TREE");
         statisticsHandler.updateStatistics(root);
 
         if (exceedSpace(root)) {

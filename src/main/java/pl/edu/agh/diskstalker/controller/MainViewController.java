@@ -17,7 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
-import pl.edu.agh.diskstalker.database.model.Type;
+import pl.edu.agh.diskstalker.database.model.Statistic;
 import pl.edu.agh.diskstalker.guice.provider.FXMLLoaderProvider;
 import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
@@ -45,19 +45,19 @@ public class MainViewController {
     private ProgressBar progressBar;
 
     @FXML
-    public TableView<Type> statisticsTable;
+    public TableView<Statistic> statisticsTable;
 
     @FXML
-    public TableColumn<Type, String> extensionColumn;
+    public TableColumn<Statistic, String> extensionColumn;
 
     @FXML
-    public TableColumn<Type, String> descriptionColumn;
+    public TableColumn<Statistic, String> descriptionColumn;
 
     @FXML
-    public TableColumn<Type, Double> bytesColumn;
+    public TableColumn<Statistic, Long> bytesColumn;
 
     @FXML
-    public TableColumn<Type, Double> percentageColumn;
+    public TableColumn<Statistic, Double> percentageColumn;
 
     private Stage primaryStage;
 
@@ -207,7 +207,7 @@ public class MainViewController {
         progressBar.setProgress(progress);
     }
 
-    public void updateStatisticsTable(ObservableList<Type> types) {
+    public void updateStatisticsTable(ObservableList<Statistic> types) {
         statisticsTable.setItems(types);
     }
 }

@@ -1,70 +1,41 @@
 package pl.edu.agh.diskstalker.database.model;
 
-import java.util.Objects;
+public enum Type {
 
-public class Type {
-
-    private final int id;
-
-    private final String extension;
+    JPG("Image"),
+    PNG("Image"),
+    PDF("File"),
+    TXT("File"),
+    MP3("Music"),
+    MP4("Video"),
+    EXE("Application"),
+    ZIP("Archive"),
+    FOLDER("Folder"),
+    OTHER("Other"),
+    ;
 
     private final String description;
 
-    private long bytes;
-
-    private double percentage;
-
-    public Type(int id, String extension, String description) {
-        this.id = id;
-        this.extension = extension;
+    Type(String description) {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getExtension() {
-        return extension;
+    public static Type getType(String type) {
+        return switch (type) {
+            case ".jpg" -> Type.JPG;
+            case ".png" -> Type.PNG;
+            case ".pdf" -> Type.PDF;
+            case ".txt" -> Type.TXT;
+            case ".mp3" -> Type.MP3;
+            case ".mp4" -> Type.MP4;
+            case ".exe" -> Type.EXE;
+            case ".zip" -> Type.ZIP;
+            case "folder" -> Type.FOLDER;
+            default -> Type.OTHER;
+        };
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public double getBytes() {
-        return bytes;
-    }
-
-    public double getPercentage() {
-        return percentage;
-    }
-
-    public void setBytes(long bytes) {
-        this.bytes = bytes;
-    }
-
-    public void setPercentage(double percentage) {
-        this.percentage = percentage;
-    }
-
-    @Override
-    public String toString() {
-        return extension;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Type)) return false;
-        Type type = (Type) o;
-        return id == type.id &&
-                extension.equals(type.extension) &&
-                Objects.equals(description, type.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, extension, description);
     }
 }

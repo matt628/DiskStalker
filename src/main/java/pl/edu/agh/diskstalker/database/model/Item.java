@@ -39,12 +39,11 @@ public class Item {
     }
 
     public String getPathname() {
-        String pathname = path + File.separator + name;
-        return type.getExtension().equals("folder") ? pathname : pathname + type;
+        return path + File.separator + name;
     }
 
     public boolean isFile() {
-        return !type.getExtension().equals("folder");
+        return type != Type.FOLDER;
     }
 
     public boolean isClosestParent(Item item) {
@@ -73,7 +72,11 @@ public class Item {
         if (this == o) return true;
         if (!(o instanceof Item)) return false;
         Item item = (Item) o;
-        return size == item.size && name.equals(item.name) && path.equals(item.path) && Objects.equals(type, item.type) && root.equals(item.root);
+        return size == item.size &&
+                name.equals(item.name) &&
+                path.equals(item.path) &&
+                Objects.equals(type, item.type) &&
+                root.equals(item.root);
     }
 
     @Override
