@@ -49,8 +49,7 @@ public class FolderAnalyzerHandler {
             e.printStackTrace();
         }
 
-        treeHandler.updateTree(root);
-        System.out.println("UPDATED TREE");
+        treeHandler.buildTree(root);
         statisticsHandler.updateStatistics(root);
 
         if (exceedSpace(root)) {
