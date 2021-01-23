@@ -1,8 +1,6 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import com.google.inject.Inject;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import pl.edu.agh.diskstalker.controller.MainViewController;
 import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
 import pl.edu.agh.diskstalker.database.model.Item;
@@ -13,6 +11,7 @@ import pl.edu.agh.diskstalker.database.model.Type;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +37,7 @@ public class StatisticsHandler {
             statistics.add(new Statistic(extension, description, itemBytes, itemPercentage));
         }
 
-        ObservableList<Statistic> observableTypes = FXCollections.observableArrayList(statistics);
-        mainViewController.updateStatisticsTable(observableTypes);
+        mainViewController.updateStatisticsTable(statistics);
     }
 
     private double getItemPercentage(Root root, double itemBytes) {
@@ -55,7 +53,6 @@ public class StatisticsHandler {
                 .map(Item::getType)
                 .distinct()
                 .collect(Collectors.toList());
-
     }
 
     private Long getItemBytes(List<Item> items, Type type) {
@@ -66,6 +63,6 @@ public class StatisticsHandler {
     }
 
     public void cleanStatistics() {
-        mainViewController.updateStatisticsTable(null);
+        mainViewController.updateStatisticsTable(Collections.emptyList());
     }
 }

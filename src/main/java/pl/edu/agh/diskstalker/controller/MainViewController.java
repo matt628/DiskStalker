@@ -3,6 +3,7 @@ package pl.edu.agh.diskstalker.controller;
 import com.google.inject.Inject;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -207,7 +208,8 @@ public class MainViewController {
         progressBar.setProgress(progress);
     }
 
-    public void updateStatisticsTable(ObservableList<Statistic> types) {
-        statisticsTable.setItems(types);
+    public void updateStatisticsTable(List<Statistic> statistics) {
+        ObservableList<Statistic> observableStatistics = FXCollections.observableArrayList(statistics);
+        statisticsTable.setItems(FXCollections.observableArrayList(observableStatistics));
     }
 }

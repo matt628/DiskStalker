@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class FolderDetailsController {
@@ -50,8 +51,9 @@ public class FolderDetailsController {
     @FXML
     private void handleOkAction(ActionEvent event) {
         long maxSize = Long.MAX_VALUE;
-        if (!folderMaxSize.getText().equals(""))
+        if (folderMaxSize != null && !folderMaxSize.getText().isEmpty())
             maxSize = Long.parseLong(folderMaxSize.getText());
+
         detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize);
         approved = true;
         dialogStage.close();
@@ -74,7 +76,6 @@ public class FolderDetailsController {
         if (result.get() == ButtonType.OK){
             detailsHandler.deleteRoot(root);
         } else {
-            // ... user chose CANCEL or closed the dialog
             dialogStage.close();
         }
 
@@ -87,7 +88,6 @@ public class FolderDetailsController {
         if (result.get() == ButtonType.OK){
             detailsHandler.cleanRoot(root);
         } else {
-            // ... user chose CANCEL or closed the dialog
             dialogStage.close();
         }
         dialogStage.close();
@@ -99,7 +99,6 @@ public class FolderDetailsController {
         alert.setHeaderText(message);
         alert.setContentText(details);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        return result;
+        return alert.showAndWait();
     }
 }

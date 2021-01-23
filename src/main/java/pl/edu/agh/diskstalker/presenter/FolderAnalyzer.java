@@ -29,7 +29,6 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
     public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
         String name = file.getFileName().toString();
         String path = file.getParent().toString();
-        System.out.println(name);
 
         String typeString = getTypeString(name);
         Type type = Type.getType(typeString);
@@ -46,7 +45,6 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
         String name = dir.getFileName().toString();
         String path = dir.getParent().toString();
-        System.out.println(name);
 
         Type type = Type.getType("folder");
         long size = getDirSize(path, name);
