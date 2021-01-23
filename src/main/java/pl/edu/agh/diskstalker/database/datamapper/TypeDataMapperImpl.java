@@ -116,9 +116,9 @@ public class TypeDataMapperImpl implements TypeDataMapper {
     }
 
     @Override
-    public Type getType(String typeString) {
-        Optional<Type> optionalType = findByExtension(typeString);
-        if (optionalType.isEmpty()) optionalType = findByExtension("other");
-        return optionalType.orElseThrow(NoSuchElementException::new);
+    public Type getType(String extension) {
+        return findByExtension(extension)
+                .orElse(findByExtension("other")
+                        .orElseThrow(NoSuchElementException::new));
     }
 }

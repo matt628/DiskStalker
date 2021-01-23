@@ -8,7 +8,9 @@ import pl.edu.agh.diskstalker.database.model.Type;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
@@ -28,16 +30,16 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
         String nameWithType = file.getFileName().toString();
+        System.out.println(nameWithType);
 
-        String name = nameWithType.substring(0, nameWithType.lastIndexOf('.'));
-        String typeString = nameWithType.substring(nameWithType.lastIndexOf('.'));
+        String name = getName(nameWithType);
+        String typeString = getTypeString(nameWithType);
         String path = file.getParent().toString();
 
         Type type = typeDataMapper.getType(typeString);
         long size = attr.size();
 
         Item fileItem = new Item(name, path, type, size, root);
-
         itemDataMapper.addItem(root, fileItem);
 
         return CONTINUE;
@@ -51,12 +53,24 @@ public class FolderAnalyzer extends SimpleFileVisitor<Path> {
         Type type = typeDataMapper.getType("folder");
         long size = getDirSize(path, name);
 
-
         Item folderItem = new Item(name, path, type, size, root);
-
         itemDataMapper.addItem(root, folderItem);
 
         return CONTINUE;
+    }
+
+    private String getTypeString(String nameWithType) {
+        return containsType(nameWithType) ?
+                nameWithType.substring(nameWithType.lastIndexOf('.')) : "";
+    }
+
+    private String getName(String nameWithType) {
+        return containsType(nameWithType) ?
+                nameWithType.substring(0, nameWithType.lastIndexOf('.')) : nameWithType;
+    }
+
+    private boolean containsType(String nameWithType) {
+        return nameWithType.contains(".");
     }
 
     private long getDirSize(String path, String name) {
