@@ -62,6 +62,9 @@ public class FolderAnalyzerHandler {
         if (exceedTreeSize(root)) {
             showNotification(root.getPathname() + " exceeded the max number of files of " + root.getMaxTreeSize());
         }
+        if (exceedFileSize(root)) {
+            showNotification(root.getPathname() + " has files which exceeded the space limit of " + root.getMaxFileSize());
+        }
     }
 
     private boolean exceedSpace(Root root) {
@@ -71,6 +74,13 @@ public class FolderAnalyzerHandler {
 
     private boolean exceedTreeSize(Root root) {
         return itemDataMapper.getTreeSize(root) > root.getMaxTreeSize();
+    }
+
+    private boolean exceedFileSize(Root root) {
+        List<Item> items = itemDataMapper.findAllByRoot(root);
+        return items.stream()
+                .filter(Item::isFile)
+                .anyMatch(item -> item.getSize() > root.getMaxFileSize());
     }
 
     public void showNotification(String message) {

@@ -12,7 +12,7 @@ public class RootTest {
         // given
         String name = "name";
         String path = "path";
-        Root root = new Root(0, name, path, 453543, 2344);
+        Root root = new Root(0, name, path, 453543, 2344, 34647);
 
         // when
         String pathname = root.getPathname();
