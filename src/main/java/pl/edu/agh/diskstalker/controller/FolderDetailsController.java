@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Root;
@@ -30,6 +31,9 @@ public class FolderDetailsController {
 
     @FXML
     private  TextField folderMaxFileSize;
+
+    @FXML
+    private ComboBox<String> folderMaxSizeUnit;
 
     @Inject
     private FolderDetailsHandler detailsHandler;
@@ -64,11 +68,22 @@ public class FolderDetailsController {
         if (folderMaxSize != null && !folderMaxSize.getText().isEmpty())
             maxSize = Long.parseLong(folderMaxSize.getText());
 
-        //        folderMaxFileSize
         long maxFilesNumber = Long.MIN_VALUE;
         if(folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty())
             maxFilesNumber = Long.parseLong(folderMaxFilesNumber.getText());
-        // todo pass to method below maxFilesNumber
+
+        // folderMaxFileSize
+
+        //read Comobobox
+        String size = folderMaxSizeUnit.getSelectionModel().selectedItemProperty().getValue();
+        maxSize = switch (size){
+            case "GB" -> maxSize * 1073741824;
+            case "MB" -> maxSize * 1048576;
+            case "kB" -> maxSize * 125;
+            default -> throw new IllegalStateException("Unexpected value: " + size);
+        };
+//        folderMaxSizeUnit
+
         detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber);
         approved = true;
         dialogStage.close();

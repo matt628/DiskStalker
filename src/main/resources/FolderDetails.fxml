@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.collections.FXCollections?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="pl.edu.agh.diskstalker.controller.FolderDetailsController"
@@ -62,6 +63,15 @@
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
+                <ComboBox fx:id="folderMaxSizeUnit" GridPane.columnIndex="2" GridPane.rowIndex="1" promptText="choose">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="GB" />
+                            <String fx:value="MB" />
+                            <String fx:value="kB" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
                 <TextField fx:id="folderMaxFilesNumber" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
