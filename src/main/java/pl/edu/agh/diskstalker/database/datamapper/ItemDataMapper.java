@@ -40,4 +40,8 @@ public class ItemDataMapper {
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
     }
+
+    public long getTreeSize(Root root) {
+        return rootItems.get(root).size() - 1;
+    }
 }

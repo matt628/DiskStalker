@@ -52,8 +52,15 @@ public class FolderAnalyzerHandler {
         treeHandler.buildTree(root);
         statisticsHandler.updateStatistics(root);
 
+        notifyUser(root);
+    }
+
+    private void notifyUser(Root root) {
         if (exceedSpace(root)) {
-            notifyByPopUp(root);
+            showNotification(root.getPathname() + " exceeded the space limit of " + root.getMaxSize());
+        }
+        if (exceedTreeSize(root)) {
+            showNotification(root.getPathname() + " exceeded the max number of files of " + root.getMaxTreeSize());
         }
     }
 
@@ -62,10 +69,13 @@ public class FolderAnalyzerHandler {
         return rootItem.getSize() > root.getMaxSize();
     }
 
-    public void notifyByPopUp(Root root) {
+    private boolean exceedTreeSize(Root root) {
+        return itemDataMapper.getTreeSize(root) > root.getMaxTreeSize();
+    }
+
+    public void showNotification(String message) {
         try {
-            PopUpNotification.displayTray("DiskStalker",
-                    root.getPathname() + "exceeded the space limit of space");
+            PopUpNotification.displayTray("DiskStalker", message);
         } catch (Exception e) {
             e.printStackTrace();
         }
