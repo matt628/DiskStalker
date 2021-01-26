@@ -32,7 +32,8 @@ public class QueryExecutor {
                     "Name VARCHAR(100) NOT NULL," +
                     "Path VARCHAR(100) NOT NULL," +
                     "MaxSize VARCHAR(20)," +
-                    "MaxTreeSize VARCHAR(20)" +
+                    "MaxTreeSize VARCHAR(20)," +
+                    "MaxFileSize VARCHAR(20)" +
                     ");");
 
         } catch (SQLException e) {

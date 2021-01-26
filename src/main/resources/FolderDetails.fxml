@@ -82,6 +82,15 @@
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
+                <ComboBox fx:id="folderMaxFileSizeUnit" GridPane.columnIndex="2" GridPane.rowIndex="4" promptText="choose">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="GB" />
+                            <String fx:value="MB" />
+                            <String fx:value="kB" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
             </children>
         </GridPane>
     </center>

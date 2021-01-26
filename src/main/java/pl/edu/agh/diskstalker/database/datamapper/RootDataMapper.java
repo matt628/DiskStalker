@@ -18,11 +18,12 @@ public class RootDataMapper {
     @Inject
     private QueryExecutor queryExecutor;
 
-    public Optional<Root> create(String name, String path, long maxSize, long maxTreeSize) {
+    public Optional<Root> create(String name, String path, long maxSize, long maxTreeSize, long maxFileSize) {
         String sql = "INSERT INTO " + TABLE_NAME + " (" + Columns.NAME + ", " + Columns.PATH + ", " +
-                Columns.MAX_SIZE + ", " + Columns.MAX_TREE_SIZE + ") VALUES (?, ?, ?, ?)";
+                Columns.MAX_SIZE + ", " + Columns.MAX_TREE_SIZE + ", " + Columns.MAX_FILE_SIZE +
+                ") VALUES (?, ?, ?, ?, ?)";
 
-        Object[] args = {name, path, maxSize, maxTreeSize};
+        Object[] args = {name, path, maxSize, maxTreeSize, maxFileSize};
         try {
             if (findByLocation(name, path).isPresent())
                 return Optional.empty();
@@ -47,7 +48,8 @@ public class RootDataMapper {
                         rs.getString(Columns.NAME),
                         rs.getString(Columns.PATH),
                         rs.getLong(Columns.MAX_SIZE),
-                        rs.getLong(Columns.MAX_TREE_SIZE))
+                        rs.getLong(Columns.MAX_TREE_SIZE),
+                        rs.getLong(Columns.MAX_FILE_SIZE))
                 );
             }
             return resultList;
@@ -80,7 +82,9 @@ public class RootDataMapper {
                         rs.getString(Columns.NAME),
                         rs.getString(Columns.PATH),
                         rs.getLong(Columns.MAX_SIZE),
-                        rs.getLong(Columns.MAX_TREE_SIZE)));
+                        rs.getLong(Columns.MAX_TREE_SIZE),
+                        rs.getLong(Columns.MAX_FILE_SIZE)
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,5 +116,7 @@ public class RootDataMapper {
         public static final String MAX_SIZE = "MaxSize";
 
         public static final String MAX_TREE_SIZE = "MaxTreeSize";
+
+        public static final String MAX_FILE_SIZE = "MaxFileSize";
     }
 }

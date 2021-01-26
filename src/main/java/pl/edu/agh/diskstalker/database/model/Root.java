@@ -15,12 +15,15 @@ public class Root {
 
     private final long maxTreeSize;
 
-    public Root(int id, String name, String path, long maxSize, long maxTreeSize) {
+    private final long maxFileSize;
+
+    public Root(int id, String name, String path, long maxSize, long maxTreeSize, long maxFileSize) {
         this.id = id;
         this.name = name;
         this.path = path;
         this.maxSize = maxSize;
         this.maxTreeSize = maxTreeSize;
+        this.maxFileSize = maxFileSize;
     }
 
     public int getId() {
@@ -43,6 +46,10 @@ public class Root {
         return maxTreeSize;
     }
 
+    public long getMaxFileSize() {
+        return maxFileSize;
+    }
+
     public String getPathname() {
         return path + File.separator + name;
     }
@@ -61,11 +68,12 @@ public class Root {
                 name.equals(root.name) &&
                 path.equals(root.path) &&
                 maxSize == root.maxSize &&
-                maxTreeSize == root.maxTreeSize;
+                maxTreeSize == root.maxTreeSize &&
+                maxFileSize == root.maxFileSize;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, path, maxSize, maxTreeSize);
+        return Objects.hash(id, name, path, maxSize, maxTreeSize, maxFileSize);
     }
 }

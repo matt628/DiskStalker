@@ -11,10 +11,10 @@ import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class FolderDetailsController {
+
 
     private Stage dialogStage;
     private Root root;
@@ -30,10 +30,13 @@ public class FolderDetailsController {
     private TextField folderMaxFilesNumber;
 
     @FXML
-    private  TextField folderMaxFileSize;
+    private TextField folderMaxFileSize;
 
     @FXML
     private ComboBox<String> folderMaxSizeUnit;
+
+    @FXML
+    private ComboBox<String> folderMaxFileSizeUnit;
 
     @Inject
     private FolderDetailsHandler detailsHandler;
@@ -50,11 +53,11 @@ public class FolderDetailsController {
         updateDisplay();
     }
 
-    private void updateDisplay(){
+    private void updateDisplay() {
         folderPath.setText(root.getPathname());
         folderMaxSize.setText(String.valueOf(root.getMaxSize()));
-//        folderMaxFilesNumber.setText()
-//        folderMaxFileSize
+        folderMaxFilesNumber.setText(String.valueOf(root.getMaxTreeSize()));
+        folderMaxFileSize.setText(String.valueOf(root.getMaxFileSize()));
 
     }
 
@@ -68,25 +71,31 @@ public class FolderDetailsController {
         if (folderMaxSize != null && !folderMaxSize.getText().isEmpty())
             maxSize = Long.parseLong(folderMaxSize.getText());
 
-        long maxFilesNumber = Long.MIN_VALUE;
-        if(folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty())
+        //        folderMaxFileSize
+        long maxFilesNumber = Long.MAX_VALUE;
+        if (folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty())
             maxFilesNumber = Long.parseLong(folderMaxFilesNumber.getText());
-
-        // folderMaxFileSize
+        // todo pass to method below maxFilesNumber
+        long maxFileSize = Long.MAX_VALUE;
+        if (folderMaxFileSize != null && !folderMaxFileSize.getText().isEmpty())
+            maxFileSize = Long.parseLong(folderMaxFileSize.getText());
 
         //read Comobobox
         String size = folderMaxSizeUnit.getSelectionModel().selectedItemProperty().getValue();
-        maxSize = switch (size){
+        maxSize = getconvertedSize(maxSize, size);
+
+        detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber, maxFileSize);
+        approved = true;
+        dialogStage.close();
+    }
+
+    private long getconvertedSize(long maxSize, String size) {
+        return switch (size) {
             case "GB" -> maxSize * 1073741824;
             case "MB" -> maxSize * 1048576;
             case "kB" -> maxSize * 125;
             default -> throw new IllegalStateException("Unexpected value: " + size);
         };
-//        folderMaxSizeUnit
-
-        detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber);
-        approved = true;
-        dialogStage.close();
     }
 
     @FXML
@@ -95,15 +104,15 @@ public class FolderDetailsController {
     }
 
     @FXML
-    private void  handleRootUnsubscribeAction(ActionEvent event) {
+    private void handleRootUnsubscribeAction(ActionEvent event) {
         detailsHandler.unsubscribeFromRoot(root);
         dialogStage.close();
     }
 
     @FXML
-    private void  handleFolderDeleteAction(ActionEvent event) {
-        var result  = showAlert("Folder will be deleted!", "Are you sure?");
-        if (result.get() == ButtonType.OK){
+    private void handleFolderDeleteAction(ActionEvent event) {
+        var result = showAlert("Folder will be deleted!", "Are you sure?");
+        if (result.get() == ButtonType.OK) {
             detailsHandler.deleteRoot(root);
         } else {
             dialogStage.close();
@@ -114,8 +123,8 @@ public class FolderDetailsController {
 
     @FXML
     private void handleFolderCleanAction(ActionEvent event) {
-        var result  = showAlert("Folder content will be deleted!", "Are you sure?");
-        if (result.get() == ButtonType.OK){
+        var result = showAlert("Folder content will be deleted!", "Are you sure?");
+        if (result.get() == ButtonType.OK) {
             detailsHandler.cleanRoot(root);
         } else {
             dialogStage.close();
@@ -123,7 +132,7 @@ public class FolderDetailsController {
         dialogStage.close();
     }
 
-    private Optional<ButtonType>  showAlert(String message,  String details){
+    private Optional<ButtonType> showAlert(String message, String details) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(message);
