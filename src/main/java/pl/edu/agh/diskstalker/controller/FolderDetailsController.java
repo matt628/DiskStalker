@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class FolderDetailsController {
+
     private Stage dialogStage;
     private Root root;
     private boolean approved;
@@ -23,6 +24,12 @@ public class FolderDetailsController {
 
     @FXML
     private TextField folderMaxSize;
+
+    @FXML
+    private TextField folderMaxFilesNumber;
+
+    @FXML
+    private  TextField folderMaxFileSize;
 
     @Inject
     private FolderDetailsHandler detailsHandler;
@@ -42,6 +49,9 @@ public class FolderDetailsController {
     private void updateDisplay(){
         folderPath.setText(root.getPathname());
         folderMaxSize.setText(String.valueOf(root.getMaxSize()));
+//        folderMaxFilesNumber.setText()
+//        folderMaxFileSize
+
     }
 
     public boolean isApproved() {
@@ -54,6 +64,11 @@ public class FolderDetailsController {
         if (folderMaxSize != null && !folderMaxSize.getText().isEmpty())
             maxSize = Long.parseLong(folderMaxSize.getText());
 
+        //        folderMaxFileSize
+        long maxFilesNumber = Long.MIN_VALUE;
+        if(folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty())
+            maxFilesNumber = Long.parseLong(folderMaxFilesNumber.getText());
+        // todo pass to method below maxFilesNumber
         detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize);
         approved = true;
         dialogStage.close();

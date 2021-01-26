@@ -42,12 +42,32 @@
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Label>
+                <Label text="Maksymalna liczba plików w drzewie" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </Label>
+                <Label text="Maksymalna rozmiar pliku w drzewie" GridPane.rowIndex="3">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </Label>
                 <TextField fx:id="folderPath" GridPane.columnIndex="1">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
                 <TextField fx:id="folderMaxSize" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </TextField>
+                <TextField fx:id="folderMaxFilesNumber" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </TextField>
+                <TextField fx:id="folderMaxFileSize" GridPane.columnIndex="1" GridPane.rowIndex="3">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
