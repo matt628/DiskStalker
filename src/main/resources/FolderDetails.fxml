@@ -64,6 +64,9 @@
                     </GridPane.margin>
                 </TextField>
                 <ComboBox fx:id="folderMaxSizeUnit" GridPane.columnIndex="2" GridPane.rowIndex="1" promptText="choose">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="GB" />
@@ -71,6 +74,9 @@
                             <String fx:value="kB" />
                         </FXCollections>
                     </items>
+                    <value>
+                        <String fx:value="MB" />
+                    </value>
                 </ComboBox>
                 <TextField fx:id="folderMaxFilesNumber" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <GridPane.margin>
@@ -82,7 +88,10 @@
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
-                <ComboBox fx:id="folderMaxFileSizeUnit" GridPane.columnIndex="2" GridPane.rowIndex="4" promptText="choose">
+                <ComboBox fx:id="folderMaxFileSizeUnit" GridPane.columnIndex="2" GridPane.rowIndex="3" promptText="choose">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="GB" />
@@ -90,6 +99,9 @@
                             <String fx:value="kB" />
                         </FXCollections>
                     </items>
+                    <value>
+                        <String fx:value="MB" />
+                    </value>
                 </ComboBox>
             </children>
         </GridPane>
@@ -113,13 +125,13 @@
                     </HBox.margin></Button>
                 <Button mnemonicParsing="false" onAction="#handleFolderDeleteAction"
                         wrapText="true" prefWidth="120.0"
-                        text="Usuń Folder UWAGA DZIALA!!">
+                        text="Usuń Folder">
                     <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin></Button>
                 <Button mnemonicParsing="false" onAction="#handleFolderCleanAction"
                         wrapText="true" prefWidth="120.0"
-                        text="Usuń zawartość folderu DZIALA!">
+                        text="Usuń zawartość folderu">
                 <HBox.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </HBox.margin></Button>
