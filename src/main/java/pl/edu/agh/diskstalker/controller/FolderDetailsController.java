@@ -69,7 +69,7 @@ public class FolderDetailsController {
         if(folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty())
             maxFilesNumber = Long.parseLong(folderMaxFilesNumber.getText());
         // todo pass to method below maxFilesNumber
-        detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize);
+        detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber);
         approved = true;
         dialogStage.close();
     }

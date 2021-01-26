@@ -58,11 +58,11 @@ public class FolderDetailsHandler {
         }
     }
 
-    public void updateRoot(String name, String path, long maxSize) {
+    public void updateRoot(String name, String path, long maxSize, long maxTreeSize) {
         Optional<Root> rootToDelete = rootDataMapper.findByLocation(name, path);
         rootToDelete.ifPresent(value -> rootDataMapper.deleteById(value.getId()));
 
-        Optional<Root> optionalRoot = rootDataMapper.create(name, path, maxSize, 0);
+        Optional<Root> optionalRoot = rootDataMapper.create(name, path, maxSize, maxTreeSize);
 
         optionalRoot.ifPresent(root -> {
             analyzerHandler.analyzeRoot(root);
