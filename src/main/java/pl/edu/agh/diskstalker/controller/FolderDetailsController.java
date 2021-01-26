@@ -15,7 +15,6 @@ import java.util.Optional;
 
 public class FolderDetailsController {
 
-
     private Stage dialogStage;
     private Root root;
     private boolean approved;
@@ -68,33 +67,35 @@ public class FolderDetailsController {
     @FXML
     private void handleOkAction(ActionEvent event) {
         long maxSize = Long.MAX_VALUE;
-        if (folderMaxSize != null && !folderMaxSize.getText().isEmpty())
+        if (folderMaxSize != null && !folderMaxSize.getText().isEmpty()) {
             maxSize = Long.parseLong(folderMaxSize.getText());
+            String unit = folderMaxSizeUnit.getSelectionModel().selectedItemProperty().getValue();
+            maxSize = getConvertedSize(maxSize, unit);
+        }
 
-        //        folderMaxFileSize
         long maxFilesNumber = Long.MAX_VALUE;
         if (folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty())
             maxFilesNumber = Long.parseLong(folderMaxFilesNumber.getText());
-        // todo pass to method below maxFilesNumber
-        long maxFileSize = Long.MAX_VALUE;
-        if (folderMaxFileSize != null && !folderMaxFileSize.getText().isEmpty())
-            maxFileSize = Long.parseLong(folderMaxFileSize.getText());
 
-        //read Comobobox
-        String size = folderMaxSizeUnit.getSelectionModel().selectedItemProperty().getValue();
-        maxSize = getconvertedSize(maxSize, size);
+        long maxFileSize = Long.MAX_VALUE;
+        if (folderMaxFileSize != null && !folderMaxFileSize.getText().isEmpty()) {
+            maxFileSize = Long.parseLong(folderMaxFileSize.getText());
+            String unit = folderMaxFileSizeUnit.getSelectionModel().selectedItemProperty().getValue();
+            maxFileSize = getConvertedSize(maxFileSize, unit);
+        }
 
         detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber, maxFileSize);
+
         approved = true;
         dialogStage.close();
     }
 
-    private long getconvertedSize(long maxSize, String size) {
-        return switch (size) {
+    private long getConvertedSize(long maxSize, String unit) {
+        return switch (unit) {
             case "GB" -> maxSize * 1073741824;
             case "MB" -> maxSize * 1048576;
             case "kB" -> maxSize * 125;
-            default -> throw new IllegalStateException("Unexpected value: " + size);
+            default -> throw new IllegalStateException("Unexpected value: " + unit);
         };
     }
 
