@@ -62,7 +62,7 @@ public class FolderDetailsHandler {
         Optional<Root> rootToDelete = rootDataMapper.findByLocation(name, path);
         rootToDelete.ifPresent(value -> rootDataMapper.deleteById(value.getId()));
 
-        Optional<Root> optionalRoot = rootDataMapper.create(name, path, maxSize);
+        Optional<Root> optionalRoot = rootDataMapper.create(name, path, maxSize, 0);
 
         optionalRoot.ifPresent(root -> {
             analyzerHandler.analyzeRoot(root);

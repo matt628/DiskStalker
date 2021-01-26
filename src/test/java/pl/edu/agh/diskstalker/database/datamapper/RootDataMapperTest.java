@@ -44,9 +44,9 @@ public class RootDataMapperTest {
     @Test
     public void createRootTest() {
         // When
-        var root1 = rootDataMapper.create("some", "/home", 234342);
-        var root2 = rootDataMapper.create("other", "/home/loc", 3454334 );
-        var redundantRoot = rootDataMapper.create("other", "/home/loc", 3454334 );
+        var root1 = rootDataMapper.create("some", "/home", 234342, 340);
+        var root2 = rootDataMapper.create("other", "/home/loc", 3454334, 340);
+        var redundantRoot = rootDataMapper.create("other", "/home/loc", 3454334, 340);
 
         // Then
         checkRoot(root1);
@@ -59,7 +59,7 @@ public class RootDataMapperTest {
     @Test
     public void findRootTest() {
         // When
-        var root = rootDataMapper.create("some", "/home", 234342);
+        var root = rootDataMapper.create("some", "/home", 234342, 340);
         var foundRootById = rootDataMapper.findById(root.get().getId());
         var nonExistingRoot = rootDataMapper.findById(Integer.MAX_VALUE);
 
@@ -73,7 +73,7 @@ public class RootDataMapperTest {
     @Test
     public void findRootByLocationTest() {
         // When
-        var root = rootDataMapper.create("some", "/home", 234342);
+        var root = rootDataMapper.create("some", "/home", 234342, 340);
         var foundRootByLocation = rootDataMapper.findByLocation(root.get().getName(), root.get().getPath());
         var nonExistingRoot = rootDataMapper.findByLocation(null, null);
 
@@ -87,8 +87,8 @@ public class RootDataMapperTest {
     @Test
     public void deleteByIdTest() {
         // Given
-        var root = rootDataMapper.create("name", "/home", 224242);
-        var rootToDelete = rootDataMapper.create("name1", "/home/name", 6211);
+        var root = rootDataMapper.create("name", "/home", 224242, 340);
+        var rootToDelete = rootDataMapper.create("name1", "/home/name", 6211, 340);
         var id = rootToDelete.get().getId();
 
         // When

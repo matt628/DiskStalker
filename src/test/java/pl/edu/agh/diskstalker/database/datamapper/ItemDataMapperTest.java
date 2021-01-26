@@ -16,7 +16,7 @@ public class ItemDataMapperTest {
     public void addItemTest() {
         // given
         ItemDataMapper mapper = new ItemDataMapper();
-        Root root = new Root(0, "root", "path", 3234534);
+        Root root = new Root(0, "root", "path", 3234534, 5464);
         Item item = new Item("name", "path", Type.OTHER, 3423, root);
 
         // when
@@ -31,8 +31,8 @@ public class ItemDataMapperTest {
     public void findAllByRootTest() {
         // given
         ItemDataMapper mapper = new ItemDataMapper();
-        Root root = new Root(0, "root", "path", 3234534);
-        Root root1 = new Root(1, "root1", "path1", 3234343);
+        Root root = new Root(0, "root", "path", 3234534, 5464);
+        Root root1 = new Root(1, "root1", "path1", 3234343, 5464);
         Item item = new Item("name", "path", Type.OTHER, 3423, root);
         Item item1 = new Item("name1", "path1", Type.OTHER, 3423, root1);
         mapper.addItem(item);
@@ -55,7 +55,7 @@ public class ItemDataMapperTest {
     public void deleteAllByRootTest() {
         // given
         ItemDataMapper mapper = new ItemDataMapper();
-        Root root = new Root(0, "root", "path", 3234534);
+        Root root = new Root(0, "root", "path", 3234534, 5464);
         Item item = new Item("name", "path", Type.OTHER, 3423, root);
         mapper.addItem(item);
         mapper.deleteAllByRoot(root);
@@ -72,7 +72,7 @@ public class ItemDataMapperTest {
     public void getChildrenTest() {
         // given
         ItemDataMapper mapper = new ItemDataMapper();
-        Root root = new Root(52, "root", File.separator + "home", 76543);
+        Root root = new Root(52, "root", File.separator + "home", 76543, 5464);
         Item itemRoot = new Item("root", File.separator + "home", Type.FOLDER, 34545, root);
         Item itemSub = new Item("subitem", itemRoot.getPathname(), Type.FOLDER, 4334, root);
         Item itemChild = new Item("childitem", itemSub.getPathname(), Type.FOLDER, 434, root);
@@ -92,7 +92,7 @@ public class ItemDataMapperTest {
     public void getRootItemTest() {
         // given
         ItemDataMapper mapper = new ItemDataMapper();
-        Root root = new Root(52, "root", File.separator + "home", 76543);
+        Root root = new Root(52, "root", File.separator + "home", 76543, 5464);
         Item itemRoot = new Item("root", File.separator + "home", Type.FOLDER, 34545, root);
         Item itemSub = new Item("subitem", itemRoot.getPathname(), Type.FOLDER, 4334, root);
         Item itemChild = new Item("childitem", itemSub.getPathname(), Type.FOLDER, 434, root);

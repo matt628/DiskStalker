@@ -21,7 +21,7 @@ public class TreeBuilderTest {
     @Test
     public void buildTreeTest1(){
         // Given
-        Root root = new Root(52, "newroot", File.separator + "rootfolder", 76543);
+        Root root = new Root(52, "newroot", File.separator + "rootfolder", 76543, 45646);
         Item item1 = new Item("newroot", File.separator + "rootfolder", Type.FOLDER, 76543, root);
         Item item2 = new Item("item1", File.separator + "rootfolder" + File.separator + "newroot", Type.JPG, 7699, root);
 

@@ -31,7 +31,8 @@ public class QueryExecutor {
                     "RootID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Name VARCHAR(100) NOT NULL," +
                     "Path VARCHAR(100) NOT NULL," +
-                    "MaxSize VARCHAR(20)" +
+                    "MaxSize VARCHAR(20)," +
+                    "MaxTreeSize VARCHAR(20)" +
                     ");");
 
         } catch (SQLException e) {

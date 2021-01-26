@@ -18,11 +18,11 @@ public class RootDataMapper {
     @Inject
     private QueryExecutor queryExecutor;
 
-    public Optional<Root> create(String name, String path, long maxSize) {
+    public Optional<Root> create(String name, String path, long maxSize, long maxTreeSize) {
         String sql = "INSERT INTO " + TABLE_NAME + " (" + Columns.NAME + ", " + Columns.PATH + ", " +
-                Columns.MAX_SIZE + ") VALUES (?, ?, ?)";
+                Columns.MAX_SIZE + ", " + Columns.MAX_TREE_SIZE + ") VALUES (?, ?, ?, ?)";
 
-        Object[] args = {name, path, maxSize};
+        Object[] args = {name, path, maxSize, maxTreeSize};
         try {
             if (findByLocation(name, path).isPresent())
                 return Optional.empty();
@@ -46,7 +46,8 @@ public class RootDataMapper {
                 resultList.add(new Root(rs.getInt(Columns.ID),
                         rs.getString(Columns.NAME),
                         rs.getString(Columns.PATH),
-                        rs.getLong(Columns.MAX_SIZE))
+                        rs.getLong(Columns.MAX_SIZE),
+                        rs.getLong(Columns.MAX_TREE_SIZE))
                 );
             }
             return resultList;
@@ -78,8 +79,8 @@ public class RootDataMapper {
                         rs.getInt(Columns.ID),
                         rs.getString(Columns.NAME),
                         rs.getString(Columns.PATH),
-                        rs.getLong(Columns.MAX_SIZE)
-                ));
+                        rs.getLong(Columns.MAX_SIZE),
+                        rs.getLong(Columns.MAX_TREE_SIZE)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,5 +110,7 @@ public class RootDataMapper {
         public static final String PATH = "Path";
 
         public static final String MAX_SIZE = "MaxSize";
+
+        public static final String MAX_TREE_SIZE = "MaxTreeSize";
     }
 }

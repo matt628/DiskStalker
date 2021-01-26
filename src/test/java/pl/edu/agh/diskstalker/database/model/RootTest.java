@@ -12,10 +12,10 @@ public class RootTest {
         // given
         String name = "name";
         String path = "path";
-        Item item = new Item(name, path, Type.OTHER, 2344, null);
+        Root root = new Root(0, name, path, 453543, 2344);
 
         // when
-        String pathname = item.getPathname();
+        String pathname = root.getPathname();
 
         // then
         Assertions.assertEquals(path + File.separator + name, pathname);

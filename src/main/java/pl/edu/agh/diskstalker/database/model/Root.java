@@ -13,11 +13,14 @@ public class Root {
 
     private final long maxSize;
 
-    public Root(int id, String name, String path, long maxSize) {
+    private final long maxTreeSize;
+
+    public Root(int id, String name, String path, long maxSize, long maxTreeSize) {
         this.id = id;
         this.name = name;
         this.path = path;
         this.maxSize = maxSize;
+        this.maxTreeSize = maxTreeSize;
     }
 
     public int getId() {
@@ -34,6 +37,10 @@ public class Root {
 
     public long getMaxSize() {
         return maxSize;
+    }
+
+    public long getMaxTreeSize() {
+        return maxTreeSize;
     }
 
     public String getPathname() {
@@ -53,11 +60,12 @@ public class Root {
         return id == root.id &&
                 name.equals(root.name) &&
                 path.equals(root.path) &&
-                maxSize == root.maxSize;
+                maxSize == root.maxSize &&
+                maxTreeSize == root.maxTreeSize;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, path, maxSize);
+        return Objects.hash(id, name, path, maxSize, maxTreeSize);
     }
 }
