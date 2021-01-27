@@ -8,12 +8,16 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
+
 public class FolderDetailsController {
+
 
     private Stage dialogStage;
     private Root root;
@@ -54,10 +58,32 @@ public class FolderDetailsController {
 
     private void updateDisplay() {
         folderPath.setText(root.getPathname());
-        folderMaxSize.setText(String.valueOf(root.getMaxSize()));
-        folderMaxFilesNumber.setText(String.valueOf(root.getMaxTreeSize()));
-        folderMaxFileSize.setText(String.valueOf(root.getMaxFileSize()));
+        String folderMaxSizeReadable = bytesToReadableAndUpdateCombobox(root.getMaxSize(), folderMaxSizeUnit);
+        folderMaxSize.setText(folderMaxSizeReadable);
 
+        folderMaxFilesNumber.setText(String.valueOf(root.getMaxTreeSize()));
+
+        // convert to readable
+        String folderMaxFileSizeReadable = bytesToReadableAndUpdateCombobox(root.getMaxFileSize(), folderMaxFileSizeUnit);
+        folderMaxFileSize.setText(folderMaxFileSizeReadable);
+
+
+    }
+
+    private String bytesToReadableAndUpdateCombobox(long sizeLong, ComboBox<String> comboBox) {
+        double size = (double) sizeLong;
+        String displaySize = "";
+        if (size / 1073741824.0 > 1) {
+            displaySize = String.valueOf(size / 1073741824.0);
+            comboBox.setValue("GB");
+        } else if (size / 1048576.0 > 1) {
+            displaySize = String.valueOf(size / 1048576.0);
+            comboBox.setValue("MB");
+        } else if (size / 1024.0 > 1) {
+            displaySize = String.valueOf(size / 1024.0);
+            comboBox.setValue("kB");
+        }
+        return displaySize;
     }
 
     public boolean isApproved() {
@@ -68,36 +94,40 @@ public class FolderDetailsController {
     private void handleOkAction(ActionEvent event) {
         long maxSize = Long.MAX_VALUE;
         if (folderMaxSize != null && !folderMaxSize.getText().isEmpty()) {
-            maxSize = Long.parseLong(folderMaxSize.getText());
             String unit = folderMaxSizeUnit.getSelectionModel().selectedItemProperty().getValue();
-            maxSize = getConvertedSize(maxSize, unit);
+            maxSize = stringSizeToLong(folderMaxSize.getText(), unit);
         }
 
+
         long maxFilesNumber = Long.MAX_VALUE;
-        if (folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty())
+        if (folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty() )
             maxFilesNumber = Long.parseLong(folderMaxFilesNumber.getText());
 
         long maxFileSize = Long.MAX_VALUE;
-        if (folderMaxFileSize != null && !folderMaxFileSize.getText().isEmpty()) {
-            maxFileSize = Long.parseLong(folderMaxFileSize.getText());
+        if (folderMaxFileSize != null && !folderMaxFileSize.getText().isEmpty()){
             String unit = folderMaxFileSizeUnit.getSelectionModel().selectedItemProperty().getValue();
-            maxFileSize = getConvertedSize(maxFileSize, unit);
+            maxFileSize = stringSizeToLong(folderMaxFileSize.getText(), unit);
         }
 
-        detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber, maxFileSize);
 
+
+        detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber, maxFileSize);
         approved = true;
         dialogStage.close();
     }
 
-    private long getConvertedSize(long maxSize, String unit) {
-        return switch (unit) {
+    long stringSizeToLong(String size, String unit) {
+        size = size.replaceAll(",", ".");
+        double maxSize = Double.parseDouble(size);
+        maxSize = switch (unit) {
             case "GB" -> maxSize * 1073741824;
             case "MB" -> maxSize * 1048576;
-            case "kB" -> maxSize * 125;
+            case "kB" -> maxSize * 1024;
             default -> throw new IllegalStateException("Unexpected value: " + unit);
         };
+        return (long) maxSize;
     }
+
 
     @FXML
     private void handleCancelAction(ActionEvent event) {
