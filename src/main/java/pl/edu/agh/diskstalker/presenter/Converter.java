@@ -7,15 +7,15 @@ public class Converter {
         double result = (double) bytes;
         if(bytes/(1024*1024*1024)  > 1){
             result /= (1024*1024*1024);
-            return " " + new DecimalFormat("##.##").format(result) + "GB";
+            return  new DecimalFormat("##.##").format(result) + "GB";
         }else if(bytes/(1024*1024) > 1){
             result /= (1024*1024);
-            return " " + new DecimalFormat("##.##").format(result) + "MB";
+            return  new DecimalFormat("##.##").format(result) + "MB";
         }else if(bytes/1024 > 1){
             result /= 1024;
-            return " " + new DecimalFormat("##.##").format(result) + "KB";
+            return  new DecimalFormat("##.##").format(result) + "KB";
         }
-        return " " + bytes + "B";
+        return  bytes + "B";
     }
 
     public static long stringSizeToLong(String size, String unit) {

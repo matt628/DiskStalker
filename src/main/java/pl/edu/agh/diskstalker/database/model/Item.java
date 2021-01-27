@@ -59,11 +59,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return name + getConvertedSizeString();
-    }
-
-    private String getConvertedSizeString() {
-        return bytesToString(size);
+        return name + " " + bytesToString(size);
     }
 
     @Override
