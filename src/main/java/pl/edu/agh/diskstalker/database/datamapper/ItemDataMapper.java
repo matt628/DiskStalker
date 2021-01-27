@@ -3,17 +3,45 @@ package pl.edu.agh.diskstalker.database.datamapper;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
 
-import java.util.List;
+import javax.inject.Singleton;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public interface ItemDataMapper {
+@Singleton
+public class ItemDataMapper {
 
-    void addItem(Root root, Item item);
+    private final Map<Root, List<Item>> rootItems = new HashMap<>();
 
-    List<Item> findAllByRoot(Root root);
+    public void addItem(Item item) {
+        List<Item> items = findAllByRoot(item.getRoot());
+        items.add(item);
+        rootItems.put(item.getRoot(), items);
+    }
 
-    void deleteAllByRoot(Root root);
+    public List<Item> findAllByRoot(Root root) {
+        return rootItems.getOrDefault(root, new ArrayList<>());
+    }
 
-    List<Item> getChildren(Item rootItem);
+    public void deleteAllByRoot(Root root) {
+        rootItems.put(root, new ArrayList<>());
+    }
 
-    Item getRootItem(Root root);
+    public List<Item> getChildren(Item rootItem) {
+        List<Item> rootChildren = findAllByRoot(rootItem.getRoot());
+        return rootChildren.stream()
+                .filter(rootItem::isClosestParent)
+                .collect(Collectors.toList());
+    }
+
+    public Item getRootItem(Root root) {
+        List<Item> items = findAllByRoot(root);
+        return items.stream()
+                .filter(item -> item.getPathname().equals(root.getPathname()))
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    public long getTreeSize(Root root) {
+        return rootItems.get(root).size() - 1;
+    }
 }

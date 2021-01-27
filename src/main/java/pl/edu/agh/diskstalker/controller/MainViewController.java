@@ -3,6 +3,7 @@ package pl.edu.agh.diskstalker.controller;
 import com.google.inject.Inject;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
-import pl.edu.agh.diskstalker.database.model.Type;
+import pl.edu.agh.diskstalker.database.model.Statistic;
 import pl.edu.agh.diskstalker.guice.provider.FXMLLoaderProvider;
 import pl.edu.agh.diskstalker.presenter.FolderAnalyzerHandler;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
@@ -28,6 +29,8 @@ import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import static pl.edu.agh.diskstalker.presenter.Converter.bytesToString;
 
 @Singleton
 public class MainViewController {
@@ -45,19 +48,19 @@ public class MainViewController {
     private ProgressBar progressBar;
 
     @FXML
-    public TableView<Type> statisticsTable;
+    public TableView<Statistic> statisticsTable;
 
     @FXML
-    public TableColumn<Type, String> extensionColumn;
+    public TableColumn<Statistic, String> extensionColumn;
 
     @FXML
-    public TableColumn<Type, String> descriptionColumn;
+    public TableColumn<Statistic, String> descriptionColumn;
 
     @FXML
-    public TableColumn<Type, Double> bytesColumn;
+    public TableColumn<Statistic, String> bytesColumn;
 
     @FXML
-    public TableColumn<Type, Double> percentageColumn;
+    public TableColumn<Statistic, Double> percentageColumn;
 
     private Stage primaryStage;
 
@@ -96,8 +99,8 @@ public class MainViewController {
 
         extensionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getExtension()));
         descriptionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getDescription()));
-        bytesColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(dataValue.getValue().getBytes()));
-        percentageColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(dataValue.getValue().getPercentage()));
+        bytesColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(bytesToString(dataValue.getValue().getSize())));
+        percentageColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty(dataValue.getValue().getPercentage()));
 
         folderListView.setOnMouseClicked(this::rootItemOnClick);
     }
@@ -127,7 +130,7 @@ public class MainViewController {
             String name = pathname.substring(pathname.lastIndexOf(File.separator) + 1);
             String path = pathname.substring(0, pathname.lastIndexOf(File.separator));
 
-            Root root = new Root(0, name, path, 0);
+            Root root = new Root(0, name, path, 0, 0, 0);
 
             showRootConfigurationDialog(root);
         }
@@ -207,7 +210,8 @@ public class MainViewController {
         progressBar.setProgress(progress);
     }
 
-    public void updateStatisticsTable(ObservableList<Type> types) {
-        statisticsTable.setItems(types);
+    public void updateStatisticsTable(List<Statistic> statistics) {
+        ObservableList<Statistic> observableStatistics = FXCollections.observableArrayList(statistics);
+        statisticsTable.setItems(FXCollections.observableArrayList(observableStatistics));
     }
 }

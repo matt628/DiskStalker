@@ -1,7 +1,10 @@
 package pl.edu.agh.diskstalker.database.model;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Objects;
+
+import static pl.edu.agh.diskstalker.presenter.Converter.bytesToString;
 
 public class Item {
     private final String name;
@@ -39,12 +42,11 @@ public class Item {
     }
 
     public String getPathname() {
-        String pathname = path + File.separator + name;
-        return type.getExtension().equals("folder") ? pathname : pathname + type;
+        return path + File.separator + name;
     }
 
     public boolean isFile() {
-        return !type.getExtension().equals("folder");
+        return type != Type.FOLDER;
     }
 
     public boolean isClosestParent(Item item) {
@@ -57,15 +59,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return name + getConvertedSizeString();
-    }
-
-    private String getConvertedSizeString() {
-        float s = size;
-        if (size / 1000000 > 1) {
-            return " " + s / 1000000 + " MB";
-        }
-        return " " + s / 1000 + " KB";
+        return name + " " + bytesToString(size);
     }
 
     @Override
@@ -73,7 +67,11 @@ public class Item {
         if (this == o) return true;
         if (!(o instanceof Item)) return false;
         Item item = (Item) o;
-        return size == item.size && name.equals(item.name) && path.equals(item.path) && Objects.equals(type, item.type) && root.equals(item.root);
+        return size == item.size &&
+                name.equals(item.name) &&
+                path.equals(item.path) &&
+                Objects.equals(type, item.type) &&
+                root.equals(item.root);
     }
 
     @Override

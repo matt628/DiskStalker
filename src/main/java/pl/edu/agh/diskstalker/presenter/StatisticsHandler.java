@@ -1,16 +1,17 @@
 package pl.edu.agh.diskstalker.presenter;
 
 import com.google.inject.Inject;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import pl.edu.agh.diskstalker.controller.MainViewController;
 import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
+import pl.edu.agh.diskstalker.database.model.Statistic;
 import pl.edu.agh.diskstalker.database.model.Type;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,17 +26,18 @@ public class StatisticsHandler {
     public void updateStatistics(Root root) {
         List<Item> items = itemDataMapper.findAllByRoot(root);
         List<Type> types = getRootTypes(items);
+        List<Statistic> statistics = new ArrayList<>();
 
         for (Type type : types) {
+            String extension = type.toString();
+            String description = type.getDescription();
             long itemBytes = getItemBytes(items, type);
-            type.setBytes(itemBytes);
-
             double itemPercentage = getItemPercentage(root, (double) itemBytes);
-            type.setPercentage(itemPercentage);
+
+            statistics.add(new Statistic(extension, description, itemBytes, itemPercentage));
         }
 
-        ObservableList<Type> observableTypes = FXCollections.observableArrayList(types);
-        mainViewController.updateStatisticsTable(observableTypes);
+        mainViewController.updateStatisticsTable(statistics);
     }
 
     private double getItemPercentage(Root root, double itemBytes) {
@@ -51,7 +53,6 @@ public class StatisticsHandler {
                 .map(Item::getType)
                 .distinct()
                 .collect(Collectors.toList());
-
     }
 
     private Long getItemBytes(List<Item> items, Type type) {
@@ -62,6 +63,6 @@ public class StatisticsHandler {
     }
 
     public void cleanStatistics() {
-        mainViewController.updateStatisticsTable(null);
+        mainViewController.updateStatisticsTable(Collections.emptyList());
     }
 }

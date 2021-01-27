@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
+import pl.edu.agh.diskstalker.database.model.Type;
 import pl.edu.agh.diskstalker.guice.GuiceModule;
 
 import java.io.File;
@@ -20,13 +21,13 @@ public class TreeBuilderTest {
     @Test
     public void buildTreeTest1(){
         // Given
-        Root root = new Root(52, "newroot", File.separator + "rootfolder", 76543);
-        Item item1 = new Item("newroot", File.separator + "rootfolder", null, 76543, root);
-        Item item2 = new Item("item1", File.separator + "rootfolder" + File.separator + "newroot", "jpg", 7699, root);
+        Root root = new Root(52, "newroot", File.separator + "rootfolder", 76543, 45646, 34647);
+        Item item1 = new Item("newroot", File.separator + "rootfolder", Type.FOLDER, 76543, root);
+        Item item2 = new Item("item1", File.separator + "rootfolder" + File.separator + "newroot", Type.JPG, 7699, root);
 
         ItemDataMapper itemDataMapper = injector.getInstance(ItemDataMapper.class);
-        itemDataMapper.addItem(root, item1);
-        itemDataMapper.addItem(root, item2);
+        itemDataMapper.addItem(item1);
+        itemDataMapper.addItem(item2);
 
         // When
         TreeBuilder treeBuilder = injector.getInstance(TreeBuilder.class);

@@ -2,6 +2,7 @@ package pl.edu.agh.diskstalker.presenter;
 
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
+import pl.edu.agh.diskstalker.database.datamapper.ItemDataMapper;
 import pl.edu.agh.diskstalker.database.datamapper.RootDataMapper;
 import pl.edu.agh.diskstalker.database.model.Item;
 import pl.edu.agh.diskstalker.database.model.Root;
@@ -26,6 +27,9 @@ public class FolderDetailsHandler {
 
     @Inject
     private RootDataMapper rootDataMapper;
+
+    @Inject
+    private ItemDataMapper itemDataMapper;
 
     public void unsubscribeFromRoot(Root root) {
         analyzerHandler.stopWatchDirectory(root);
@@ -58,11 +62,14 @@ public class FolderDetailsHandler {
         }
     }
 
-    public void updateRoot(String name, String path, long maxSize) {
+    public void updateRoot(String name, String path, long maxSize, long maxTreeSize, long maxFileSize) {
+        rootDataMapper.findByLocation(name, path).ifPresent(root -> {
+            itemDataMapper.deleteAllByRoot(root);
+        });
         Optional<Root> rootToDelete = rootDataMapper.findByLocation(name, path);
         rootToDelete.ifPresent(value -> rootDataMapper.deleteById(value.getId()));
 
-        Optional<Root> optionalRoot = rootDataMapper.create(name, path, maxSize);
+        Optional<Root> optionalRoot = rootDataMapper.create(name, path, maxSize, maxTreeSize, maxFileSize);
 
         optionalRoot.ifPresent(root -> {
             analyzerHandler.analyzeRoot(root);
@@ -86,6 +93,4 @@ public class FolderDetailsHandler {
             }
         }
     }
-
-
 }

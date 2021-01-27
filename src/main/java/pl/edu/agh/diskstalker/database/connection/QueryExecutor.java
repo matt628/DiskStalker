@@ -31,14 +31,9 @@ public class QueryExecutor {
                     "RootID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Name VARCHAR(100) NOT NULL," +
                     "Path VARCHAR(100) NOT NULL," +
-                    "MaxSize VARCHAR(20)" +
-                    ");");
-
-            logger.info("Creating table Types");
-            create("CREATE TABLE IF NOT EXISTS Types (" +
-                    "TypeID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "Extension VARCHAR(20) NOT NULL UNIQUE," +
-                    "Description VARCHAR(200)" +
+                    "MaxSize VARCHAR(20)," +
+                    "MaxTreeSize VARCHAR(20)," +
+                    "MaxFileSize VARCHAR(20)" +
                     ");");
 
         } catch (SQLException e) {

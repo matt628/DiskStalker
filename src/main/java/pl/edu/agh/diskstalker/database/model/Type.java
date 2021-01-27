@@ -1,70 +1,57 @@
 package pl.edu.agh.diskstalker.database.model;
 
-import java.util.Objects;
+public enum Type {
 
-public class Type {
-
-    private final int id;
-
-    private final String extension;
+    JPG("Image"),
+    JPEG("JPEG graphic"),
+    PNG("Portable Network Graphics"),
+    GIF("Graphics Interchange Format"),
+    PDF("Acrobat -Portable document format"),
+    TXT("ASCII text"),
+    CVS("Comma separated, variable length file"),
+    MP3("Music"),
+    MP4("Video"),
+    EXE("PC Application"),
+    ZIP("Archive"),
+    WAV("Windows sound"),
+    TAR("Compressed archive"),
+    HTML("Web page source text"),
+    JAVA("Java files"),
+    CLASS("Java files"),
+    FOLDER("Folder"),
+    OTHER("Other"),
+    ;
 
     private final String description;
 
-    private long bytes;
-
-    private double percentage;
-
-    public Type(int id, String extension, String description) {
-        this.id = id;
-        this.extension = extension;
+    Type(String description) {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getExtension() {
-        return extension;
+    public static Type getType(String type) {
+        return switch (type) {
+            case ".jpg" -> Type.JPG;
+            case ".jpeg" -> Type.JPEG;
+            case ".png" -> Type.PNG;
+            case ".gif" -> Type.GIF;
+            case ".pdf" -> Type.PDF;
+            case ".txt" -> Type.TXT;
+            case ".cvs" -> Type.CVS;
+            case ".mp3" -> Type.MP3;
+            case ".mp4" -> Type.MP4;
+            case ".exe" -> Type.EXE;
+            case ".zip" -> Type.ZIP;
+            case ".wav" -> Type.WAV;
+            case ".tar" -> Type.TAR;
+            case ".html" -> Type.HTML;
+            case ".java" -> Type.JAVA;
+            case ".class" -> Type.CLASS;
+            case "folder" -> Type.FOLDER;
+            default -> Type.OTHER;
+        };
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public double getBytes() {
-        return bytes;
-    }
-
-    public double getPercentage() {
-        return percentage;
-    }
-
-    public void setBytes(long bytes) {
-        this.bytes = bytes;
-    }
-
-    public void setPercentage(double percentage) {
-        this.percentage = percentage;
-    }
-
-    @Override
-    public String toString() {
-        return extension;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Type)) return false;
-        Type type = (Type) o;
-        return id == type.id &&
-                extension.equals(type.extension) &&
-                Objects.equals(description, type.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, extension, description);
     }
 }
