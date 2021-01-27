@@ -15,6 +15,9 @@ import java.io.InputStream;
 
 public class Main extends Application {
 
+    public static final String APPLICATION_NAME = "Disk Stalker";
+    public static final int NOTIFICATION_FREQUENCY_IN_HOURS = 2;
+
     public static void main(String[] args) {
         Main.launch();
     }
@@ -29,7 +32,7 @@ public class Main extends Application {
         try (InputStream fxmlInputStream = ClassLoader.getSystemResourceAsStream("MainPane.fxml")) {
             Parent parent = loader.load(fxmlInputStream);
             primaryStage.setScene(new Scene(parent));
-            primaryStage.setTitle("Disk Stalker");
+            primaryStage.setTitle(APPLICATION_NAME);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
