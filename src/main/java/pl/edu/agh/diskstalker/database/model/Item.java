@@ -1,6 +1,7 @@
 package pl.edu.agh.diskstalker.database.model;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Objects;
 
 public class Item {
@@ -60,11 +61,19 @@ public class Item {
     }
 
     private String getConvertedSizeString() {
-        float s = size;
-        if (size / 1000000 > 1) {
-            return " " + s / 1000000 + " MB";
+        double result = (double) size;
+        if(size/(1024*1024*1024)  > 1){
+            result /= (1024*1024*1024);
+            return " " + new DecimalFormat("##.##").format(result) + "GB";
+        }else if(size/(1024*1024) > 1){
+            result /= (1024*1024);
+            return " " + new DecimalFormat("##.##").format(result) + "MB";
+        }else if(size/1024 > 1){
+            result /= 1024;
+            return " " + new DecimalFormat("##.##").format(result) + "KB";
         }
-        return " " + s / 1000 + " KB";
+        return " " + size + "B";
+
     }
 
     @Override
