@@ -35,6 +35,8 @@ public class TreeHandler {
     public void updateTree(Root root) {
         TreeItem<Item> treeRoot = trees.get(root);
         mainViewController.updateFolderTreeView(treeRoot);
+        Item itemRoot = itemDataMapper.getRootItem(root);
+        updateProgressBar(itemRoot, root);
     }
 
     public void buildTree(Root root) {
