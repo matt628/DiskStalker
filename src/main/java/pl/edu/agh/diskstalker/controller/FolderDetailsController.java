@@ -8,10 +8,14 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 import pl.edu.agh.diskstalker.database.model.Root;
 import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 
+import java.math.BigInteger;
 import java.util.Optional;
+
+import static pl.edu.agh.diskstalker.presenter.Converter.stringSizeToLong;
 
 
 public class FolderDetailsController {
@@ -96,6 +100,7 @@ public class FolderDetailsController {
             maxSize = stringSizeToLong(folderMaxSize.getText(), unit);
         }
 
+
         long maxFilesNumber = Long.MAX_VALUE;
         if (folderMaxFilesNumber != null && !folderMaxFilesNumber.getText().isEmpty() )
             maxFilesNumber = Long.parseLong(folderMaxFilesNumber.getText());
@@ -105,6 +110,8 @@ public class FolderDetailsController {
             String unit = folderMaxFileSizeUnit.getSelectionModel().selectedItemProperty().getValue();
             maxFileSize = stringSizeToLong(folderMaxFileSize.getText(), unit);
         }
+
+
 
         detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber, maxFileSize);
         approved = true;
@@ -122,6 +129,7 @@ public class FolderDetailsController {
         };
         return (long) maxSize;
     }
+
 
     @FXML
     private void handleCancelAction(ActionEvent event) {

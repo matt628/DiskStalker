@@ -22,6 +22,7 @@ import java.util.Map;
 import static pl.edu.agh.diskstalker.Main.APPLICATION_NAME;
 import static pl.edu.agh.diskstalker.Main.NOTIFICATION_FREQUENCY_IN_HOURS;
 import static pl.edu.agh.diskstalker.database.model.NotificationType.*;
+import static pl.edu.agh.diskstalker.presenter.Converter.bytesToString;
 
 public class FolderAnalyzerHandler {
 
@@ -67,15 +68,15 @@ public class FolderAnalyzerHandler {
 
     private void notifyUser(Root root) {
         if (exceedSpace(root) && isTime(BY_ROOT_SIZE)) {
-            showNotification(root.getPathname() + " exceeded the space limit of " + root.getMaxSize());
+            showNotification(root.getPathname() + " exceeded the space limit of " + bytesToString(root.getMaxSize()));
             lastNotifications.put(BY_ROOT_SIZE, LocalDateTime.now());
         }
         if (exceedTreeSize(root) && isTime(BY_TREE_SIZE)) {
-            showNotification(root.getPathname() + " exceeded the max number of files of " + root.getMaxTreeSize());
+            showNotification(root.getPathname() + " exceeded the max number of files of " + bytesToString(root.getMaxTreeSize()));
             lastNotifications.put(BY_TREE_SIZE, LocalDateTime.now());
         }
         if (exceedFileSize(root) && isTime(BY_FILE_SIZE)) {
-            showNotification(root.getPathname() + " has files which exceeded the space limit of " + root.getMaxFileSize());
+            showNotification(root.getPathname() + " has files which exceeded the space limit of " + bytesToString(root.getMaxFileSize()));
             lastNotifications.put(BY_FILE_SIZE, LocalDateTime.now());
         }
     }
