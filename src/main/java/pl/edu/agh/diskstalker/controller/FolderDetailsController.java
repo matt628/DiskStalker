@@ -15,6 +15,8 @@ import pl.edu.agh.diskstalker.presenter.FolderDetailsHandler;
 import java.math.BigInteger;
 import java.util.Optional;
 
+import static pl.edu.agh.diskstalker.presenter.Converter.stringSizeToLong;
+
 
 public class FolderDetailsController {
 
@@ -109,23 +111,9 @@ public class FolderDetailsController {
             maxFileSize = stringSizeToLong(folderMaxFileSize.getText(), unit);
         }
 
-
-
         detailsHandler.updateRoot(root.getName(), root.getPath(), maxSize, maxFilesNumber, maxFileSize);
         approved = true;
         dialogStage.close();
-    }
-
-    long stringSizeToLong(String size, String unit) {
-        size = size.replaceAll(",", ".");
-        double maxSize = Double.parseDouble(size);
-        maxSize = switch (unit) {
-            case "GB" -> maxSize * 1073741824;
-            case "MB" -> maxSize * 1048576;
-            case "kB" -> maxSize * 1024;
-            default -> throw new IllegalStateException("Unexpected value: " + unit);
-        };
-        return (long) maxSize;
     }
 
 

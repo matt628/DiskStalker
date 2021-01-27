@@ -17,4 +17,16 @@ public class Converter {
         }
         return " " + bytes + "B";
     }
+
+    public static long stringSizeToLong(String size, String unit) {
+        size = size.replaceAll(",", ".");
+        double maxSize = Double.parseDouble(size);
+        maxSize = switch (unit) {
+            case "GB" -> maxSize * 1073741824;
+            case "MB" -> maxSize * 1048576;
+            case "kB" -> maxSize * 1024;
+            default -> throw new IllegalStateException("Unexpected value: " + unit);
+        };
+        return (long) maxSize;
+    }
 }
