@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static pl.edu.agh.diskstalker.presenter.Converter.bytesToString;
+
 @Singleton
 public class MainViewController {
 
@@ -97,7 +99,7 @@ public class MainViewController {
 
         extensionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getExtension()));
         descriptionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getDescription()));
-        bytesColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(dataValue.getValue().getSize()));
+        bytesColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(bytesToString(dataValue.getValue().getSize())));
         percentageColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty(dataValue.getValue().getPercentage()));
 
         folderListView.setOnMouseClicked(this::rootItemOnClick);

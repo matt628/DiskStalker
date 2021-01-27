@@ -4,6 +4,8 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
+import static pl.edu.agh.diskstalker.presenter.Converter.bytesToString;
+
 public class Item {
     private final String name;
     private final String path;
@@ -61,19 +63,7 @@ public class Item {
     }
 
     private String getConvertedSizeString() {
-        double result = (double) size;
-        if(size/(1024*1024*1024)  > 1){
-            result /= (1024*1024*1024);
-            return " " + new DecimalFormat("##.##").format(result) + "GB";
-        }else if(size/(1024*1024) > 1){
-            result /= (1024*1024);
-            return " " + new DecimalFormat("##.##").format(result) + "MB";
-        }else if(size/1024 > 1){
-            result /= 1024;
-            return " " + new DecimalFormat("##.##").format(result) + "KB";
-        }
-        return " " + size + "B";
-
+        return bytesToString(size);
     }
 
     @Override
