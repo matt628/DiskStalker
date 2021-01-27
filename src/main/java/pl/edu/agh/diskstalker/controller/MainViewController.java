@@ -55,7 +55,7 @@ public class MainViewController {
     public TableColumn<Statistic, String> descriptionColumn;
 
     @FXML
-    public TableColumn<Statistic, Long> bytesColumn;
+    public TableColumn<Statistic, String> bytesColumn;
 
     @FXML
     public TableColumn<Statistic, Double> percentageColumn;
@@ -97,8 +97,8 @@ public class MainViewController {
 
         extensionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getExtension()));
         descriptionColumn.setCellValueFactory(dataValue -> new SimpleStringProperty(dataValue.getValue().getDescription()));
-        bytesColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(dataValue.getValue().getBytes()));
-        percentageColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(dataValue.getValue().getPercentage()));
+        bytesColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty<>(dataValue.getValue().getSize()));
+        percentageColumn.setCellValueFactory(dataValue -> new SimpleObjectProperty(dataValue.getValue().getPercentage()));
 
         folderListView.setOnMouseClicked(this::rootItemOnClick);
     }

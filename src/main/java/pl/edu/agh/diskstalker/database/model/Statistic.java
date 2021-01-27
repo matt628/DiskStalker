@@ -1,5 +1,7 @@
 package pl.edu.agh.diskstalker.database.model;
 
+import java.text.DecimalFormat;
+
 public class Statistic {
 
     private final String extension;
@@ -22,11 +24,22 @@ public class Statistic {
         return description;
     }
 
-    public long getBytes() {
-        return bytes;
+    public String getSize() {
+        double result = (double) bytes;
+        if(bytes/(1024*1024*1024)  > 1){
+            result /= (1024*1024*1024);
+            return new DecimalFormat("##.##").format(result) + "GB";
+        }else if(bytes/(1024*1024) > 1){
+            result /= (1024*1024);
+            return new DecimalFormat("##.##").format(result) + "MB";
+        }else if(bytes/1024 > 1){
+            result /= 1024;
+            return new DecimalFormat("##.##").format(result) + "KB";
+        }
+        return bytes + "B";
     }
 
-    public double getPercentage() {
-        return percentage;
+    public String getPercentage() {
+        return percentage + "%";
     }
 }
